@@ -1,6 +1,6 @@
 // assets/js/api.js — Cliente da API Delfiaapp
 
-const API_URL = window.DELFIAAPP_API || 'https://delfiaapp-backend.up.railway.app';
+const API_URL = window.DELFIAAPP_API || 'https://web-production-e0bfa.up.railway.app';
 
 const Api = {
   // ============================================================
