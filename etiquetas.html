@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Central de Etiquetas — Delfiaapp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --forest:#0d2b1a;--green:#1e6b40;--green-b:#2d9b5a;
+  --sage:#e6f2eb;--sage-b:#b8dfc7;
+  --gold:#f5a623;--gold-soft:#fff3d6;--gold-b:rgba(245,166,35,.3);
+  --red:#e03e3e;--red-soft:#fde8e8;
+  --bg:#f4f3ef;--surface:#fff;--sf2:#faf9f6;
+  --border:#e8e6e0;--border2:#d8d5ce;
+  --ink:#141210;--ink2:#4a4540;--ink3:#8c8680;
+  --r:10px;--rl:14px;
+  --sh-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --sh:0 4px 12px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.04);
+  --sh-lg:0 16px 40px rgba(0,0,0,.12);
+}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh;overflow:hidden}
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--sh-sm);position:sticky;top:0;z-index:100}
+.hdr-l{display:flex;align-items:center;gap:14px}
+.hdr-title h1{font-size:15px;font-weight:700;color:var(--ink);letter-spacing:-.3px}
+.hdr-title p{font-size:11px;color:var(--ink3);font-family:'DM Mono',monospace;margin-top:1px}
+.hdivider{width:1px;height:20px;background:var(--border)}
+.sizes{display:flex;gap:5px}
+.sz{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--border2);background:var(--surface);color:var(--ink3);transition:all .18s;font-family:'DM Mono',monospace;letter-spacing:.3px}
+.sz:hover{border-color:var(--green);color:var(--green)}
+.sz.on{background:var(--forest);border-color:var(--forest);color:#fff;box-shadow:0 2px 8px rgba(13,43,26,.25)}
+.tabs{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;gap:2px}
+.tab{padding:11px 16px;font-size:13px;font-weight:500;color:var(--ink3);cursor:pointer;border-bottom:2.5px solid transparent;transition:all .18s;display:flex;align-items:center;gap:7px;margin-bottom:-1px;user-select:none}
+.tab:hover{color:var(--ink)}
+.tab.on{color:var(--forest);border-bottom-color:var(--forest);font-weight:600}
+.tab i{font-size:15px}
+.workspace{display:grid;grid-template-columns:1fr 300px;height:calc(100vh - 110px);overflow:hidden}
+.pnl{overflow-y:auto;background:var(--bg)}
+.pnl::-webkit-scrollbar{width:5px}
+.pnl::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
+.blk{margin:10px 16px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-sm)}
+.blk:last-of-type{margin-bottom:0}
+.blk-hd{padding:12px 16px;display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;transition:background .15s}
+.blk-hd:hover{background:var(--sf2)}
+.blk-icon{width:28px;height:28px;border-radius:8px;background:var(--sage);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.blk-icon i{font-size:14px;color:var(--green)}
+.blk-icon.gold{background:var(--gold-soft)}
+.blk-icon.gold i{color:var(--gold)}
+.blk-title{font-size:13px;font-weight:600;color:var(--ink);flex:1;letter-spacing:-.1px}
+.blk-sub{font-size:11px;color:var(--ink3);font-weight:400;margin-left:4px}
+.chev{font-size:13px;color:var(--ink3);transition:transform .22s}
+.blk-hd.open .chev{transform:rotate(180deg)}
+.blk-bd{padding:16px;display:none;border-top:1px solid var(--border)}
+.blk-bd.vis{display:block}
+.f{margin-bottom:13px}
+.f:last-child{margin-bottom:0}
+.f label{display:block;font-size:10px;font-weight:700;color:var(--ink3);margin-bottom:5px;letter-spacing:.8px;text-transform:uppercase}
+.f input,.f select,.f textarea{width:100%;padding:8px 11px;font-size:13px;font-family:'Sora',sans-serif;border:1px solid var(--border2);border-radius:var(--r);background:var(--sf2);color:var(--ink);outline:none;transition:all .18s;box-shadow:inset 0 1px 2px rgba(0,0,0,.04)}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--green);background:var(--surface);box-shadow:0 0 0 3px rgba(30,107,64,.1)}
+.f input::placeholder,.f textarea::placeholder{color:var(--ink3)}
+.f textarea{resize:vertical;min-height:60px;line-height:1.5}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f-hint{font-size:10px;color:var(--green);margin-top:4px;font-family:'DM Mono',monospace}
+.f-hint2{font-size:10px;color:var(--ink3);margin-top:4px}
+.sld{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
+.sld label{font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.8px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+.sld label span{color:var(--green);font-family:'DM Mono',monospace;font-weight:700;text-transform:none;letter-spacing:0;font-size:12px}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:4px;background:var(--border2);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--forest);cursor:pointer;box-shadow:0 2px 6px rgba(13,43,26,.3)}
+.crows{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:2px}
+.csw{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .18s;flex-shrink:0;position:relative}
+.csw:hover,.csw.on{border-color:var(--green);transform:scale(1.12)}
+.csw.on::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:700}
+.csw.on[data-c="w"]::after{color:var(--ink)}
+.cpick-wrap{position:relative;width:26px;height:26px}
+.cpick-btn{width:26px;height:26px;border-radius:50%;border:2px dashed var(--border2);background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);cursor:pointer;transition:all .18s}
+.cpick-btn:hover{transform:scale(1.12);border-color:var(--green)}
+.cpick-native{position:absolute;inset:0;opacity:0;cursor:pointer;border-radius:50%;width:100%;height:100%}
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:13px}
+.fopt{border:1.5px solid var(--border2);border-radius:var(--r);padding:8px 4px;text-align:center;cursor:pointer;transition:all .18s;background:var(--sf2)}
+.fopt:hover{border-color:var(--green)}
+.fopt.on{border-color:var(--forest);background:var(--sage)}
+.fopt .fa2{font-size:15px;font-weight:700;color:var(--ink);display:block;margin-bottom:1px}
+.fopt .fn{font-size:9px;color:var(--ink3)}
+.lmodes{display:flex;gap:6px;margin-bottom:13px}
+.lmode{flex:1;padding:7px 4px;border:1.5px solid var(--border2);border-radius:var(--r);text-align:center;cursor:pointer;font-size:11px;font-weight:600;transition:all .18s;color:var(--ink3)}
+.lmode:hover{border-color:var(--green);color:var(--green)}
+.lmode.on{border-color:var(--forest);background:var(--forest);color:#fff}
+.selos{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.selo{display:flex;align-items:center;gap:5px;background:var(--sage);border:1px solid var(--sage-b);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--green);font-weight:500}
+.selo button{background:none;border:none;cursor:pointer;color:var(--green);font-size:11px;line-height:1;padding:0}
+.add-selo{display:flex;gap:6px}
+.add-selo input{flex:1;padding:6px 10px;font-size:12px;border:1px solid var(--border2);border-radius:var(--r);background:var(--sf2);color:var(--ink);outline:none;font-family:'Sora',sans-serif}
+.add-selo input:focus{border-color:var(--green)}
+.add-selo button{padding:6px 11px;background:var(--forest);border:none;border-radius:var(--r);color:#fff;font-size:12px;cursor:pointer;font-family:'Sora',sans-serif;white-space:nowrap;display:flex;align-items:center;gap:4px}
+.nt{width:100%;border-collapse:collapse;margin-top:4px}
+.nt th{font-size:9px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;padding:4px 6px;background:var(--sf2);border-bottom:1px solid var(--border);text-align:left}
+.nt td{padding:3px 6px;border-bottom:1px solid var(--border);font-size:12px;color:var(--ink2)}
+.nt td input{width:100%;border:none;background:transparent;outline:none;font-size:11px;font-family:'DM Mono',monospace;color:var(--ink);padding:1px 2px;border-radius:3px}
+.nt td input:focus{background:var(--sage)}
+.nt tr:last-child td{border-bottom:none}
+.uprow{display:flex;gap:6px;margin-bottom:10px}
+.upbtn{flex:1;padding:7px;border:1.5px solid var(--border2);border-radius:var(--r);background:var(--sf2);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;color:var(--ink2);font-family:'Sora',sans-serif;font-weight:500;transition:all .18s}
+.upbtn:hover{border-color:var(--green);color:var(--green)}
+.ia-box{background:var(--sf2);border:1px solid var(--border);border-radius:var(--r);padding:12px}
+.ia-box textarea{width:100%;border:none;background:transparent;font-size:12px;font-family:'Sora',sans-serif;color:var(--ink);outline:none;resize:none;min-height:44px}
+.ia-box textarea::placeholder{color:var(--ink3)}
+.ia-btn{width:100%;padding:9px;background:linear-gradient(135deg,var(--forest),var(--green));border:none;border-radius:var(--r);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Sora',sans-serif;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:7px}
+.sugg{position:absolute;z-index:50;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);max-height:160px;overflow-y:auto;width:100%;left:0;top:100%;margin-top:2px;display:none}
+.sugg.vis{display:block}
+.sugg-item{padding:8px 12px;font-size:12px;color:var(--ink2);cursor:pointer;transition:background .12s;display:flex;align-items:center;gap:7px}
+.sugg-item:hover{background:var(--sage);color:var(--green)}
+.f-rel{position:relative}
+.abar{padding:12px 16px;background:var(--surface);border-top:1px solid var(--border);display:flex;gap:8px}
+.abtn{flex:1;padding:10px;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;font-family:'Sora',sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .18s;border:none}
+.ab-sec{background:var(--sf2);border:1.5px solid var(--border2);color:var(--ink2)}
+.ab-sec:hover{border-color:var(--green);color:var(--green)}
+.ab-upd{background:var(--sage);border:1.5px solid var(--sage-b);color:var(--green)}
+.ab-pri{background:var(--forest);color:#fff;box-shadow:0 2px 8px rgba(13,43,26,.25);flex:2}
+.ab-pri:hover{background:var(--green)}
+.saved-sec{margin:14px 16px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:13px;box-shadow:var(--sh-sm)}
+.saved-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.saved-hd span{font-size:12px;font-weight:600;color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:flex;align-items:center;gap:6px;background:var(--sf2);border:1px solid var(--border);border-radius:20px;padding:4px 10px 4px 12px;font-size:12px;color:var(--ink2);cursor:pointer;transition:all .18s}
+.chip:hover{border-color:var(--green);color:var(--green)}
+.chip-x{width:14px;height:14px;border-radius:50%;background:none;border:none;cursor:pointer;color:var(--ink3);font-size:11px;display:flex;align-items:center;justify-content:center}
+.chip-x:hover{background:var(--red-soft);color:var(--red)}
+.pnl-r{background:var(--sf2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.prev-hd{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.prev-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3)}
+.prev-sz{font-size:11px;font-weight:700;color:var(--forest);font-family:'DM Mono',monospace}
+.prev-area{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:20px}
+/* ETIQUETA RÓTULO */
+.lbl-wrap{background:#fff;box-shadow:0 8px 32px rgba(0,0,0,.18),0 2px 6px rgba(0,0,0,.08);border-radius:3px;overflow:hidden;transition:all .3s}
+.lbl-inner{display:flex;flex-direction:column;width:100%;height:100%;position:relative;font-family:'Sora',sans-serif}
+/* ETIQUETA SANITÁRIA */
+.san-wrap{background:#fff;box-shadow:0 8px 32px rgba(0,0,0,.18),0 2px 6px rgba(0,0,0,.08);border-radius:3px;overflow:hidden;transition:all .3s;font-family:'Sora',sans-serif}
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--forest);color:#fff;padding:11px 18px;border-radius:12px;font-size:13px;font-weight:500;z-index:9999;box-shadow:var(--sh-lg);display:flex;align-items:center;gap:8px;animation:tai .3s cubic-bezier(.34,1.4,.64,1)}
+.toast.hidden{display:none}
+.toast.err{background:#c0392b}
+@keyframes tai{from{opacity:0;transform:translateY(14px) scale(.95)}to{opacity:1;transform:none}}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
+::-webkit-scrollbar-track{background:transparent}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-l">
+    <div class="hdr-title">
+      <h1>Central de Etiquetas</h1>
+      <p>Delfia Foods · Geração de etiquetas para impressão</p>
+    </div>
+    <div class="hdivider"></div>
+    <div class="sizes">
+      <button class="sz" onclick="setSize('6x4')" id="sz-6x4">6×4 cm</button>
+      <button class="sz" onclick="setSize('4x6')" id="sz-4x6">4×6 cm</button>
+      <button class="sz" onclick="setSize('10x5')" id="sz-10x5">10×5 cm</button>
+      <button class="sz on" onclick="setSize('5x10')" id="sz-5x10">5×10 cm</button>
+      <button class="sz" onclick="setSize('custom')" id="sz-custom">Personalizado</button>
+    </div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab on"  id="tab-rotulo"    onclick="setTab('rotulo')"><i class="ti ti-certificate"></i> Rótulo do Produto</div>
+  <div class="tab"     id="tab-sanitario" onclick="setTab('sanitario')"><i class="ti ti-alert-triangle"></i> Sanitário / Logística</div>
+  <div class="tab"     id="tab-sazonais"  onclick="setTab('sazonais')"><i class="ti ti-heart"></i> Cartões Sazonais</div>
+  <div class="tab"     id="tab-studio"    onclick="setTab('studio')"><i class="ti ti-sparkles"></i> Estúdio Livre</div>
+</div>
+
+<div class="workspace">
+  <div class="pnl" id="mainPanel"></div>
+  <div class="pnl-r">
+    <div class="prev-hd">
+      <span class="prev-lbl">Preview</span>
+      <span class="prev-sz" id="prevSzLbl">5×10 CM</span>
+    </div>
+    <div class="prev-area" id="prevArea">
+      <div id="labelWrap"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toastEl"></div>
+
+<script>
+// ── ESTADO ──────────────────────────────────────────────
+const S={tab:'rotulo',size:'5x10',nameColor:'#141210',nameFont:'Arial Black',logoMode:'color',bgImg:null,barcodeImg:null,selos:['Probiótico','Gaseificado','100% Natural']};
+const SIZES={'6x4':{w:227,h:151,horiz:true,lbl:'6×4 CM'},'4x6':{w:151,h:227,horiz:false,lbl:'4×6 CM'},'10x5':{w:378,h:189,horiz:true,lbl:'10×5 CM'},'5x10':{w:189,h:378,horiz:false,lbl:'5×10 CM'},'custom':{w:200,h:300,horiz:false,lbl:'PERSONALIZADO'}};
+
+// ── BASE DE INSUMOS ──────────────────────────────────────
+const INSUMOS={
+  'Adoçantes':[{id:'acucar-coco',nome:'Açúcar de Coco',alerg:'COCO',dias:365,cons:'ambiente'},{id:'xilitol',nome:'Xilitol',alerg:'',dias:730,cons:'ambiente'},{id:'eritritol',nome:'Eritritol',alerg:'',dias:730,cons:'ambiente'}],
+  'Cacau e Derivados':[{id:'cacau-po',nome:'Cacau em Pó',alerg:'',dias:365,cons:'ambiente'},{id:'nibs',nome:'Nibs de Cacau',alerg:'',dias:180,cons:'fresco-seco'},{id:'choco70',nome:'Chocolate 70%',alerg:'LEITE,GLÚTEN',dias:365,cons:'ambiente'}],
+  'Frutas Secas':[{id:'tamaras',nome:'Tâmaras',alerg:'',dias:180,cons:'fresco-seco'},{id:'uvas-passas',nome:'Uvas Passas',alerg:'',dias:365,cons:'ambiente'},{id:'damasco',nome:'Damasco',alerg:'SULFITOS',dias:365,cons:'fresco-seco'}],
+  'Grãos e Cereais':[{id:'aveia',nome:'Aveia',alerg:'GLÚTEN',dias:365,cons:'ambiente'},{id:'granola',nome:'Granola',alerg:'GLÚTEN,NOZES',dias:180,cons:'ambiente'},{id:'mix-graos',nome:'Mix de Grãos',alerg:'GLÚTEN',dias:365,cons:'ambiente'}],
+  'Oleaginosas':[{id:'nozes',nome:'Nozes',alerg:'NOZES',dias:180,cons:'fresco-seco'},{id:'cast-caju',nome:'Castanha de Caju',alerg:'NOZES',dias:180,cons:'fresco-seco'},{id:'amendoas',nome:'Amêndoas',alerg:'NOZES',dias:180,cons:'fresco-seco'},{id:'cast-para',nome:'Castanha-do-Pará',alerg:'NOZES,SELÊNIO',dias:180,cons:'fresco-seco'}],
+  'Sementes':[{id:'chia',nome:'Chia',alerg:'',dias:365,cons:'ambiente'},{id:'linhaca',nome:'Linhaça',alerg:'',dias:365,cons:'ambiente'},{id:'girassol',nome:'Semente de Girassol',alerg:'',dias:180,cons:'fresco-seco'}],
+  'Temperos':[{id:'gengibre',nome:'Gengibre em Pó',alerg:'',dias:730,cons:'ambiente'},{id:'acafrao',nome:'Açafrão em Pó',alerg:'',dias:730,cons:'ambiente'},{id:'sal',nome:'Sal de Mossoró',alerg:'',dias:9999,cons:'ambiente'}],
+};
+const IMAP={};Object.values(INSUMOS).flat().forEach(i=>IMAP[i.id]=i);
+const CLBL={'nao':'Não especificado','refrig':'Refrigerado (2°C a 8°C)','congelado':'Congelado (-18°C)','ambiente':'Temperatura Ambiente','fresco-seco':'Local Fresco e Seco'};
+let fornHist=['Armazém São Vítor','Orgânico Brasil','Fazenda Natural'];
+
+// ── RENDER PAINEL ────────────────────────────────────────
+function renderPanel(){
+  const p=document.getElementById('mainPanel');
+  if(S.tab==='rotulo')renderRotulo(p);
+  else if(S.tab==='sanitario')renderSanitario(p);
+  else renderComingSoon(p);
+}
+
+// ── RÓTULO DO PRODUTO ────────────────────────────────────
+function renderRotulo(p){
+  p.innerHTML=`
+  <div class="saved-sec">
+    <div class="saved-hd"><i class="ti ti-bookmark" style="font-size:14px;color:var(--gold)"></i><span>Rótulos salvos</span></div>
+    <div class="chips" id="savedChips">
+      <div class="chip" onclick="toast('Carregando KEFI — Limão...')">KEFI — Limão<button class="chip-x" onclick="event.stopPropagation();this.closest('.chip').remove();toast('Removido')"><i class="ti ti-x"></i></button></div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-hd open" onclick="tog(this)">
+      <div class="blk-icon"><i class="ti ti-package"></i></div>
+      <div class="blk-title">Produto</div><i class="ti ti-chevron-down chev"></i>
+    </div>
+    <div class="blk-bd vis">
+      <div class="f"><label>Selecionar produto</label>
+        <select id="rSelProd" onchange="onRProd(this.value)">
+          <option value="">— Escolha um produto —</option>
+          <option value="kefi-limao">KEFI — Limão (300ml)</option>
+          <option value="kefi-maracuja">KEFI — Maracujá (300ml)</option>
+          <option value="granola">Granola Especial (250g)</option>
+        </select>
+      </div>
+      <div class="f-row">
+        <div class="f"><label>Nome / Marca</label><input id="rNome" value="KEFI" oninput="R.r()"></div>
+        <div class="f"><label>Sabor / Variante</label><input id="rSabor" value="Limão" oninput="R.r()"></div>
+      </div>
+      <div class="f">
+        <label>Cor do nome / sabor</label>
+        <div class="crows">
+          <div class="csw on" data-c="k" style="background:#141210" onclick="setNC('#141210',this)"></div>
+          <div class="csw" data-c="f" style="background:#0d2b1a" onclick="setNC('#0d2b1a',this)"></div>
+          <div class="csw" data-c="w" style="background:#fff;border-color:var(--border2)" onclick="setNC('#ffffff',this)"></div>
+          <div class="csw" data-c="g" style="background:#1e6b40" onclick="setNC('#1e6b40',this)"></div>
+          <div class="csw" data-c="o" style="background:#f5a623" onclick="setNC('#f5a623',this)"></div>
+          <div class="cpick-wrap"><div class="cpick-btn"></div><input type="color" class="cpick-native" oninput="setNC(this.value,null)"></div>
+        </div>
+      </div>
+      <div class="f"><label>Volume / Peso</label><input id="rVol" value="300ml" oninput="R.r()" style="max-width:110px"></div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-hd open" onclick="tog(this)">
+      <div class="blk-icon gold"><i class="ti ti-photo"></i></div>
+      <div class="blk-title">Logo Delfia</div><i class="ti ti-chevron-down chev"></i>
+    </div>
+    <div class="blk-bd vis">
+      <div class="lmodes">
+        <div class="lmode on" onclick="setLM('color',this)">Colorido</div>
+        <div class="lmode" onclick="setLM('black',this)">Preto</div>
+        <div class="lmode" onclick="setLM('white',this)">Branco</div>
+        <div class="lmode" onclick="setLM('none',this)">Sem logo</div>
+      </div>
+      <div class="sld">
+        <label>Tamanho do logo <span id="lszv">50%</span></label>
+        <input type="range" min="20" max="100" value="50" oninput="document.getElementById('lszv').textContent=this.value+'%';R.r()">
+      </div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-hd open" onclick="tog(this)">
+      <div class="blk-icon"><i class="ti ti-typography"></i></div>
+      <div class="blk-title">Nome — fonte e tamanho</div><i class="ti ti-chevron-down chev"></i>
+    </div>
+    <div class="blk-bd vis">
+      <div class="fgrid">
+        ${[['Barlow Condensed','Barlow Cond.','Barlow Condensed,sans-serif'],['Georgia','Serif','Georgia,serif'],['Oswald','Oswald','Oswald,sans-serif'],
+           ['Anton','Anton','Impact,sans-serif'],['Arial Black','Arial Black','Arial,sans-serif'],['Trebuchet MS','Trebuchet','Trebuchet MS,sans-serif'],
+           ['Verdana','Verdana','Verdana,sans-serif'],['Georgia','Georgia','Georgia,serif'],['Impact','Impact','Impact,sans-serif'],
+           ['Century Gothic','Century Gothic','Century Gothic,sans-serif'],['Optima','Optima','Optima,sans-serif'],['Futura','Futura','Futura,sans-serif']
+        ].map(([f,n,ff],i)=>`<div class="fopt ${i===4?'on':''}" onclick="setFF('${f}',this)"><span class="fa2" style="font-family:${ff};font-weight:${i===4?900:700}">Aa</span><span class="fn">${n}</span></div>`).join('')}
+      </div>
+      <div class="sld"><label>Tamanho da fonte <span id="fszv">60</span></label><input type="range" min="20" max="100" value="60" id="rFontSz" oninput="document.getElementById('fszv').textContent=this.value;R.r()"></div>
+      <div class="sld"><label>Posição vertical do nome <span id="posv">+0%</span></label><input type="range" min="-40" max="40" value="0" id="rNamePos" oninput="document.getElementById('posv').textContent=(this.value>0?'+':'')+this.value+'%';R.r()"></div>
+      <p style="font-size:10px;color:var(--ink3);font-style:italic">Negativo = sobe · Positivo = desce</p>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-hd open" onclick="tog(this)">
+      <div class="blk-icon"><i class="ti ti-wall"></i></div>
+      <div class="blk-title">Imagem de fundo</div><i class="ti ti-chevron-down chev"></i>
+    </div>
+    <div class="blk-bd vis">
+      <div class="sld"><label>Espaçamento entre blocos <span id="spacv">0px</span></label><input type="range" min="0" max="20" value="0" oninput="document.getElementById('spacv').textContent=this.value+'px';R.r()"></div>
+      <div class="uprow">
+        <label class="upbtn" style="cursor:pointer"><i class="ti ti-upload" style="font-size:14px"></i> Upload<input type="file" accept="image/*" style="display:none" onchange="onBgImg(event)"></label>
+        <button class="upbtn" onclick="toast('Biblioteca em breve!')"><i class="ti ti-photo-scan" style="font-size:14px"></i> Biblioteca (15)</button>
+        <button class="upbtn" onclick="S.bgImg=null;R.r();toast('Imagem removida')" style="color:var(--red)"><i class="ti ti-x" style="font-size:14px"></i></button>
+      </div>
+      <div class="ia-box">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:7px"><i class="ti ti-sparkles" style="font-size:14px;color:var(--gold)"></i><span style="font-size:12px;font-weight:600">Gerar imagem com IA</span></div>
+        <textarea placeholder="Descreva a imagem..."></textarea>
+        <button class="ia-btn" onclick="toast('Geração por IA em breve!')"><i class="ti ti-sparkles"></i> Gerar imagem</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-hd open" onclick="tog(this)">
+      <div class="blk-icon"><i class="ti ti-shield-check"></i></div>
+      <div class="blk-title">Selos / Atributos</div><i class="ti ti-chevron-down chev"></i>
+    </div>
+    <div class="blk-bd vis">
+      <div class="selos" id="selosWrap">${S.selos.map(s=>`<div class="selo">${s}<button onclick="rmSelo(this)"><i class="ti ti-x"></i></button></div>`).join('')}</div>
+      <div class="add-selo">
+        <input type="text" id="newSelo" placeholder="ex: Vegano, Sem Lactose...">
+        <button onclick="addSelo()"><i class="ti ti-plus"></i> Adicionar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-hd open" onclick="tog(this)">
+      <div class="blk-icon"><i class="ti ti-text-size"></i></div>
+      <div class="blk-title">Textos do Rótulo</div><i class="ti ti-chevron-down chev"></i>
+    </div>
+    <div class="blk-bd vis">
+      <div class="f"><label>Tagline</label><textarea id="rTagline" oninput="R.r()">Fermentado com amor,
+gaseificado por natureza</textarea></div>
+      <div class="f"><label>Modo de consumo / Descrição</label><textarea id="rDesc" oninput="R.r()">Perfeito para refeições matinais, acompanhado por um snack</textarea></div>
+      <div class="f" style="margin-bottom:0"><label>Ingredientes</label><textarea id="rIngred" rows="3" oninput="R.r()">Água Filtrada, Limão Orgânico, Lemon - Limão Siciliano - doTERRA, Açúcar de coco, Açúcar mascavo, Gengibre orgânico desidratado, Açafrão em pó, Uva passas preta, Tâmaras, Sal de Mossoró</textarea></div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-hd" onclick="tog(this)">
+      <div class="blk-icon"><i class="ti ti-report-analytics"></i></div>
+      <div class="blk-title">Informação Nutricional</div><i class="ti ti-chevron-down chev"></i>
+    </div>
+    <div class="blk-bd">
+      <div class="f"><label>Porção</label><input id="rPorcao" value="300ml" oninput="R.r()" style="max-width:100px"></div>
+      <table class="nt"><thead><tr><th>Nutriente</th><th>Por porção</th><th>%VD</th></tr></thead><tbody>
+        ${[['n-kcal','Valor energético','85 kcal','4%'],['n-carb','Carboidratos','20g','7%'],['n-sug','Açúcares totais','7g','*'],
+           ['n-sadd','Açúcares adicionados','0g','0%'],['n-prot','Proteínas','0g','0%'],['n-fat','Gorduras totais','0g','0%'],
+           ['n-satfat','Gorduras saturadas','0g','0%'],['n-trans','Gorduras trans','0g','*'],['n-fib','Fibra alimentar','0,5g','2%'],['n-sod','Sódio','15mg','1%']
+        ].map(([id,n,v,vd])=>`<tr><td>${n}</td><td><input id="${id}" value="${v}" oninput="R.r()"></td><td><input id="${id}-vd" value="${vd}" oninput="R.r()" style="max-width:36px"></td></tr>`).join('')}
+      </tbody></table>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-hd open" onclick="tog(this)">
+      <div class="blk-icon"><i class="ti ti-calendar-event"></i></div>
+      <div class="blk-title">Lote e Validade</div><i class="ti ti-chevron-down chev"></i>
+    </div>
+    <div class="blk-bd vis">
+      <div class="f-row">
+        <div class="f" style="margin-bottom:0"><label>Lote</label><input id="rLote" value="24/05" oninput="R.r()"></div>
+        <div class="f" style="margin-bottom:0"><label>Validade</label><input id="rVal" value="06/06/2026" oninput="R.r()"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-hd open" onclick="tog(this)">
+      <div class="blk-icon"><i class="ti ti-info-circle"></i></div>
+      <div class="blk-title">Rodapé</div><i class="ti ti-chevron-down chev"></i>
+    </div>
+    <div class="blk-bd vis">
+      <div class="f"><label>Conservação</label><textarea id="rConserv" oninput="R.r()">Manter refrigerado entre 2°C e 4°C. Consumir em até 5 dias após aberto.</textarea></div>
+      <div class="f-row">
+        <div class="f" style="margin-bottom:0"><label>WhatsApp</label><input id="rWpp" value="11 99112-4043" oninput="R.r()"></div>
+        <div class="f" style="margin-bottom:0"><label>Site</label><input id="rSite" value="www.delfiafoods.com.br" oninput="R.r()"></div>
+      </div>
+      <div class="f" style="margin-top:10px"><label>CNPJ / Razão Social</label><input id="rCnpj" value="DELFIA FOODS LTDA. CNPJ: 58.534.752/0001-12" oninput="R.r()"></div>
+      <div class="f" style="margin-bottom:0">
+        <label>Código de Barras</label>
+        <div style="display:flex;gap:7px;align-items:flex-end">
+          <input id="rBarcode" value="7898775470097" oninput="R.r()" style="flex:1">
+          <label class="upbtn" style="cursor:pointer;padding:8px 12px;flex-shrink:0;margin-bottom:0"><i class="ti ti-upload" style="font-size:13px"></i> Imagem<input type="file" accept="image/*" style="display:none" onchange="onBcImg(event)"></label>
+        </div>
+        <p class="f-hint2" style="margin-top:4px">Número gera código automático · ou carregue uma imagem</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="abar">
+    <button class="abtn ab-sec" onclick="saveLabel()"><i class="ti ti-bookmark"></i> Nova</button>
+    <button class="abtn ab-upd" onclick="toast('Rótulo atualizado!')"><i class="ti ti-refresh"></i> Atualizar</button>
+    <button class="abtn ab-pri" onclick="printR()"><i class="ti ti-printer"></i> Imprimir</button>
+  </div>`;
+  R.r();
+}
+
+// ── SANITÁRIO / LOGÍSTICA ────────────────────────────────
+function renderSanitario(p){
+  const opts=Object.entries(INSUMOS).map(([cat,itens])=>`<optgroup label="${cat}">${itens.map(i=>`<option value="${i.id}">${i.nome}</option>`).join('')}</optgroup>`).join('');
+  p.innerHTML=`
+  <div class="blk" style="margin-top:14px">
+    <div class="blk-hd open" onclick="tog(this)">
+      <div class="blk-icon gold"><i class="ti ti-alert-triangle"></i></div>
+      <div class="blk-title">Dados do Insumo <span class="blk-sub">(Padrão ANVISA)</span></div>
+      <i class="ti ti-chevron-down chev"></i>
+    </div>
+    <div class="blk-bd vis">
+      <div class="f"><label>Produto / Categoria</label><select id="sInsumo" onchange="onInsumo(this.value)"><option value="">Selecionar produto...</option>${opts}</select></div>
+      <div class="f"><label>Nome do Produto (na etiqueta)</label><input id="sNome" placeholder="ex: Nozes Pecã Orgânicas" oninput="San.r()"></div>
+      <div class="f-row">
+        <div class="f" style="margin-bottom:0"><label>Lote Original</label><input id="sLote" placeholder="ex: LOT-2025-05" oninput="San.r()"></div>
+        <div class="f f-rel" style="margin-bottom:0">
+          <label>Fornecedor</label>
+          <input id="sForn" placeholder="ex: Orgânico Brasil" oninput="onForn()" autocomplete="off">
+          <div class="sugg" id="fornSugg"></div>
+        </div>
+      </div>
+      <div class="f-row" style="margin-top:13px">
+        <div class="f" style="margin-bottom:0"><label>Quantidade</label>
+          <div style="display:flex;gap:5px">
+            <input id="sQtd" placeholder="500" oninput="San.r()" style="flex:1;min-width:0">
+            <select id="sQtdUn" onchange="San.r()" style="width:68px"><option value="g">g</option><option value="kg">kg</option><option value="ml">ml</option><option value="L">L</option><option value="un">un</option><option value="cx">cx</option></select>
+          </div>
+        </div>
+        <div class="f" style="margin-bottom:0"><label>Conservação</label>
+          <select id="sConserv" onchange="San.r()"><option value="nao">Não especificado</option><option value="refrig">Refrigerado (2°C a 8°C)</option><option value="congelado">Congelado (-18°C)</option><option value="ambiente">Temperatura Ambiente</option><option value="fresco-seco">Local Fresco e Seco</option></select>
+        </div>
+      </div>
+      <div class="f-row" style="margin-top:13px">
+        <div class="f" style="margin-bottom:0"><label>Data de Recebimento</label><input type="date" id="sReceb" oninput="San.r()" value="${todayISO()}"></div>
+        <div class="f" style="margin-bottom:0"><label>Data de Manipulação</label><input type="date" id="sManip" oninput="San.r()" value="${todayISO()}"></div>
+      </div>
+      <div class="f-row" style="margin-top:13px">
+        <div class="f" style="margin-bottom:0"><label>Prazo de Validade</label><input type="date" id="sValidade" oninput="San.r()"><p class="f-hint" id="sValidHint" style="display:none"></p></div>
+        <div class="f" style="margin-bottom:0"><label>Responsável</label><input id="sResp" placeholder="Nome" oninput="San.r()"></div>
+      </div>
+      <div class="f" style="margin-top:13px;margin-bottom:0">
+        <label>Alérgênicos</label>
+        <input id="sAlerg" placeholder="ex: NOZES, GLÚTEN" oninput="San.r()">
+        <p class="f-hint2" style="margin-top:4px">Preenchido automaticamente ao selecionar o produto</p>
+      </div>
+    </div>
+  </div>
+  <div class="abar"><button class="abtn ab-pri" onclick="printSan()"><i class="ti ti-printer"></i> Imprimir Etiqueta</button></div>`;
+  San.r();
+}
+
+function renderComingSoon(p){
+  const info={sazonais:{ic:'🎁',n:'Cartões Sazonais',d:'Crie cartões personalizados para datas especiais: Natal, Páscoa, Dia das Mães, aniversários e muito mais.'},studio:{ic:'🎨',n:'Estúdio Livre',d:'Editor livre para criar qualquer layout de etiqueta com arrastar e soltar.'}}[S.tab]||{ic:'🚀',n:S.tab,d:''};
+  p.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;height:calc(100vh - 200px)"><div style="width:80px;height:80px;border-radius:20px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--sh);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:20px">${info.ic}</div><h2 style="font-size:18px;font-weight:700;color:var(--ink);margin-bottom:8px">${info.n}</h2><p style="font-size:14px;color:var(--ink3);max-width:280px;line-height:1.7">${info.d}</p><div style="display:inline-flex;align-items:center;gap:6px;background:var(--gold-soft);color:#8a5c00;border:1px solid var(--gold-b);border-radius:20px;padding:6px 16px;font-size:12px;font-weight:600;margin-top:16px"><i class="ti ti-clock" style="font-size:13px"></i>Em desenvolvimento</div></div>`;
+}
+
+// ── RENDER RÓTULO ────────────────────────────────────────
+const R={r(){
+  if(S.tab!=='rotulo')return;
+  const sz=SIZES[S.size],lw=document.getElementById('labelWrap');
+  lw.innerHTML='';lw.className='lbl-wrap';
+  lw.style.width=sz.w+'px';lw.style.height=sz.h+'px';
+  const sf=sz.w/189,bgH=Math.round(sz.h*.38);
+  const fSz=Math.round(parseInt(gv('rFontSz')||60)*sf*.28);
+  const nPos=parseInt(gv('rNamePos')||0);
+  const lSz=Math.round((parseInt(document.querySelector('#mainPanel input[type=range][oninput*="lszv"]')?.value||50))*.22*sf);
+  const spac=parseInt(document.querySelector('#mainPanel input[type=range][oninput*="spacv"]')?.value||0);
+  const xs=Math.round(6*sf),xxs=Math.round(5.5*sf),s7=Math.round(7*sf);
+  const nome=gv('rNome')||'PRODUTO',sabor=gv('rSabor'),vol=gv('rVol');
+  let logoH=`<img src="assets/logo-delfiafoods.png" style="height:${lSz}px;width:auto;filter:${S.logoMode==='black'?'grayscale(1) brightness(0)':S.logoMode==='white'?'grayscale(1) brightness(10)':'none'}" onerror="this.style.display='none'">`;
+  if(S.logoMode==='none')logoH='';
+  const selosH=S.selos.map(s=>`<span style="font-size:${xxs}px;font-weight:700;padding:2px 5px;border:1px solid #1e6b40;border-radius:20px;color:#1e6b40;white-space:nowrap">${s}</span>`).join('');
+  const nutH=[['Valor energético',gv('n-kcal'),gv('n-kcal-vd')],['Carboidratos',gv('n-carb'),gv('n-carb-vd')],['Açúcares totais',gv('n-sug'),gv('n-sug-vd')],['Açúcares adicionados',gv('n-sadd'),gv('n-sadd-vd')],['Proteínas',gv('n-prot'),gv('n-prot-vd')],['Gorduras totais',gv('n-fat'),gv('n-fat-vd')],['Gorduras saturadas',gv('n-satfat'),gv('n-satfat-vd')],['Gorduras trans',gv('n-trans'),gv('n-trans-vd')],['Fibra alimentar',gv('n-fib'),gv('n-fib-vd')],['Sódio',gv('n-sod'),gv('n-sod-vd')]].map(([n,v,vd])=>`<div style="display:flex;justify-content:space-between;padding:${Math.round(1.5*sf)}px ${Math.round(3*sf)}px;border-bottom:1px solid #eee;font-size:${Math.round(4.8*sf)}px"><span>${n}</span><span>${v||'—'} · ${vd||'—'} VD</span></div>`).join('');
+  const bcH=S.barcodeImg?`<img src="${S.barcodeImg}" style="height:${Math.round(18*sf)}px;max-width:100%;object-fit:contain">`:genBC(gv('rBarcode')||'',Math.round(18*sf));
+  const bgC=S.bgImg?`<img src="${S.bgImg}" style="width:100%;height:${bgH}px;object-fit:cover;display:block">`:`<div style="width:100%;height:${bgH}px;background:linear-gradient(135deg,#e8f5ec,#c5e8d5);display:flex;align-items:center;justify-content:center;opacity:.5;font-size:${Math.round(30*sf)}px">🌿</div>`;
+  lw.innerHTML=`<div class="lbl-inner"><div style="display:flex;align-items:center;justify-content:space-between;padding:${Math.round(5*sf)}px ${Math.round(7*sf)}px ${Math.round(2*sf)}px;flex-shrink:0">${logoH}<span style="font-family:'DM Mono',monospace;color:#888;font-size:${xxs}px">${vol}</span></div><div style="position:relative;overflow:hidden;flex-shrink:0">${bgC}<div style="position:absolute;left:0;right:0;top:calc(50% + ${nPos}%);transform:translateY(-50%);text-align:center;padding:0 ${Math.round(4*sf)}px;pointer-events:none"><div style="font-size:${fSz}px;color:${S.nameColor};font-family:'${S.nameFont}',Impact,sans-serif;font-weight:900;letter-spacing:1px;text-transform:uppercase;line-height:1;text-shadow:${S.bgImg?'0 1px 6px rgba(0,0,0,.5)':'none'}">${nome}</div>${sabor?`<div style="font-size:${Math.round(fSz*.36)}px;color:${S.nameColor};font-family:'${S.nameFont}',Impact,sans-serif;font-weight:600;margin-top:2px">${sabor}</div>`:''}</div></div><div style="flex:1;overflow:hidden;padding:${Math.round(4*sf)}px ${Math.round(6*sf)}px;display:flex;flex-direction:column;gap:${spac+2}px"><div style="display:flex;flex-wrap:wrap;gap:2px;justify-content:center">${selosH}</div>${gv('rTagline')?`<div style="font-size:${xs}px;font-style:italic;text-align:center;color:#333;line-height:1.35">${gv('rTagline').replace(/\n/g,'<br>')}</div>`:''} ${gv('rDesc')?`<div style="font-size:${xxs}px;text-align:center;color:#555;background:#f9f9f9;border-radius:3px;padding:3px 5px;border:1px solid #eee;line-height:1.3">${gv('rDesc')}</div>`:''} ${gv('rIngred')?`<div style="font-size:${Math.round(4.8*sf)}px;color:#444;line-height:1.4"><strong>Ingredientes:</strong> ${gv('rIngred')}</div>`:''}<div style="border:1px solid #ccc;border-radius:3px;overflow:hidden"><div style="background:#1e6b40;color:#fff;text-align:center;font-weight:700;font-size:${xxs}px;padding:${Math.round(2*sf)}px">Inf. Nutricional (porção ${gv('rPorcao')||'—'})</div>${nutH}<div style="font-size:${Math.round(4*sf)}px;color:#aaa;padding:${Math.round(2*sf)}px ${Math.round(3*sf)}px">* Não se aplica. %VD dieta 2000 kcal.</div></div></div><div style="flex-shrink:0;border-top:1px solid #e0e0e0;padding:${Math.round(3*sf)}px ${Math.round(6*sf)}px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:${Math.round(3*sf)}px;margin-bottom:${Math.round(3*sf)}px"><div style="border:1px solid #ccc;border-radius:2px;padding:${Math.round(2*sf)}px ${Math.round(4*sf)}px"><div style="font-size:${Math.round(4.5*sf)}px;color:#888;font-weight:700;text-transform:uppercase">Lote</div><div style="font-size:${s7}px;font-weight:700;color:#222;font-family:'DM Mono',monospace">${gv('rLote')||'—'}</div></div><div style="border:1px solid #ccc;border-radius:2px;padding:${Math.round(2*sf)}px ${Math.round(4*sf)}px"><div style="font-size:${Math.round(4.5*sf)}px;color:#888;font-weight:700;text-transform:uppercase">Validade</div><div style="font-size:${s7}px;font-weight:700;color:#222;font-family:'DM Mono',monospace">${gv('rVal')||'—'}</div></div></div><div style="display:flex;flex-direction:column;align-items:center;gap:1px">${bcH}</div><div style="display:flex;flex-wrap:wrap;align-items:center;gap:${Math.round(5*sf)}px;margin-top:${Math.round(2*sf)}px;font-size:${Math.round(5*sf)}px;color:#555">${gv('rWpp')?`<span>📱 ${gv('rWpp')}</span>`:''} ${gv('rSite')?`<span>🌐 ${gv('rSite')}</span>`:''}</div>${gv('rConserv')?`<div style="font-size:${Math.round(5*sf)}px;color:#666;line-height:1.4;margin-top:${Math.round(2*sf)}px">${gv('rConserv')}</div>`:''} ${gv('rCnpj')?`<div style="font-size:${Math.round(4.5*sf)}px;color:#bbb;border-top:1px solid #f0f0f0;padding-top:${Math.round(2*sf)}px;margin-top:${Math.round(2*sf)}px">${gv('rCnpj')}</div>`:''}</div></div>`;
+}};
+
+// ── RENDER SANITÁRIA ─────────────────────────────────────
+const San={r(){
+  if(S.tab!=='sanitario')return;
+  const sz=SIZES[S.size],lw=document.getElementById('labelWrap');
+  lw.innerHTML='';lw.className='san-wrap';
+  lw.style.width=sz.w+'px';lw.style.height=sz.h+'px';
+  const sf=sz.w/189;
+  const nome=gv('sNome')||'NOME DO PRODUTO';
+  const lote=gv('sLote')||'—';
+  const forn=gv('sForn')||'—';
+  const qtd=gv('sQtd')?(gv('sQtd')+' '+(gv('sQtdUn')||'g')):'—';
+  const conservK=document.getElementById('sConserv')?.value||'nao';
+  const conserv=CLBL[conservK]||'';
+  const receb=fmtD(gv('sReceb'));
+  const manip=fmtD(gv('sManip'));
+  const valid=fmtD(gv('sValidade'));
+  const resp=gv('sResp')||'—';
+  const alerg=gv('sAlerg')||'';
+  const isH=sz.horiz;
+
+  if(!isH){
+    // VERTICAL
+    lw.innerHTML=`<div style="display:flex;flex-direction:column;width:100%;height:${sz.h}px;font-size:${Math.round(6.5*sf)}px">
+      <div style="border-bottom:1.5px solid #222;padding:${Math.round(5*sf)}px ${Math.round(7*sf)}px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+        <img src="assets/logo-delfiafoods.png" style="height:${Math.round(18*sf)}px;width:auto" onerror="this.style.display='none'">
+        <span style="font-size:${Math.round(5*sf)}px;color:#888;font-weight:700;text-align:right">Controle de<br>Qualidade</span>
+      </div>
+      <div style="padding:${Math.round(5*sf)}px ${Math.round(7*sf)}px">
+        <div style="font-size:${Math.round(13*sf)}px;font-weight:900;text-transform:uppercase;text-align:center;border-bottom:1.5px solid #222;padding-bottom:${Math.round(4*sf)}px;margin-bottom:${Math.round(4*sf)}px;letter-spacing:.5px">${nome}</div>
+        ${[['Fornecedor:',forn],['Recebimento:',receb],['Manipulação:',manip],['Validade:',valid],['Qtd:',qtd],['Responsável:',resp]].map(([l,v])=>`<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px;border-bottom:1px solid #eee;padding-bottom:${Math.round(2*sf)}px;margin-bottom:${Math.round(2*sf)}px"><span style="font-size:${Math.round(5*sf)}px;color:#888;font-weight:600;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;flex-shrink:0">${l}</span><span style="font-size:${Math.round(5.5*sf)}px;font-weight:500;color:#222;font-family:'DM Mono',monospace;text-align:right;flex:1">${v}</span></div>`).join('')}
+      </div>
+      <div style="flex:1"></div>
+      <div style="border-top:1.5px solid #222;padding:${Math.round(4*sf)}px ${Math.round(7*sf)}px;flex-shrink:0;background:#f9f9f9">
+        ${conserv&&conservK!=='nao'?`<div style="font-size:${Math.round(5.5*sf)}px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:#333;text-align:center;margin-bottom:${Math.round(2*sf)}px">MANTER: ${conserv.toUpperCase()}</div>`:''}
+        ${alerg?`<div style="font-size:${Math.round(5.5*sf)}px;font-weight:700;color:#c0392b;text-transform:uppercase;letter-spacing:.3px;text-align:center">ALÉRGÊNICOS: ${alerg}</div>`:''}
+      </div>
+    </div>`;
+  } else {
+    // HORIZONTAL
+    const cols=sz.w>250?'55% 1fr':'45% 1fr';
+    lw.innerHTML=`<div style="display:grid;grid-template-columns:${cols};height:${sz.h}px;font-size:${Math.round(6*sf)}px">
+      <div style="border-right:1.5px solid #222;padding:${Math.round(5*sf)}px ${Math.round(7*sf)}px;display:flex;flex-direction:column;justify-content:space-between">
+        <div>
+          <img src="assets/logo-delfiafoods.png" style="height:${Math.round(16*sf)}px;width:auto;margin-bottom:${Math.round(3*sf)}px" onerror="this.style.display='none'">
+          <div style="font-size:${Math.round(4.5*sf)}px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;color:#888;margin-bottom:${Math.round(4*sf)}px">Controle de Qualidade</div>
+          <div style="font-size:${Math.round(11*sf)}px;font-weight:900;text-transform:uppercase;letter-spacing:.3px;line-height:1.1">${nome}</div>
+        </div>
+        <div>
+          ${conserv&&conservK!=='nao'?`<div style="font-size:${Math.round(5*sf)}px;font-weight:700;text-transform:uppercase;color:#333;margin-bottom:${Math.round(2*sf)}px">MANTER: ${conserv.replace(/\(.*\)/,'').toUpperCase().trim()}</div>`:''}
+          ${alerg?`<div style="font-size:${Math.round(5*sf)}px;font-weight:700;color:#c0392b;text-transform:uppercase;letter-spacing:.3px;border-top:1px solid #eee;padding-top:${Math.round(2*sf)}px">ALÉRGÊNICOS: ${alerg}</div>`:''}
+        </div>
+      </div>
+      <div style="padding:${Math.round(5*sf)}px ${Math.round(6*sf)}px;display:flex;flex-direction:column;gap:${Math.round(2*sf)}px">
+        ${[['Lote:',lote],['Fornecedor:',forn],['Recebimento:',receb],['Manipulação:',manip],['Validade:',valid],['Qtd:',qtd],['Responsável:',resp]].map(([l,v])=>`<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px;border-bottom:1px solid #f0f0f0;padding-bottom:${Math.round(2*sf)}px"><span style="font-size:${Math.round(4.5*sf)}px;color:#888;font-weight:600;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;flex-shrink:0">${l}</span><span style="font-size:${Math.round(5.5*sf)}px;font-weight:500;color:#222;font-family:'DM Mono',monospace;text-align:right;flex:1">${v}</span></div>`).join('')}
+      </div>
+    </div>`;
+  }
+}};
+
+// ── CONTROLES ────────────────────────────────────────────
+function setSize(sz){S.size=sz;document.querySelectorAll('.sz').forEach(b=>b.classList.remove('on'));document.getElementById('sz-'+sz)?.classList.add('on');document.getElementById('prevSzLbl').textContent=SIZES[sz].lbl;if(S.tab==='rotulo')R.r();else if(S.tab==='sanitario')San.r();}
+function setTab(t){S.tab=t;document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));document.getElementById('tab-'+t)?.classList.add('on');renderPanel();}
+function tog(hd){hd.classList.toggle('open');hd.nextElementSibling?.classList.toggle('vis');}
+function setNC(c,el){S.nameColor=c;document.querySelectorAll('.csw').forEach(s=>s.classList.remove('on'));if(el)el.classList.add('on');R.r();}
+function setFF(f,el){S.nameFont=f;document.querySelectorAll('.fopt').forEach(x=>x.classList.remove('on'));el.classList.add('on');R.r();}
+function setLM(m,el){S.logoMode=m;document.querySelectorAll('.lmode').forEach(x=>x.classList.remove('on'));el.classList.add('on');R.r();}
+function onBgImg(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{S.bgImg=ev.target.result;R.r();toast('Imagem aplicada!')};r.readAsDataURL(f);}
+function onBcImg(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{S.barcodeImg=ev.target.result;R.r();toast('Código aplicado!')};r.readAsDataURL(f);}
+function addSelo(){const inp=document.getElementById('newSelo');const v=inp.value.trim();if(!v)return;S.selos.push(v);inp.value='';const w=document.getElementById('selosWrap');const d=document.createElement('div');d.className='selo';d.innerHTML=`${v}<button onclick="rmSelo(this)"><i class="ti ti-x"></i></button>`;w.appendChild(d);R.r();}
+function rmSelo(btn){const t=btn.closest('.selo').textContent.trim().replace('×','').trim();S.selos=S.selos.filter(s=>s!==t);btn.closest('.selo').remove();R.r();}
+function onRProd(val){const m={'kefi-limao':{n:'KEFI',s:'Limão',v:'300ml'},'kefi-maracuja':{n:'KEFI',s:'Maracujá',v:'300ml'},'granola':{n:'GRANOLA',s:'Especial',v:'250g'}};const p=m[val];if(!p)return;sv('rNome',p.n);sv('rSabor',p.s);sv('rVol',p.v);R.r();toast(`"${p.n} — ${p.s}" carregado!`);}
+function onInsumo(id){const ins=IMAP[id];if(!ins)return;sv('sNome',ins.nome);sv('sAlerg',ins.alerg);const sel=document.getElementById('sConserv');if(sel)sel.value=ins.cons;const manip=document.getElementById('sManip')?.value||todayISO();if(manip&&ins.dias<9999){const d=new Date(manip);d.setDate(d.getDate()+ins.dias);sv('sValidade',d.toISOString().slice(0,10));const h=document.getElementById('sValidHint');if(h){h.style.display='';h.textContent=`Sugerido: ${ins.dias} dias pós-manipulação`;}}San.r();toast(`"${ins.nome}" carregado!`);}
+function onForn(){const inp=document.getElementById('sForn');const q=inp.value.toLowerCase();const sg=document.getElementById('fornSugg');if(!q){sg.classList.remove('vis');San.r();return;}const m=fornHist.filter(f=>f.toLowerCase().includes(q));if(!m.length){sg.classList.remove('vis');San.r();return;}sg.innerHTML=m.map(f=>`<div class="sugg-item" onclick="selForn('${f}')"><i class="ti ti-building-store"></i>${f}</div>`).join('');sg.classList.add('vis');San.r();}
+function selForn(f){sv('sForn',f);document.getElementById('fornSugg')?.classList.remove('vis');San.r();}
+document.addEventListener('click',e=>{if(!e.target.closest('.f-rel'))document.getElementById('fornSugg')?.classList.remove('vis');});
+document.addEventListener('focusout',e=>{if(e.target.id==='sForn'){const v=e.target.value.trim();if(v&&!fornHist.includes(v))fornHist.push(v);}});
+function saveLabel(){const key=`${gv('rNome')||'Produto'} — ${gv('rSabor')||'Variante'}`;const chips=document.getElementById('savedChips');if(!chips)return;const exists=[...chips.querySelectorAll('.chip')].some(c=>c.textContent.trim().startsWith(key));if(exists){toast(`"${key}" já existe`,'err');return;}const chip=document.createElement('div');chip.className='chip';chip.innerHTML=`${key}<button class="chip-x" onclick="event.stopPropagation();this.closest('.chip').remove();"><i class="ti ti-x"></i></button>`;chips.appendChild(chip);toast(`"${key}" salvo!`);}
+function printR(){openPrint(document.getElementById('labelWrap').outerHTML);}
+function printSan(){openPrint(document.getElementById('labelWrap').outerHTML);}
+function openPrint(html){const win=window.open('','_blank');win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"><style>@page{margin:5mm;size:auto}body{margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:Sora,sans-serif}*{box-sizing:border-box}</style></head><body>${html}<script>window.onload=()=>window.print()<\/script></body></html>`);win.document.close();}
+function genBC(code,h){if(!code)return'';const bars=[3,2,1,1,2,3,1,2,1,3,2,1,3,1,2,2,1,1,3,1,2,1,2,3,1,2,3,1,1,2,2,3,1,1,2,1,3,2,1,2,1,3,1,2,3,1,2,1,3,2,1,1,2,3,2,1,1,3,1,2,1,2,3,1,2,1,3,1,2,2,3,1,2,1,1,3,2,1,3,1,2,1,2,1,3,2,1,3];const tot=bars.reduce((a,b)=>a+b,0);const W=140;let rects='',cx=0;bars.forEach((w,i)=>{if(i%2===0)rects+=`<rect x="${Math.round(cx/tot*W)}" y="0" width="${Math.max(1,Math.round(w/tot*W))}" height="${h}" fill="#1a1a1a" rx=".3"/>`;cx+=w;});return`<div style="display:flex;flex-direction:column;align-items:center;gap:1px"><svg width="${W}" height="${h}" xmlns="http://www.w3.org/2000/svg">${rects}</svg><div style="font-family:'DM Mono',monospace;font-size:${Math.round(h*.28)}px;color:#555;letter-spacing:.5px">${code}</div></div>`;}
+function gv(id){return document.getElementById(id)?.value||'';}
+function sv(id,val){const el=document.getElementById(id);if(el)el.value=val;}
+function todayISO(){return new Date().toISOString().slice(0,10);}
+function fmtD(iso){if(!iso)return'—';const[y,m,d]=iso.split('-');return`${d}/${m}/${y}`;}
+function toast(msg,type=''){const t=document.getElementById('toastEl');t.className=`toast ${type==='err'?'err':''}`;t.innerHTML=`<i class="ti ${type==='err'?'ti-alert-circle':'ti-check'}" style="font-size:15px;flex-shrink:0"></i> ${msg}`;clearTimeout(t._t);t._t=setTimeout(()=>t.classList.add('hidden'),3000);}
+
+window.addEventListener('DOMContentLoaded',()=>renderPanel());
+</script>
+</body>
+</html>
