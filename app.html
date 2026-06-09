@@ -145,8 +145,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <style>
 svg{display:inline-block;vertical-align:middle;flex-shrink:0}
 .ni svg{flex-shrink:0}
-</style></head>
+</style>
+<script src="assets/js/api.js"></script>
+</head>
 <body>
+<script>
+// Verificar se está logado
+if(!localStorage.getItem('da_token')){window.location.href='index.html';}
+const U=JSON.parse(localStorage.getItem('da_user')||'{}');
+</script>
 <div class="sidebar">
     <div class="logo-a" style="padding:14px;display:flex;align-items:center;justify-content:center">
     <img src="assets/DelfiaFoods-Logo.svg" style="width:130px;height:auto" onerror="this.style.display='none'">
