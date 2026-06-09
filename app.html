@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Delfia Foods — Sistema de Gestão</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css">
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--gd:#1a3a2a;--gm:#1a6e3a;--gl:#e8f5ec;--gb:#9FE1CB;--or:#f5a623;--ol:#fff8e6;--rd:#e24b4a;--bg:#f5f5f0;--bg2:#fff;--bg3:#f0f0ea;--bd:#e5e5e0;--bd2:#ddd;--t1:#1a1a1a;--t2:#555;--t3:#999;--r:8px;--rl:12px}
@@ -142,23 +142,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .blbl{font-size:10px;color:var(--t3)}
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:10px}
 </style>
-</head>
+<style>
+svg{display:inline-block;vertical-align:middle;flex-shrink:0}
+.ni svg{flex-shrink:0}
+</style></head>
 <body>
 <div class="sidebar">
     <div class="logo-a" style="padding:14px;display:flex;align-items:center;justify-content:center">
     <img src="assets/DelfiaFoods-Logo.svg" style="width:130px;height:auto" onerror="this.style.display='none'">
   </div>
-  <div class="ni act" onclick="goTo('dashboard',this)"><i class="ti ti-layout-dashboard"></i><span>Painel</span></div>
-  <div class="ni" onclick="goTo('pdv',this)"><i class="ti ti-cash-register"></i><span>PDV</span></div>
-  <div class="ni" onclick="goTo('vendas',this)"><i class="ti ti-shopping-cart"></i><span>Vendas</span></div>
-  <div class="ni" onclick="goTo('producao',this)"><i class="ti ti-tools-kitchen-2"></i><span>Produção</span></div>
-  <div class="ni" onclick="goTo('produtos',this)"><i class="ti ti-package"></i><span>Produtos</span></div>
-  <div class="ni" onclick="goTo('clientes',this)"><i class="ti ti-users"></i><span>Clientes</span></div>
-  <div class="ni" onclick="goTo('agenda',this)"><i class="ti ti-calendar"></i><span>Agenda</span></div>
-  <div class="ni" onclick="goTo('prec',this)"><i class="ti ti-calculator"></i><span>Precificação</span></div>
+  <div class="ni act" onclick="goTo('dashboard',this)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg><span>Painel</span></div>
+  <div class="ni" onclick="goTo('pdv',this)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9"/><path d="M3 15h18v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4z"/><line x1="12" y1="7" x2="12" y2="11"/><line x1="10" y1="9" x2="14" y2="9"/></svg><span>PDV</span></div>
+  <div class="ni" onclick="goTo('vendas',this)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span>Vendas</span></div>
+  <div class="ni" onclick="goTo('producao',this)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 3v12h-5c-.023-3.681.184-7.406 5-12zm0 12v6h-1v-3M8 3a8 8 0 0 1 0 16m0-16v16m0-16H6m2 16H6"/></svg><span>Produção</span></div>
+  <div class="ni" onclick="goTo('produtos',this)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg><span>Produtos</span></div>
+  <div class="ni" onclick="goTo('clientes',this)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Clientes</span></div>
+  <div class="ni" onclick="goTo('agenda',this)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Agenda</span></div>
+  <div class="ni" onclick="goTo('prec',this)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="10" y2="18"/><line x1="14" y1="18" x2="16" y2="18"/></svg><span>Precificação</span></div>
   <div class="nb">
-    <div class="ni" style="color:#f5a623"><i class="ti ti-world"></i><span>Cardápio Online</span></div>
-    <div class="ni" onclick="logout()"><i class="ti ti-logout"></i><span>Sair</span></div>
+    <div class="ni" style="color:#f5a623"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span>Cardápio Online</span></div>
+    <div class="ni" onclick="logout()"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Sair</span></div>
   </div>
 </div>
 <div class="main">
@@ -174,11 +177,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div style="height:1px;background:var(--bd);margin-bottom:12px"></div>
     <div style="font-size:13px;font-weight:600;margin-bottom:8px">Forma de pagamento</div>
     <div class="pgrd">
-      <div class="pybtn sel" onclick="spay(this,'din')"><i class="ti ti-cash"></i>Dinheiro</div>
-      <div class="pybtn" onclick="spay(this,'crd')"><i class="ti ti-credit-card"></i>Crédito</div>
-      <div class="pybtn" onclick="spay(this,'dbt')"><i class="ti ti-credit-card"></i>Débito</div>
-      <div class="pybtn" onclick="spay(this,'pix')"><i class="ti ti-qrcode"></i>Pix</div>
-      <div class="pybtn" onclick="spay(this,'grp')"><i class="ti ti-users"></i>Conta Grupo</div>
+      <div class="pybtn sel" onclick="spay(this,'din')"><span style="display:inline-block;width:18px;height:18px"></span>Dinheiro</div>
+      <div class="pybtn" onclick="spay(this,'crd')"><span style="display:inline-block;width:18px;height:18px"></span>Crédito</div>
+      <div class="pybtn" onclick="spay(this,'dbt')"><span style="display:inline-block;width:18px;height:18px"></span>Débito</div>
+      <div class="pybtn" onclick="spay(this,'pix')"><span style="display:inline-block;width:18px;height:18px"></span>Pix</div>
+      <div class="pybtn" onclick="spay(this,'grp')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Conta Grupo</div>
     </div>
     <div class="field"><label>Canal de venda</label><select><option>📱 WhatsApp</option><option>🌐 Site</option><option>🏪 Loja São Paulo</option><option>⛸️ Loja Arena Ice Brasil</option><option>🤝 Amigo/Parente</option><option>🎪 Eventos</option></select></div>
     <div class="field"><label>Cliente (opcional)</label><input type="text" placeholder="Nome do cliente"></div>
@@ -193,7 +196,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- SUCCESS -->
 <div class="ov" id="ovSuc">
   <div style="background:var(--bg2);border-radius:var(--rl);padding:32px;text-align:center;width:320px;box-shadow:0 8px 32px rgba(0,0,0,.2)">
-    <div style="width:60px;height:60px;background:var(--gl);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:30px;color:var(--gm)"><i class="ti ti-check"></i></div>
+    <div style="width:60px;height:60px;background:var(--gl);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:30px;color:var(--gm)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
     <div style="font-size:18px;font-weight:600;margin-bottom:8px">Venda confirmada!</div>
     <div style="font-size:24px;font-weight:700;color:var(--gm);margin-bottom:5px" id="sVal"></div>
     <div style="font-size:13px;color:var(--t2);margin-bottom:22px" id="sPay"></div>
@@ -206,7 +209,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="mtit" id="pedTit">— <button onclick="cOv('ovPed')" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--t2)">✕</button></div>
     <div id="pedCon"></div>
     <div class="mbtns">
-      <button style="flex:1;padding:9px;border:1px solid #25D366;border-radius:var(--r);background:#e8f9f0;color:var(--gm);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px"><i class="ti ti-brand-whatsapp"></i> WhatsApp</button>
+      <button style="flex:1;padding:9px;border:1px solid #25D366;border-radius:var(--r);background:#e8f9f0;color:var(--gm);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg> WhatsApp</button>
       <button class="bcl" onclick="cOv('ovPed')">Fechar</button>
       <button class="bsv" onclick="cOv('ovPed')">Salvar</button>
     </div>
@@ -242,10 +245,10 @@ function rDash(){
   document.getElementById('ta').innerHTML='';
   document.getElementById('mc').innerHTML=`
   <div class="sgrid">
-    <div class="sc"><div class="sl"><i class="ti ti-trending-up" style="font-size:12px"></i>Vendas hoje</div><div class="sv" style="color:var(--gm)">R$ 847</div><div class="sb">+12% vs ontem</div></div>
-    <div class="sc"><div class="sl"><i class="ti ti-shopping-bag" style="font-size:12px"></i>Pedidos</div><div class="sv">23</div><div class="sb">5 em andamento</div></div>
-    <div class="sc"><div class="sl"><i class="ti ti-package" style="font-size:12px"></i>Produtos ativos</div><div class="sv">48</div><div class="sb">3 sem estoque</div></div>
-    <div class="sc"><div class="sl"><i class="ti ti-users" style="font-size:12px"></i>Clientes</div><div class="sv">312</div><div class="sb">+4 esta semana</div></div>
+    <div class="sc"><div class="sl"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Vendas hoje</div><div class="sv" style="color:var(--gm)">R$ 847</div><div class="sb">+12% vs ontem</div></div>
+    <div class="sc"><div class="sl"><span style="display:inline-block;width:18px;height:18px"></span>Pedidos</div><div class="sv">23</div><div class="sb">5 em andamento</div></div>
+    <div class="sc"><div class="sl"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>Produtos ativos</div><div class="sv">48</div><div class="sb">3 sem estoque</div></div>
+    <div class="sc"><div class="sl"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes</div><div class="sv">312</div><div class="sb">+4 esta semana</div></div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
     <div style="background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);padding:14px">
@@ -263,19 +266,45 @@ function rDash(){
   <div style="background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);padding:14px">
     <div style="font-size:13px;font-weight:500;margin-bottom:10px">Navegação rápida</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      ${[['PDV','ti-cash-register','pdv'],['Vendas','ti-shopping-cart','vendas'],['Produção','ti-tools-kitchen-2','producao'],['Clientes','ti-users','clientes'],['Agenda','ti-calendar','agenda'],['Precificação','ti-calculator','prec']].map(([l,ic,p])=>`<button class="btn" onclick="goTo('${p}',document.querySelectorAll('.ni')[${['pdv','vendas','producao','clientes','agenda','prec'].indexOf(p)+1}])"><i class="ti ${ic}"></i> ${l}</button>`).join('')}
+      ${[['PDV','ti-cash-register','pdv'],['Vendas','ti-shopping-cart','vendas'],['Produção','ti-tools-kitchen-2','producao'],['Clientes','ti-users','clientes'],['Agenda','ti-calendar','agenda'],['Precificação','ti-calculator','prec']].map(([l,ic,p])=>`<button class="btn" onclick="goTo('${p}',document.querySelectorAll('.ni')[${['pdv','vendas','producao','clientes','agenda','prec'].indexOf(p)+1}])"><span style="display:inline-block;width:18px;height:18px"></span> ${l}</button>`).join('')}
     </div>
   </div>`;
 }
 // PDV
-const PPRODS=[
-  {id:1,cat:'Acompanhamentos',nome:'Banana picada',preco:12,e:'🍌'},{id:2,cat:'Acompanhamentos',nome:'Couve picada',preco:12,e:'🥬'},
-  {id:3,cat:'Acompanhamentos',nome:'Guacamole',preco:14,e:'🥑'},{id:4,cat:'Acompanhamentos',nome:'Tomate picado',preco:12,e:'🍅'},
-  {id:5,cat:'Bebidas',nome:'Suco detox',preco:16,e:'🥤'},{id:6,cat:'Bebidas',nome:'Limonada',preco:14,e:'🍋'},
-  {id:7,cat:'Bebidas',nome:'Leite de coco',preco:15,e:'🥥'},{id:8,cat:'Bebidas',nome:'Vitamina verde',preco:18,e:'🌿'},
-  {id:9,cat:'Pratos',nome:'Bowl vegano',preco:32,e:'🥗'},{id:10,cat:'Pratos',nome:'Wrap integral',preco:28,e:'🌯'},
-  {id:11,cat:'Sobremesas',nome:'Mousse de açaí',preco:18,e:'🍫'},{id:12,cat:'Sobremesas',nome:'Brigadeiro vegano',preco:8,e:'🍬'},
-];
+// Produtos carregados da API
+let PPRODS=[];
+// Emoji padrão por categoria
+function catEmoji(cat){
+  const m={'Acompanhamentos':'🥗','Bebidas':'🥤','Doces':'🍬','Kits':'🎁','Pães':'🍞','Queijos':'🧀','Snacks':'🍿','Sopas':'🍲','Sorvetes':'🍦','Pratos':'🍽️','Sobremesas':'🍫'};
+  return m[cat]||'📦';
+}
+async function loadProdutos(){
+  try{
+    const r=await Api.get('/api/produtos');
+    if(r && r.length){
+      PPRODS=r.map(p=>({
+        id:p.id,
+        cat:p.categoria||'Outros',
+        nome:p.nome,
+        preco:parseFloat(p.preco_convencional||p.preco||0),
+        preco_promo:parseFloat(p.preco_promocional||p.preco_convencional||p.preco||0),
+        e:catEmoji(p.categoria||''),
+        estoque:p.estoque_atual||99,
+        ativo:p.ativo!==false
+      })).filter(p=>p.ativo);
+    }
+  }catch(e){
+    console.log('Usando produtos de demonstração');
+    PPRODS=[
+      {id:1,cat:'Snacks',nome:'Snack Tomate',preco:23.5,preco_promo:20,e:'🍅'},
+      {id:2,cat:'Snacks',nome:'Snack Beterraba',preco:23.5,preco_promo:20,e:'🫚'},
+      {id:3,cat:'Bebidas',nome:'KEFI Limão',preco:16,preco_promo:14,e:'🥤'},
+      {id:4,cat:'Bebidas',nome:'KEFI Maracujá',preco:16,preco_promo:14,e:'🥤'},
+      {id:5,cat:'Doces',nome:'Brigadeiro Vegano',preco:8,preco_promo:7,e:'🍫'},
+      {id:6,cat:'Queijos',nome:'Queijo de Castanhas 150g',preco:38,preco_promo:34,e:'🧀'},
+    ];
+  }
+}
 let cart={},pmM=false,spM='din',gD=0;
 const PMIN=3,PPCT=0.15;
 const tQty=()=>Object.values(cart).reduce((a,b)=>a+b.qty,0);
@@ -287,14 +316,14 @@ function rPDV(){
   <div class="pdvw">
     <div class="pdvp" id="pdvG">
       <div style="padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--bd);display:flex;gap:8px;align-items:center;margin:-14px -14px 14px">
-        <i class="ti ti-search" style="color:var(--t3);font-size:16px"></i>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input style="flex:1;border:none;background:transparent;padding:4px 0;font-size:13px;outline:none;color:var(--t1)" placeholder="Buscar produto..." oninput="pdvF(this.value)" id="pdvSr">
       </div>
-      <div id="pdvGrid"></div>
+      <div id="pdvGrid"><div style="padding:40px;text-align:center;color:var(--t3)">Carregando produtos...</div></div>
     </div>
     <div class="pdvc">
-      <div class="ch"><div style="font-size:14px;font-weight:500;display:flex;align-items:center;gap:6px"><i class="ti ti-shopping-cart" style="font-size:16px"></i>Carrinho</div><span class="cbdg" id="cBdg">0</span></div>
-      <div class="ptgl cv" id="pBtn" onclick="tPromo()"><i class="ti ti-tag" style="font-size:14px"></i><span id="pLbl">Preço Convencional</span></div>
+      <div class="ch"><div style="font-size:14px;font-weight:500;display:flex;align-items:center;gap:6px"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>Carrinho</div><span class="cbdg" id="cBdg">0</span></div>
+      <div class="ptgl cv" id="pBtn" onclick="tPromo()"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span id="pLbl">Preço Convencional</span></div>
       <div class="ci" id="cItEl"><div class="ce">Carrinho vazio</div></div>
       <div class="cf">
         <div class="dr"><select id="dType" onchange="calc()"><option value="none">Sem desconto</option><option value="pct">% desconto</option><option value="fix">R$ desconto</option></select><input type="number" id="dVal" placeholder="0" min="0" oninput="calc()"></div>
@@ -303,20 +332,21 @@ function rPDV(){
       </div>
     </div>
   </div>`;
-  rGrid(PPRODS);rCart();
+  // Carregar produtos da API
+  loadProdutos().then(()=>{rGrid(PPRODS);rCart();});
 }
 function pdvF(q){rGrid(q?PPRODS.filter(p=>p.nome.toLowerCase().includes(q.toLowerCase())):PPRODS);}
 function rGrid(list){
   const cats=[...new Set(list.map(p=>p.cat))],pro=pOn();
   document.getElementById('pdvGrid').innerHTML=cats.map(cat=>`<div class="cattit">${cat}</div><div class="pgrid">${list.filter(p=>p.cat===cat).map(p=>{
-    const ic=cart[p.id]?.qty||0,pF=pro?p.preco*(1-PPCT):p.preco;
+    const ic=cart[p.id]?.qty||0,pF=pro?(p.preco_promo||p.preco*(1-PPCT)):p.preco;
     return`<div class="pc" onclick="add(${p.id})"><div class="pim"><span>${p.e}</span><div class="pov"><span>+ Adicionar</span></div>${ic>0?`<div class="pbdg">${ic}</div>`:''}</div><div class="pin"><div class="pnm">${p.nome}</div><div class="ppr">${B(pF)}${pro?`<span class="pol">${B(p.preco)}</span>`:''}</div></div></div>`;
   }).join('')}</div>`).join('');}
 function add(id){const p=PPRODS.find(x=>x.id===id);if(!cart[id])cart[id]={...p,qty:0};cart[id].qty++;rCart();rGrid(PPRODS);upPBtn();}
 function chgQ(id,d){if(!cart[id])return;cart[id].qty+=d;if(cart[id].qty<=0)delete cart[id];rCart();rGrid(PPRODS);upPBtn();}
 function del(id){delete cart[id];rCart();rGrid(PPRODS);upPBtn();}
 function calc(){
-  const pro=pOn();let sub=Object.values(cart).reduce((a,i)=>a+(pro?i.preco*(1-PPCT):i.preco)*i.qty,0);
+  const pro=pOn();let sub=Object.values(cart).reduce((a,i)=>a+(pro?(i.preco_promo||i.preco*(1-PPCT)):i.preco)*i.qty,0);
   const dt=document.getElementById('dType').value,dv=parseFloat(document.getElementById('dVal').value)||0;
   document.getElementById('dVal').style.display=dt==='none'?'none':'block';
   if(dt==='pct')sub*=(1-Math.min(dv,100)/100);if(dt==='fix')sub=Math.max(0,sub-dv);if(gD>0)sub*=(1-gD/100);
@@ -328,7 +358,7 @@ function rCart(){
   const bd=document.getElementById('cBdg');if(bd)bd.textContent=cnt;
   const el=document.getElementById('cItEl');if(!el)return;
   if(!items.length){el.innerHTML='<div class="ce">Carrinho vazio</div>';calc();return;}
-  el.innerHTML=items.map(item=>{const price=pro?item.preco*(1-PPCT):item.preco;return`<div class="citem"><div style="width:34px;height:34px;border-radius:7px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${item.e}</div><div class="cin"><div class="cnm">${item.nome}</div><div class="cpri">${B(price)}${pro?'<span style="background:var(--ol);color:#a06000;font-size:10px;padding:1px 5px;border-radius:3px;margin-left:4px">PROMO</span>':''}</div><div class="qctl"><button class="qb" onclick="chgQ(${item.id},-1)">−</button><span class="qv">${item.qty}</span><button class="qb" onclick="chgQ(${item.id},1)">+</button></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="ct">${B(price*item.qty)}</span><button class="ab del" onclick="del(${item.id})"><i class="ti ti-trash"></i></button></div></div>`;}).join('');calc();
+  el.innerHTML=items.map(item=>{const price=pro?(item.preco_promo||item.preco*(1-PPCT)):item.preco;return`<div class="citem"><div style="width:34px;height:34px;border-radius:7px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${item.e}</div><div class="cin"><div class="cnm">${item.nome}</div><div class="cpri">${B(price)}${pro?'<span style="background:var(--ol);color:#a06000;font-size:10px;padding:1px 5px;border-radius:3px;margin-left:4px">PROMO</span>':''}</div><div class="qctl"><button class="qb" onclick="chgQ(${item.id},-1)">−</button><span class="qv">${item.qty}</span><button class="qb" onclick="chgQ(${item.id},1)">+</button></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="ct">${B(price*item.qty)}</span><button class="ab del" onclick="del(${item.id})"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button></div></div>`;}).join('');calc();
 }
 function tPromo(){pmM=!pmM;upPBtn();rCart();rGrid(PPRODS);}
 function upPBtn(){const b=document.getElementById('pBtn'),l=document.getElementById('pLbl');if(!b||!l)return;if(pOn()){b.className='ptgl pm';l.textContent='Promo ≥3 itens';}else{b.className='ptgl cv';l.textContent='Preço Convencional';}}
@@ -348,15 +378,15 @@ const VD=[
   {id:7,cl:'Vanessa Jornalista Band',pr:'Cajumen × 1\nQueijo × 1\nBombom 6 × 1',en:'Avenida Profess...',vl:84,st:'confirmado',et:'segunda, 27/04'},
 ];
 function rVendas(){
-  document.getElementById('ta').innerHTML=`<button class="btnp"><i class="ti ti-plus"></i> Nova Venda</button>`;
+  document.getElementById('ta').innerHTML=`<button class="btnp"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nova Venda</button>`;
   const hj=VD.filter(v=>v.st==='hoje'),an=VD.filter(v=>v.st!=='hoje'&&v.st!=='entregue'&&v.st!=='cancelado');
   document.getElementById('mc').innerHTML=`
   <div class="srow"><input class="sinp" placeholder="Buscar cliente ou produto..."><select style="padding:7px 10px;border:1px solid var(--bd2);border-radius:var(--r);font-size:13px;outline:none"><option>Todos</option><option>Pendente</option><option>Confirmado</option></select></div>
-  ${hj.length?`<div class="secl urg"><i class="ti ti-truck-delivery" style="font-size:13px;vertical-align:-1px"></i> SAIU / ENTREGA HOJE</div><div class="vtbl urg">${vth()}${hj.map(vtr).join('')}</div>`:''}
+  ${hj.length?`<div class="secl urg"><span style="display:inline-block;width:18px;height:18px"></span> SAIU / ENTREGA HOJE</div><div class="vtbl urg">${vth()}${hj.map(vtr).join('')}</div>`:''}
   <div class="secl">EM ANDAMENTO</div><div class="vtbl">${vth()}${an.map(vtr).join('')}</div>`;
 }
 function vth(){return`<div class="vth"><span>Cliente</span><span>Produtos</span><span>Endereço</span><span>Valor</span><span>Status</span><span>Entrega</span><span>Ações</span></div>`;}
-function vtr(v){const s=ST[v.st]||{c:'bp',l:v.st};return`<div class="vtr"><div style="font-weight:500;font-size:13px">${v.cl}</div><div style="font-size:12px;color:var(--t2)">${v.pr.split('\n').map(p=>`<div>${p}</div>`).join('')}${v.sb?`<div style="font-size:11px;color:var(--t3)">${v.sb}</div>`:''}</div><div style="font-size:12px;color:var(--t2)">${v.en}</div><div style="font-weight:500;font-size:13px">${B(v.vl)}</div><div><span class="bdg ${s.c}">${s.l}</span></div><div style="font-size:12px;color:var(--t2)">${v.et}</div><div style="display:flex;gap:5px"><button class="ab"><i class="ti ti-tag"></i></button><button class="ab wpp"><i class="ti ti-brand-whatsapp"></i></button><button class="ab"><i class="ti ti-pencil"></i></button><button class="ab del"><i class="ti ti-trash"></i></button></div></div>`;}
+function vtr(v){const s=ST[v.st]||{c:'bp',l:v.st};return`<div class="vtr"><div style="font-weight:500;font-size:13px">${v.cl}</div><div style="font-size:12px;color:var(--t2)">${v.pr.split('\n').map(p=>`<div>${p}</div>`).join('')}${v.sb?`<div style="font-size:11px;color:var(--t3)">${v.sb}</div>`:''}</div><div style="font-size:12px;color:var(--t2)">${v.en}</div><div style="font-weight:500;font-size:13px">${B(v.vl)}</div><div><span class="bdg ${s.c}">${s.l}</span></div><div style="font-size:12px;color:var(--t2)">${v.et}</div><div style="display:flex;gap:5px"><button class="ab"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></button><button class="ab wpp"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg></button><button class="ab"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ab del"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button></div></div>`;}
 // PRODUCAO
 let PI=[
   {id:1,n:'Leite de Amendoas',e:'🥛',q:1,p:1,vs:[{c:'Karla',q:1,s:'pendente',et:'17/05'}]},
@@ -369,21 +399,21 @@ let PI=[
   {id:8,n:'Bombom 6 unidades',e:'🍫',q:5,p:2,vs:[{c:'Elaine',q:4,s:'pendente',et:'27/04'},{c:'Vanessa',q:1,s:'confirmado',et:'27/04'}]},
 ];
 function rProd(){
-  document.getElementById('ta').innerHTML=`<button class="btnp"><i class="ti ti-plus"></i> Item extra</button>`;
+  document.getElementById('ta').innerHTML=`<button class="btnp"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Item extra</button>`;
   document.getElementById('ps').textContent=`${PI.reduce((a,b)=>a+b.q,0)} unidades para produzir`;
   document.getElementById('mc').innerHTML=`
-  <div class="secl" style="color:var(--gm)"><i class="ti ti-clipboard-check" style="font-size:13px"></i> A PRODUZIR (DAS VENDAS)</div>
-  ${PI.length===0?'<div style="text-align:center;padding:30px;color:var(--t3);background:var(--bg2);border-radius:var(--rl)"><i class="ti ti-check" style="font-size:32px;display:block;margin-bottom:8px"></i>Tudo produzido!</div>':
+  <div class="secl" style="color:var(--gm)"><span style="display:inline-block;width:18px;height:18px"></span> A PRODUZIR (DAS VENDAS)</div>
+  ${PI.length===0?'<div style="text-align:center;padding:30px;color:var(--t3);background:var(--bg2);border-radius:var(--rl)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Tudo produzido!</div>':
   `<div class="ppgrid">${PI.map(i=>`<div class="ppc" onclick="opD(${i.id})"><div><div style="font-size:13px;font-weight:500">${i.n}</div><div style="font-size:11px;color:var(--t2)">${i.p} pedido${i.p>1?'s':''} · clique para ver</div></div><div style="display:flex;align-items:center;gap:8px"><div class="ppq ${i.q>=10?'big':''}">${i.q}</div><span style="font-size:22px">${i.e}</span></div></div>`).join('')}</div>`}
-  <div class="secl"><i class="ti ti-circle-check" style="font-size:13px"></i> EXTRAS CONCLUÍDOS</div>
+  <div class="secl"><span style="display:inline-block;width:18px;height:18px"></span> EXTRAS CONCLUÍDOS</div>
   <div class="ppgrid">
-    ${[{n:'Bombom 6 un.',e:'🍫',q:3},{n:'Snack Tomate',e:'🍅',q:8}].map(ex=>`<div style="background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);padding:12px;display:flex;align-items:center;justify-content:space-between;opacity:.7"><div style="display:flex;align-items:center;gap:8px"><i class="ti ti-circle-check" style="color:var(--gm);font-size:15px"></i><div style="text-decoration:line-through;color:var(--t2);font-size:13px">${ex.n}</div></div><span style="font-size:13px;color:var(--t2)">${ex.q}</span></div>`).join('')}
+    ${[{n:'Bombom 6 un.',e:'🍫',q:3},{n:'Snack Tomate',e:'🍅',q:8}].map(ex=>`<div style="background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);padding:12px;display:flex;align-items:center;justify-content:space-between;opacity:.7"><div style="display:flex;align-items:center;gap:8px"><span style="display:inline-block;width:18px;height:18px"></span><div style="text-decoration:line-through;color:var(--t2);font-size:13px">${ex.n}</div></div><span style="font-size:13px;color:var(--t2)">${ex.q}</span></div>`).join('')}
   </div>`;
 }
 function opD(id){
   const item=PI.find(x=>x.id===id);if(!item)return;
   document.getElementById('pedTit').innerHTML=`<span style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">${item.e}</span>${item.n} <span class="bdg" style="background:var(--gl);color:var(--gm)">${item.q}</span></span><button onclick="cOv('ovPed')" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--t2)">✕</button>`;
-  document.getElementById('pedCon').innerHTML=`<div class="ibox"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0"></i><span>Quando marcado como <strong>Entregue</strong>, a quantidade diminui automaticamente.</span></div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--t2);margin-bottom:8px">Pedidos com este item</div>${item.vs.map(v=>{const s=ST[v.s]||{c:'bp',l:v.s};return`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bd)"><div><div style="font-size:13px;font-weight:500">${v.c}</div><div style="font-size:11px;color:var(--t2)">Entrega: ${v.et}</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;font-weight:500">× ${v.q}</span><span class="bdg ${s.c}">${s.l}</span><button onclick="mE(${id},'${v.c}')" style="background:var(--gl);border:1px solid var(--gb);border-radius:var(--r);padding:4px 8px;font-size:11px;cursor:pointer;color:var(--gm)"><i class="ti ti-check" style="font-size:11px;vertical-align:-1px"></i> Entregue</button></div></div>`;}).join('')}<div style="display:flex;justify-content:space-between;margin-top:10px;padding:10px;background:var(--bg3);border-radius:var(--r)"><span style="font-size:13px;color:var(--t2)">Total a produzir</span><span style="font-size:16px;font-weight:600">${item.q} unidades</span></div>`;
+  document.getElementById('pedCon').innerHTML=`<div class="ibox"><span style="display:inline-block;width:18px;height:18px"></span><span>Quando marcado como <strong>Entregue</strong>, a quantidade diminui automaticamente.</span></div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--t2);margin-bottom:8px">Pedidos com este item</div>${item.vs.map(v=>{const s=ST[v.s]||{c:'bp',l:v.s};return`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bd)"><div><div style="font-size:13px;font-weight:500">${v.c}</div><div style="font-size:11px;color:var(--t2)">Entrega: ${v.et}</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;font-weight:500">× ${v.q}</span><span class="bdg ${s.c}">${s.l}</span><button onclick="mE(${id},'${v.c}')" style="background:var(--gl);border:1px solid var(--gb);border-radius:var(--r);padding:4px 8px;font-size:11px;cursor:pointer;color:var(--gm)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Entregue</button></div></div>`;}).join('')}<div style="display:flex;justify-content:space-between;margin-top:10px;padding:10px;background:var(--bg3);border-radius:var(--r)"><span style="font-size:13px;color:var(--t2)">Total a produzir</span><span style="font-size:16px;font-weight:600">${item.q} unidades</span></div>`;
   oOv('ovPed');
 }
 function mE(iid,cl){
@@ -403,15 +433,29 @@ const PRDS=[
   {id:11,cat:'Queijos',n:'Queijo de castanhas 150g',pc:18.35,pp:15,e:'🧀'},{id:12,cat:'Doces',n:'Bombom 6 unidades',pc:15,pp:13,e:'🍫'},
 ];
 function rProds(){
-  document.getElementById('ta').innerHTML=`<button class="btnp"><i class="ti ti-plus"></i> Novo Produto</button>`;
-  const cats=[...new Set(PRDS.map(p=>p.cat))];
-  document.getElementById('mc').innerHTML=`
-  <div style="background:var(--gl);border:1px solid var(--gb);border-radius:var(--r);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-    <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--gm)"><i class="ti ti-tool" style="font-size:15px"></i> Cardápio Online</div>
-    <div style="display:flex;gap:6px"><button class="btn" style="font-size:12px;padding:5px 10px"><i class="ti ti-printer" style="font-size:12px"></i> Imprimir</button><button class="btn" style="font-size:12px;padding:5px 10px"><i class="ti ti-copy" style="font-size:12px"></i> Copiar link</button><button class="btnp" style="font-size:12px;padding:5px 10px"><i class="ti ti-external-link" style="font-size:12px"></i> Abrir</button></div>
-  </div>
-  ${cats.map(cat=>`<div class="cattit">${cat}</div><div class="pgrid" style="margin-bottom:16px">${PRDS.filter(p=>p.cat===cat).map(p=>`<div class="pc"><div class="pim"><span>${p.e}</span><span style="position:absolute;bottom:5px;right:5px;background:var(--gl);color:var(--gm);border-radius:4px;padding:1px 6px;font-size:10px;font-weight:500"><i class="ti ti-check" style="font-size:9px"></i> Ativo</span></div><div class="pin"><div class="pnm">${p.n}</div><div style="display:flex;gap:10px;font-size:11px;margin-bottom:6px"><div><div style="color:var(--t3);font-size:10px">Promo</div><div class="ppr" style="font-size:12px">${p.pp?'R$ '+p.pp:'—'}</div></div><div><div style="color:var(--t3);font-size:10px">Conv</div><div class="ppr" style="font-size:12px">R$ ${p.pc}</div></div></div><div style="display:flex;gap:7px;border-top:1px solid var(--bd);padding-top:6px"><button class="ab"><i class="ti ti-file-text"></i></button><button class="ab"><i class="ti ti-pencil"></i></button><button class="ab del"><i class="ti ti-trash"></i></button></div></div></div>`).join('')}</div>`).join('')}`;
+  document.getElementById('ta').innerHTML=`<button class="btnp" onclick="abrirNovoProduto()"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo Produto</button>`;
+  document.getElementById('mc').innerHTML='<div style="padding:40px;text-align:center;color:var(--t3)">Carregando produtos...</div>';
+  Api.get('/api/produtos').then(prods=>{
+    if(!prods||!prods.length){
+      document.getElementById('mc').innerHTML='<div style="padding:40px;text-align:center;color:var(--t3)">Nenhum produto cadastrado ainda.<br><br><button class="btnp" onclick="abrirNovoProduto()">+ Cadastrar primeiro produto</button></div>';
+      return;
+    }
+    const cats=[...new Set(prods.map(p=>p.categoria||'Outros'))];
+    document.getElementById('mc').innerHTML=`
+    <div style="background:var(--gl);border:1px solid var(--gb);border-radius:var(--r);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:500;color:var(--gm)">🌐 Cardápio Online</div>
+      <div style="display:flex;gap:6px"><button class="btnp" style="font-size:12px;padding:5px 10px">🔗 Abrir</button></div>
+    </div>
+    ${cats.map(cat=>`<div class="cattit">${cat}</div><div class="pgrid" style="margin-bottom:16px">${prods.filter(p=>(p.categoria||'Outros')===cat).map(p=>`<div class="pc"><div class="pim"><span>${catEmoji(p.categoria||'')}</span><span style="position:absolute;bottom:5px;right:5px;background:var(--gl);color:var(--gm);border-radius:4px;padding:1px 6px;font-size:10px;font-weight:500">${p.ativo!==false?'✓ Ativo':'Inativo'}</span></div><div class="pin"><div class="pnm">${p.nome}</div><div style="display:flex;gap:10px;font-size:11px;margin-bottom:6px"><div><div style="color:var(--t3);font-size:10px">Promo</div><div class="ppr" style="font-size:12px">${p.preco_promocional?'R$ '+parseFloat(p.preco_promocional).toFixed(2).replace('.',','):'—'}</div></div><div><div style="color:var(--t3);font-size:10px">Conv</div><div class="ppr" style="font-size:12px">R$ ${parseFloat(p.preco_convencional||p.preco||0).toFixed(2).replace('.',',')}</div></div></div><div style="display:flex;gap:7px;border-top:1px solid var(--bd);padding-top:6px"><button class="ab" onclick="editProd(${p.id})">✏️</button><button class="ab del" onclick="delProd(${p.id})">🗑️</button></div></div></div>`).join('')}</div>`).join('')}`;
+  }).catch(()=>{
+    document.getElementById('mc').innerHTML='<div style="padding:40px;text-align:center;color:var(--t3)">Erro ao carregar produtos.<br>Verifique sua conexão.</div>';
+  });
 }
+function abrirNovoProduto(){alert('Cadastro de produto em breve!');}
+function editProd(id){alert('Editar produto '+id+' em breve!');}
+function delProd(id){if(confirm('Excluir produto?'))Api.delete('/api/produtos/'+id).then(()=>{toast('Produto excluído!');rProds();});}
+function toast(m){const d=document.createElement('div');d.textContent=m;d.style.cssText='position:fixed;bottom:20px;right:20px;background:#1a3a2a;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;z-index:9999';document.body.appendChild(d);setTimeout(()=>d.remove(),2500);}
+// CLIENTES - rProds_end
 // CLIENTES
 const CL=[
   {id:1,n:'Delfia Loja São Paulo',en:'Clube Social',fv:'Snack de Maçã',tot:1845,pd:2,tm:923,d:30},
@@ -421,16 +465,16 @@ const CL=[
   {id:5,n:'Dra Kátia Cilene Barroso Verly Lemos',en:'Rua Fidélis Tomaz...',fv:'Queijo',tot:218,pd:1,tm:218,d:5},
 ];
 function rClientes(){
-  document.getElementById('ta').innerHTML=`<button class="btnp"><i class="ti ti-plus"></i> Novo Cliente</button>`;
+  document.getElementById('ta').innerHTML=`<button class="btnp"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo Cliente</button>`;
   document.getElementById('pt').textContent='Clientes';document.getElementById('ps').textContent='20 clientes · clique para ver detalhes';
   document.getElementById('mc').innerHTML=`
   <div class="srow"><input class="sinp" placeholder="Buscar por nome ou endereço..."><button class="sbtn act">Maior gasto</button><button class="sbtn">Mais pedidos</button><button class="sbtn">Mais recente</button><button class="sbtn">A-Z</button></div>
-  ${CL.map((c,i)=>`<div class="crow" onclick="opCliente(${c.id})"><div class="rkbdg">${i+1}</div><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">${c.n}</div><div style="display:flex;gap:10px;font-size:12px;color:var(--t2);margin-top:2px"><span><i class="ti ti-map-pin" style="font-size:12px;vertical-align:-1px"></i> ${c.en}</span><span style="color:var(--or)"><i class="ti ti-star" style="font-size:12px;vertical-align:-1px"></i> ${c.fv}</span></div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:15px;font-weight:600;color:var(--gm)">R$ ${c.tot.toLocaleString('pt-BR')}</div><div style="font-size:12px;color:var(--t2)">${c.pd} pedidos &nbsp; T.M. R$ ${c.tm.toLocaleString('pt-BR')}</div><div style="font-size:11px;color:var(--t3)">há ${c.d}d</div></div></div>`).join('')}`;
+  ${CL.map((c,i)=>`<div class="crow" onclick="opCliente(${c.id})"><div class="rkbdg">${i+1}</div><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">${c.n}</div><div style="display:flex;gap:10px;font-size:12px;color:var(--t2);margin-top:2px"><span><span style="display:inline-block;width:18px;height:18px"></span> ${c.en}</span><span style="color:var(--or)"><span style="display:inline-block;width:18px;height:18px"></span> ${c.fv}</span></div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:15px;font-weight:600;color:var(--gm)">R$ ${c.tot.toLocaleString('pt-BR')}</div><div style="font-size:12px;color:var(--t2)">${c.pd} pedidos &nbsp; T.M. R$ ${c.tm.toLocaleString('pt-BR')}</div><div style="font-size:11px;color:var(--t3)">há ${c.d}d</div></div></div>`).join('')}`;
 }
 function opCliente(id){
   const c=CL.find(x=>x.id===id);if(!c)return;
   document.getElementById('pt').textContent=c.n;document.getElementById('ps').textContent=c.en;
-  document.getElementById('ta').innerHTML=`<button class="btn" onclick="rClientes()"><i class="ti ti-arrow-left"></i> Voltar</button>`;
+  document.getElementById('ta').innerHTML=`<button class="btn" onclick="rClientes()"><span style="display:inline-block;width:18px;height:18px"></span> Voltar</button>`;
   document.getElementById('mc').innerHTML=`
   <div class="sgrid">
     <div class="sc"><div class="sl">Total gasto</div><div class="sv" style="color:var(--gm)">R$ ${c.tot.toLocaleString('pt-BR')}</div></div>
@@ -442,7 +486,7 @@ function opCliente(id){
     <div style="font-size:13px;font-weight:500;margin-bottom:10px">Gasto no período</div>
     <div class="bbar-wrap">${['Sem 1','Sem 2','Sem 3','Sem 4'].map((s,i)=>`<div class="bcol"><div class="bfill" style="height:${i===3?80:3}px;background:${i===3?'var(--gd)':'var(--bd)'}"></div><div class="blbl">${s}</div></div>`).join('')}</div>
   </div>
-  <div class="secl"><i class="ti ti-package" style="font-size:13px"></i> HISTÓRICO DE PEDIDOS</div>
+  <div class="secl"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> HISTÓRICO DE PEDIDOS</div>
   <div style="background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);padding:14px;margin-bottom:8px">
     <div style="display:flex;justify-content:space-between;margin-bottom:8px"><div style="font-size:12px;color:var(--t2)">domingo, 19/04/2026 · WhatsApp · sex, 24/04</div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:14px;font-weight:500">R$ 670</span>${bdg('entregue')}</div></div>
     ${['Beterraba com cenoura - detox 200ml ×5 R$ 110','Maracujá com linhaça ×5 R$ 90','Kefir ×15 R$ 195','Suco Verde 300 ml ×5 R$ 165'].map(i=>`<div style="font-size:12px;padding:3px 0;border-bottom:1px solid var(--bd)">${i}</div>`).join('')}
@@ -457,12 +501,12 @@ const AG=[
   {id:5,n:'Keikokomakone',it:'Snack de Maçã x1',st:'pendente',d:3,sem:2,dt:'27/05'},
 ];
 function rAgenda(){
-  document.getElementById('ta').innerHTML=`<div class="abanner"><i class="ti ti-clock" style="font-size:14px"></i> Depois das 20h — produção de amanhã já está em preparo</div>`;
+  document.getElementById('ta').innerHTML=`<div class="abanner"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Depois das 20h — produção de amanhã já está em preparo</div>`;
   const dias=['Segunda','Terça','Quarta','Quinta','Sexta','Sáb','Dom'];
   const w1=[18,19,20,21,22,23,24],w2=[25,26,27,28,29,30,31];
   function bW(dates,sem){return`<div class="wgrid">${dias.map((d,i)=>{const iT=(dates[i]===19&&sem===1),peds=AG.filter(p=>p.sem===sem&&p.d===i+1);return`<div class="dc ${iT?'td':''}"><div class="dch"><span style="font-size:10px;color:var(--t3)">${d}</span><div style="display:flex;align-items:center;gap:4px">${iT?'<span class="tdp">Hoje</span>':''}<span class="dn">${dates[i]}</span></div></div>${peds.length?peds.map(p=>{const s=ST[p.st]||{c:'bp',l:p.st};return`<div class="dcard" onclick="opAg(${p.id})"><div class="dcn">${p.n}</div><div class="dci">${p.it}</div><span class="bdg ${s.c}" style="font-size:9px">${s.l}</span></div>`;}).join(''):'<div style="text-align:center;padding:18px 0;color:var(--t3);font-size:16px">—</div>'}</div>`;}).join('')}</div>`;}
   document.getElementById('mc').innerHTML=`
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div style="font-size:12px;font-weight:500;color:var(--t2);display:flex;align-items:center;gap:6px"><i class="ti ti-calendar" style="font-size:14px"></i> CALENDÁRIO DE ENTREGAS</div><div style="display:flex;gap:6px;align-items:center"><button class="btn" style="padding:5px 8px;font-size:14px"><i class="ti ti-chevron-left"></i></button><span style="font-size:12px;color:var(--t2)">18/05 – 24/05</span><button class="btn" style="padding:5px 8px;font-size:14px"><i class="ti ti-chevron-right"></i></button><button class="btn" style="font-size:12px;padding:5px 10px">Hoje</button></div></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div style="font-size:12px;font-weight:500;color:var(--t2);display:flex;align-items:center;gap:6px"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> CALENDÁRIO DE ENTREGAS</div><div style="display:flex;gap:6px;align-items:center"><button class="btn" style="padding:5px 8px;font-size:14px"><span style="display:inline-block;width:18px;height:18px"></span></button><span style="font-size:12px;color:var(--t2)">18/05 – 24/05</span><button class="btn" style="padding:5px 8px;font-size:14px"><span style="display:inline-block;width:18px;height:18px"></span></button><button class="btn" style="font-size:12px;padding:5px 10px">Hoje</button></div></div>
   <div style="font-size:11px;color:var(--t3);margin-bottom:6px">18/05 – 24/05</div>${bW(w1,1)}
   <div style="font-size:11px;color:var(--t3);margin-bottom:6px;margin-top:6px">25/05 – 31/05</div>${bW(w2,2)}
   <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin:12px 0 8px">Entregas além das 2 semanas</div>
@@ -487,11 +531,11 @@ function rPrec(){
   document.getElementById('ta').innerHTML='';
   document.getElementById('mc').innerHTML=`
   <div class="tabs2">
-    <div class="tb2 act" onclick="pTab('ins',this)"><i class="ti ti-leaf" style="font-size:13px"></i> Insumos</div>
-    <div class="tb2" onclick="pTab('fml',this)"><i class="ti ti-flask" style="font-size:13px"></i> Fórmulas</div>
-    <div class="tb2" onclick="pTab('prc',this)"><i class="ti ti-tag" style="font-size:13px"></i> Preços</div>
-    <div class="tb2" onclick="pTab('op',this)"><i class="ti ti-chart-bar" style="font-size:13px"></i> Operação</div>
-    <div class="tb2" onclick="pTab('mt',this)"><i class="ti ti-target" style="font-size:13px"></i> Metas</div>
+    <div class="tb2 act" onclick="pTab('ins',this)"><span style="display:inline-block;width:18px;height:18px"></span> Insumos</div>
+    <div class="tb2" onclick="pTab('fml',this)"><span style="display:inline-block;width:18px;height:18px"></span> Fórmulas</div>
+    <div class="tb2" onclick="pTab('prc',this)"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Preços</div>
+    <div class="tb2" onclick="pTab('op',this)"><span style="display:inline-block;width:18px;height:18px"></span> Operação</div>
+    <div class="tb2" onclick="pTab('mt',this)"><span style="display:inline-block;width:18px;height:18px"></span> Metas</div>
   </div>
   <div id="pc"></div>`;
   pIns();
@@ -499,20 +543,20 @@ function rPrec(){
 function pTab(t,el){document.querySelectorAll('.tb2').forEach(x=>x.classList.remove('act'));el.classList.add('act');{ins:pIns,fml:pFml,prc:pPrc,op:pOp,mt:pMt}[t]();}
 function pIns(){
   const ins={'Açúcares e Adoçantes':[['Açucar de coco',24,'kg'],['Açucar mascavo',8,'kg']],'Embalagens':[['Conjunto 4 Velas Tripla Ação Stéfani',75,'unidade']],'Frutas':[['Água de coco',4,'kg'],['Maracujá',6,'kg']],'Legumes e Verduras':[['Abobrinha italiana Orgânica',10,'kg'],['Cenoura Orgânica',10,'kg'],['Tomate orgânico',12,'kg']],'Sementes':[['Gergelim',40,'kg'],['Girassol',17,'kg'],['Linhaça',50,'kg'],['Sarraceno',21,'kg']]};
-  document.getElementById('pc').innerHTML=`<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px"><button class="btn"><i class="ti ti-upload" style="font-size:13px"></i> Importar em Lote</button><button class="btnp"><i class="ti ti-plus" style="font-size:13px"></i> Novo Insumo</button></div>`+Object.entries(ins).map(([cat,items])=>`<div class="secl">${cat}</div>${items.map(([n,p,u])=>`<div class="irow"><div><div style="font-size:13px;font-weight:500">${n}</div><div style="font-size:12px;color:var(--t2)">R$ ${p.toFixed(2)} / ${u}</div></div><div style="display:flex;gap:8px"><button class="ab"><i class="ti ti-pencil"></i></button><button class="ab del"><i class="ti ti-trash"></i></button></div></div>`).join('')}`).join('');
+  document.getElementById('pc').innerHTML=`<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px"><button class="btn"><span style="display:inline-block;width:18px;height:18px"></span> Importar em Lote</button><button class="btnp"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo Insumo</button></div>`+Object.entries(ins).map(([cat,items])=>`<div class="secl">${cat}</div>${items.map(([n,p,u])=>`<div class="irow"><div><div style="font-size:13px;font-weight:500">${n}</div><div style="font-size:12px;color:var(--t2)">R$ ${p.toFixed(2)} / ${u}</div></div><div style="display:flex;gap:8px"><button class="ab"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ab del"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button></div></div>`).join('')}`).join('');
 }
 function pFml(){
   const fmls={'Bebidas':[['Água Filtrada',1200,.23],['Beterraba com cenoura',10,2.70],['Kefir de Limão',8,1.17],['Leite de amendoas - 200ml',6,1.66],['Maracujá 200ml',8,2.91]],'Snacks':[['Snack Tomate',28,2.32],['Snack de Maçã',25,1.95]],'Doces':[['Barra de chocolate',20,5.60],['Bombom - 6 unid',10,8.20]],'Queijos':[['Queijo de castanhas 150g',12,7.34]]};
-  document.getElementById('pc').innerHTML=`<div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btnp"><i class="ti ti-plus" style="font-size:13px"></i> Nova Fórmula</button></div>`+Object.entries(fmls).map(([cat,items])=>`<div class="secl">${cat}</div>${items.map(([n,r,c])=>`<div class="frow2"><div style="width:36px;height:36px;border-radius:var(--r);background:var(--bg3);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="ti ti-flask" style="font-size:17px;color:var(--t3)"></i></div><div style="flex:1"><div style="font-size:13px;font-weight:500">${n}</div><div style="font-size:12px;color:var(--t2)">Rend.: ${r} un · <span style="color:var(--gm);font-weight:500">R$ ${c.toFixed(2)}/un</span></div></div><div style="display:flex;gap:6px"><button class="ab"><i class="ti ti-clipboard-list"></i></button><button class="ab"><i class="ti ti-copy"></i></button><button class="ab"><i class="ti ti-pencil"></i></button><button class="ab del"><i class="ti ti-trash"></i></button></div></div>`).join('')}`).join('');
+  document.getElementById('pc').innerHTML=`<div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btnp"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nova Fórmula</button></div>`+Object.entries(fmls).map(([cat,items])=>`<div class="secl">${cat}</div>${items.map(([n,r,c])=>`<div class="frow2"><div style="width:36px;height:36px;border-radius:var(--r);background:var(--bg3);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="display:inline-block;width:18px;height:18px"></span></div><div style="flex:1"><div style="font-size:13px;font-weight:500">${n}</div><div style="font-size:12px;color:var(--t2)">Rend.: ${r} un · <span style="color:var(--gm);font-weight:500">R$ ${c.toFixed(2)}/un</span></div></div><div style="display:flex;gap:6px"><button class="ab"><span style="display:inline-block;width:18px;height:18px"></span></button><button class="ab"><span style="display:inline-block;width:18px;height:18px"></span></button><button class="ab"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ab del"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button></div></div>`).join('')}`).join('');
 }
 function pPrc(){
   const prcs=[{n:'Barra de chocolate',m:2,l:6.89,lp:50,it:{Insumos:5.60,Embalagem:.10,Etiqueta:.13},tot:6.89,p:13.78},{n:'Queijo de castanhas 150g',m:2.5,l:11.01,lp:60,it:{Insumos:7.34,'Mão de obra':.00,Embalagem:1.00,Etiqueta:.25},tot:8.59,p:18.35},{n:'Snack Tomate',m:2.5,l:11.99,lp:60,it:{Insumos:2.32,Operação:4.57,Embalagem:.96,Etiqueta:.14},tot:7.99,p:23.50}];
-  document.getElementById('pc').innerHTML=`<div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btnp"><i class="ti ti-plus" style="font-size:13px"></i> Nova Precificação</button></div>`+prcs.map(p=>`<div class="pcard"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div><div style="font-size:14px;font-weight:500">${p.n}</div><div style="font-size:12px;color:var(--t2)">Margem: ${p.m}× · Lucro/un: R$ ${p.l.toFixed(2)} (${p.lp}%)</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:17px;font-weight:600;color:var(--or)">R$ ${p.p.toFixed(2)}</span><button class="ab"><i class="ti ti-pencil"></i></button><button class="ab del"><i class="ti ti-trash"></i></button></div></div><table class="ctbl"><tr><td style="color:var(--t3)">Composição do custo</td><td>R$/un</td></tr>${Object.entries(p.it).map(([k,v])=>`<tr><td>${k}</td><td>R$ ${v.toFixed(2)}</td></tr>`).join('')}<tr><td>Custo total</td><td>R$ ${p.tot.toFixed(2)}</td></tr></table></div>`).join('');
+  document.getElementById('pc').innerHTML=`<div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btnp"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nova Precificação</button></div>`+prcs.map(p=>`<div class="pcard"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div><div style="font-size:14px;font-weight:500">${p.n}</div><div style="font-size:12px;color:var(--t2)">Margem: ${p.m}× · Lucro/un: R$ ${p.l.toFixed(2)} (${p.lp}%)</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:17px;font-weight:600;color:var(--or)">R$ ${p.p.toFixed(2)}</span><button class="ab"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ab del"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button></div></div><table class="ctbl"><tr><td style="color:var(--t3)">Composição do custo</td><td>R$/un</td></tr>${Object.entries(p.it).map(([k,v])=>`<tr><td>${k}</td><td>R$ ${v.toFixed(2)}</td></tr>`).join('')}<tr><td>Custo total</td><td>R$ ${p.tot.toFixed(2)}</td></tr></table></div>`).join('');
 }
 function pOp(){
-  document.getElementById('pc').innerHTML=`<div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btnp"><i class="ti ti-plus" style="font-size:13px"></i> Nova Operação</button></div>
+  document.getElementById('pc').innerHTML=`<div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btnp"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nova Operação</button></div>
   <div style="background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);padding:14px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:15px;font-weight:600">Fabrica</span><div style="display:flex;align-items:center;gap:10px"><span style="font-size:13px;font-weight:500;color:var(--gm);background:var(--gl);border:1px solid var(--gb);border-radius:20px;padding:3px 10px"><i class="ti ti-clock" style="font-size:12px;vertical-align:-1px"></i> R$ 85,23/h</span><span style="font-size:11px;color:var(--t2)">Total/mês: R$ 15.000,00</span><button class="ab"><i class="ti ti-pencil"></i></button><button class="ab del"><i class="ti ti-trash"></i></button></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:15px;font-weight:600">Fabrica</span><div style="display:flex;align-items:center;gap:10px"><span style="font-size:13px;font-weight:500;color:var(--gm);background:var(--gl);border:1px solid var(--gb);border-radius:20px;padding:3px 10px"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> R$ 85,23/h</span><span style="font-size:11px;color:var(--t2)">Total/mês: R$ 15.000,00</span><button class="ab"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="ab del"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button></div></div>
     <div style="font-size:12px;color:var(--t2);margin-bottom:10px">8h/dia · 22 dias/mês · 176h total</div>
     <table style="width:100%;border-collapse:collapse;font-size:13px">${[['Aluguel',4000],['Energia',1000],['Internet',300],['Outros',300],['Contador',400],['Pró-labore (fundadora)',5000],['Funcionário 1 (salário + encargos CLT)',4000],['Total mensal',15000]].map(([n,v],i,a)=>`<tr style="border-bottom:${i<a.length-1?'1px solid var(--bd)':'none'};${i===a.length-1?'font-weight:600':''}"><td style="padding:5px 0">${n}</td><td style="text-align:right;color:var(--t2);padding:5px 0">R$ ${v.toLocaleString('pt-BR')},00</td></tr>`).join('')}</table>
   </div>`;
@@ -522,7 +566,7 @@ function pMt(){
   document.getElementById('pc').innerHTML=`
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
     <div><div style="font-size:12px;color:var(--t2);margin-bottom:4px">Meta de lucro mensal (R$)</div><input type="number" value="${meta}" style="border:1px solid var(--bd2);border-radius:var(--r);padding:7px 10px;font-size:14px;font-weight:600;width:130px;outline:none"></div>
-    <button class="btnp" style="align-self:flex-end"><i class="ti ti-refresh" style="font-size:13px"></i> Ajustar quantidades</button>
+    <button class="btnp" style="align-self:flex-end"><span style="display:inline-block;width:18px;height:18px"></span> Ajustar quantidades</button>
   </div>
   <div style="font-size:12px;color:var(--rd);margin-bottom:12px">Falta R$ ${(meta-liq).toLocaleString('pt-BR',{minimumFractionDigits:1})} — clique em "Ajustar quantidades"</div>
   <div class="sgrid">
@@ -536,7 +580,7 @@ function pMt(){
     <div style="height:8px;background:var(--bg3);border-radius:4px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--or);border-radius:4px"></div></div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-    ${[{n:'Loja São Paulo',ic:'ti-building-store',items:[['Kefir',60,540],['Snack de Tomate',40,680],['Snack de Maçã',30,510],['Bombom (cx 6 un)',25,375]]},{n:'WhatsApp',ic:'ti-brand-whatsapp',items:[['Kefir',18,162],['Snack de Tomate',12,204],['Snack de Maçã',9,153],['Bombom (cx 6 un)',8,120]]}].map(c=>`<div style="background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:12px"><div style="font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;margin-bottom:8px"><i class="ti ${c.ic}" style="font-size:15px;color:var(--t2)"></i>${c.n}</div>${c.items.map(([n,q,r])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd);font-size:12px"><span>${n}</span><div style="display:flex;gap:8px"><span style="font-weight:500">${q} un</span><span style="color:var(--gm)">= R$ ${r}/sem</span></div></div>`).join('')}</div>`).join('')}
+    ${[{n:'Loja São Paulo',ic:'ti-building-store',items:[['Kefir',60,540],['Snack de Tomate',40,680],['Snack de Maçã',30,510],['Bombom (cx 6 un)',25,375]]},{n:'WhatsApp',ic:'ti-brand-whatsapp',items:[['Kefir',18,162],['Snack de Tomate',12,204],['Snack de Maçã',9,153],['Bombom (cx 6 un)',8,120]]}].map(c=>`<div style="background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:12px"><div style="font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;margin-bottom:8px"><span style="display:inline-block;width:18px;height:18px"></span>${c.n}</div>${c.items.map(([n,q,r])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd);font-size:12px"><span>${n}</span><div style="display:flex;gap:8px"><span style="font-weight:500">${q} un</span><span style="color:var(--gm)">= R$ ${r}/sem</span></div></div>`).join('')}</div>`).join('')}
   </div>`;
 }
 // LOGOUT
