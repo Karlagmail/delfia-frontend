@@ -84,56 +84,66 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Sora,sans-serif;bac
 .ab svg{width:14px;height:14px}
 
 /* PDV */
-.pdvw{display:grid;grid-template-columns:1fr 320px;gap:0;height:calc(100vh - 117px);margin:-18px -20px}
-.pdvp{overflow-y:auto;padding:14px;background:var(--bg)}
+.pdvw{display:grid;grid-template-columns:1fr 300px;gap:0;height:calc(100vh - 57px);margin:-18px -20px}
+.pdvp{overflow-y:auto;padding:0;background:#f7f6f3}
 .pdvp::-webkit-scrollbar{width:5px}
 .pdvp::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:10px}
 .pdvc{background:var(--s);border-left:1px solid var(--bd);display:flex;flex-direction:column}
-.pdv-search{padding:10px 14px;background:var(--s);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;flex-shrink:0}
-.pdv-search input{flex:1;border:none;background:transparent;font-size:13px;outline:none;color:var(--t1);font-family:inherit}
+.pdv-search{padding:12px 16px;background:#fff;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;position:sticky;top:0;z-index:10}
+.pdv-search input{flex:1;border:none;background:transparent;font-size:14px;outline:none;color:var(--t1);font-family:inherit}
 .pdv-search input::placeholder{color:var(--t3)}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:14px}
-.pc{background:var(--s);border:1.5px solid var(--bd);border-radius:var(--rl);cursor:pointer;transition:all .18s;overflow:hidden}
-.pc:hover{border-color:var(--gm);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
-.pc.in-cart{border-color:var(--gm);background:var(--gl)}
-.pim{position:relative;aspect-ratio:1;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:32px}
-.pbdg{position:absolute;top:4px;right:4px;background:var(--gm);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
-.pin{padding:7px 8px}
-.pnm{font-size:11px;font-weight:600;color:var(--t1);margin-bottom:3px;line-height:1.3}
-.ppr{font-size:12px;font-weight:700;color:var(--gm)}
-.pol{font-size:10px;color:var(--t3);text-decoration:line-through;margin-left:4px;font-weight:400}
-.cattit{font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;padding-left:2px}
 
-/* CART */
-.ch{padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+/* GRID DE PRODUTOS — 4 colunas, cards com foto grande */
+.pdv-section{padding:16px 16px 0}
+.pdv-cat-lbl{font-size:11px;font-weight:700;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.pc{background:#fff;border:1.5px solid var(--bd);border-radius:12px;cursor:pointer;transition:all .18s;overflow:hidden;position:relative}
+.pc:hover{border-color:var(--gm);box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.pc.in-cart{border-color:var(--gm);box-shadow:0 0 0 2px rgba(30,107,64,.15)}
+.pim{position:relative;aspect-ratio:1;background:#f0efec;display:flex;align-items:center;justify-content:center;font-size:42px;overflow:hidden}
+.pim img{width:100%;height:100%;object-fit:cover}
+/* overlay + botão adicionar no hover */
+.pim-overlay{position:absolute;inset:0;background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .18s;border-radius:0}
+.pc:hover .pim-overlay{opacity:1}
+.pim-add{background:var(--gm);color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.pbdg{position:absolute;top:8px;right:8px;background:var(--gm);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,.2);z-index:2}
+.pin{padding:10px 12px 12px}
+.pnm{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:4px;line-height:1.3}
+.ppr{font-size:14px;font-weight:700;color:var(--gm)}
+.pol{font-size:11px;color:var(--t3);text-decoration:line-through;margin-left:5px;font-weight:400}
+
+/* CARRINHO NOVO */
+.ch{padding:14px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .cbdg{background:var(--gm);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
-.ptgl{padding:8px 14px;margin:10px;border-radius:var(--r);cursor:pointer;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;border:1.5px solid;transition:all .18s;flex-shrink:0}
+.ptgl{padding:8px 14px;margin:8px 12px 0;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;border:1.5px solid;transition:all .18s;flex-shrink:0;font-family:inherit}
 .ptgl.cv{border-color:var(--bd2);color:var(--t2);background:var(--s2)}
 .ptgl.pm{border-color:var(--gm);color:var(--gm);background:var(--gl)}
-.ci{flex:1;overflow-y:auto;padding:10px}
+
+/* Carrinho vazio */
+.ce{text-align:center;color:var(--t3);font-size:13px;padding:40px 20px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.ci{flex:1;overflow-y:auto;padding:8px 14px}
 .ci::-webkit-scrollbar{width:4px}
 .ci::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:10px}
-.ce{text-align:center;color:var(--t3);font-size:13px;padding:30px 0}
-.citem{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)}
+.citem{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-bottom:1px solid var(--bd)}
 .citem:last-child{border-bottom:none}
 .cin{flex:1;min-width:0}
-.cnm{font-size:12px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cpri{font-size:11px;color:var(--gm);font-weight:600;margin:2px 0}
+.cnm{font-size:13px;font-weight:600;color:var(--t1);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+.cpri{font-size:12px;color:var(--t3);margin-top:1px}
 .qctl{display:flex;align-items:center;gap:4px}
-.qb{width:20px;height:20px;border-radius:50%;border:1px solid var(--bd);background:var(--s2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;color:var(--t1);transition:all .15s}
+.qb{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--bd);background:var(--s2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;color:var(--t1);transition:all .15s}
 .qb:hover{background:var(--gd);color:#fff;border-color:var(--gd)}
-.qv{font-size:12px;font-weight:600;min-width:20px;text-align:center}
+.qv{font-size:12px;font-weight:700;min-width:20px;text-align:center}
 .ct{font-size:12px;font-weight:700;color:var(--t1);white-space:nowrap}
-.cf{padding:12px;border-top:1px solid var(--bd);flex-shrink:0;background:var(--s2)}
-.dr{display:flex;gap:6px;margin-bottom:10px}
-.dr select,.dr input{flex:1;padding:7px;font-size:12px;border:1px solid var(--bd);border-radius:var(--r);background:var(--s);color:var(--t1);outline:none;font-family:inherit}
+.cf{padding:14px 16px;border-top:1px solid var(--bd);flex-shrink:0;background:var(--s)}
+.dr{display:flex;gap:6px;margin-bottom:12px}
+.dr select,.dr input{flex:1;padding:8px 10px;font-size:12px;border:1.5px solid var(--bd);border-radius:var(--r);background:var(--s2);color:var(--t1);outline:none;font-family:inherit}
 .dr input{max-width:80px}
 .dr select:focus,.dr input:focus{border-color:var(--gm)}
-.trow{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.tv{font-size:18px;font-weight:700;color:var(--t1)}
-.bfin{width:100%;padding:11px;background:var(--gd);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;font-family:inherit}
-.bfin:hover:not(:disabled){background:var(--gm)}
-.bfin:disabled{opacity:.5;cursor:not-allowed}
+.trow{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.tv{font-size:20px;font-weight:700;color:var(--t1)}
+.bfin{width:100%;padding:13px;background:var(--gm);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;font-family:inherit;letter-spacing:.3px}
+.bfin:hover:not(:disabled){background:var(--gd)}
+.bfin:disabled{opacity:.45;cursor:not-allowed}
 
 /* MODAIS */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
@@ -189,6 +199,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Sora,sans-serif;bac
 .foto-thumb:hover .foto-actions{display:flex}
 .foto-thumb .foto-actions button{background:rgba(255,255,255,.9);border:none;border-radius:4px;font-size:9px;padding:3px 5px;cursor:pointer;font-weight:600;width:44px;font-family:inherit}
 .foto-thumb.principal{border-color:var(--gm);border-width:2px}
+
+/* DROPDOWN DESCONTO */
+.ddopt{padding:11px 14px;font-size:13px;cursor:pointer;color:var(--t1);display:flex;align-items:center;justify-content:space-between;transition:background .12s}
+.ddopt:hover{background:var(--s2)}
+.ddopt.sel{background:var(--or);color:#fff;font-weight:600}
+.ddopt.sel:hover{background:#e8991a}
 
 /* IA LOADING DOTS */
 @keyframes iaLoad{0%,80%,100%{opacity:.2}40%{opacity:1}}
@@ -705,7 +721,39 @@ async function rDash(){
   }
 }
 
-// ─── PDV ──────────────────────────────────────────────────
+// ── DROPDOWN DESCONTO ─────────────────────────────────────
+let dTypeVal='none';
+function toggleDrop(){
+  const menu=document.getElementById('dDropMenu');
+  const arrow=document.getElementById('dDropArrow');
+  if(!menu)return;
+  const open=menu.style.display==='block';
+  menu.style.display=open?'none':'block';
+  if(arrow)arrow.style.transform=open?'':'rotate(180deg)';
+  if(!open){
+    // fechar ao clicar fora
+    setTimeout(()=>document.addEventListener('click',closeDrop,{once:true}),10);
+  }
+}
+function closeDrop(){
+  const menu=document.getElementById('dDropMenu');
+  const arrow=document.getElementById('dDropArrow');
+  if(menu)menu.style.display='none';
+  if(arrow)arrow.style.transform='';
+}
+function selDrop(val,lbl,el){
+  dTypeVal=val;
+  const lblEl=document.getElementById('dDropLbl');
+  if(lblEl)lblEl.textContent=lbl;
+  document.querySelectorAll('.ddopt').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  const dv=document.getElementById('dVal');
+  if(dv){dv.style.display=val==='none'?'none':'block';if(val!=='none')dv.focus();}
+  closeDrop();
+  calc();
+}
+
+// ── PDV ───────────────────────────────────────────────────
 const tQty=()=>Object.values(cart).reduce((a,b)=>a+b.qty,0);
 const pOn=()=>pmM||tQty()>=PMIN;
 
@@ -719,32 +767,51 @@ async function rPDV(){
       <div class="pdv-search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0;color:var(--t3)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input placeholder="Buscar produto..." oninput="pdvF(this.value)">
+        <button onclick="rPDV()" style="background:none;border:none;cursor:pointer;color:var(--t3);padding:4px" title="Atualizar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </button>
       </div>
-      <div id="pdvGrid" style="padding:10px"><div class="loading"><div class="spinner"></div>Carregando produtos...</div></div>
+      <div id="pdvGrid"><div class="loading"><div class="spinner"></div>Carregando produtos...</div></div>
     </div>
     <div class="pdvc">
       <div class="ch">
-        <div style="font-size:14px;font-weight:600;display:flex;align-items:center;gap:7px">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <div style="font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="color:var(--gm)"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
           Carrinho
         </div>
-        <span class="cbdg" id="cBdg">0</span>
+        <span id="cBdg" style="background:var(--bd2);color:var(--t2);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700">0</span>
       </div>
       <div class="ptgl cv" id="pBtn" onclick="tPromo()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
         <span id="pLbl">Preço Convencional</span>
       </div>
-      <div class="ci" id="cItEl"><div class="ce">Carrinho vazio</div></div>
-      <div class="cf">
-        <div class="dr">
-          <select id="dType" onchange="calc()">
-            <option value="none">Sem desconto</option>
-            <option value="pct">% desconto</option>
-            <option value="fix">R$ desconto</option>
-          </select>
-          <input type="number" id="dVal" placeholder="0" min="0" oninput="calc()" style="display:none">
+      <div class="ci" id="cItEl">
+        <div class="ce">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40" style="color:var(--bd2)"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          Selecione um produto
         </div>
-        <div class="trow"><span style="font-size:13px;color:var(--t2)">Total</span><span class="tv" id="pTot">R$ 0,00</span></div>
+      </div>
+      <div class="cf">
+        <!-- DROPDOWN DESCONTO CUSTOMIZADO -->
+        <div style="position:relative;margin-bottom:12px" id="dDropWrap">
+          <button onclick="toggleDrop()" id="dDropBtn" style="width:100%;padding:10px 14px;border:1.5px solid var(--bd);border-radius:var(--r);background:var(--s);font-size:13px;font-family:inherit;color:var(--t1);cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:border-color .15s">
+            <span id="dDropLbl">Sem desconto</span>
+            <svg id="dDropArrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14" style="transition:transform .2s"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="dDropMenu" style="display:none;position:absolute;bottom:calc(100% + 4px);left:0;right:0;background:var(--s);border:1.5px solid var(--bd);border-radius:var(--r);box-shadow:0 4px 20px rgba(0,0,0,.12);overflow:hidden;z-index:50">
+            <div class="ddopt sel" onclick="selDrop('none','Sem desconto',this)">
+              Sem desconto
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="ddopt" onclick="selDrop('pct','% Percentual',this)">% Percentual</div>
+            <div class="ddopt" onclick="selDrop('fix','R$ Valor fixo',this)">R$ Valor fixo</div>
+          </div>
+        </div>
+        <input type="number" id="dVal" placeholder="0" min="0" oninput="calc()" style="display:none;width:100%;padding:9px 12px;border:1.5px solid var(--bd);border-radius:var(--r);font-size:13px;font-family:inherit;outline:none;margin-bottom:12px;color:var(--t1);background:var(--s2)">
+        <div class="trow">
+          <span style="font-size:13px;color:var(--t2);font-weight:500">Total</span>
+          <span class="tv" id="pTot">R$ 0,00</span>
+        </div>
         <button class="bfin" id="bFin" onclick="openFin()" disabled>Finalizar Venda</button>
       </div>
     </div>
@@ -758,6 +825,7 @@ async function rPDV(){
       preco:parseFloat(p.preco_conv||0),
       preco_promo:parseFloat(p.preco_promo||p.preco_conv||0),
       e:p.emoji||catEmoji(p.categoria_nome||p.categoria||''),
+      foto:p.foto_url||'',
     }));
     if(!PPRODS.length){
       document.getElementById('pdvGrid').innerHTML='<div class="empty"><div class="empty-ico">📦</div><p>Nenhum produto cadastrado ainda</p><button class="btnp" onclick="goTo(\'produtos\',document.querySelectorAll(\'.ni\')[4])">Cadastrar produtos</button></div>';
@@ -783,16 +851,24 @@ function pdvF(q){rGrid(q?PPRODS.filter(p=>p.nome.toLowerCase().includes(q.toLowe
 function rGrid(list){
   const cats=[...new Set(list.map(p=>p.cat))],pro=pOn();
   document.getElementById('pdvGrid').innerHTML=cats.map(cat=>`
-    <div class="cattit">${cat}</div>
-    <div class="pgrid">${list.filter(p=>p.cat===cat).map(p=>{
-      const ic=cart[p.id]?.qty||0,pF=pro?p.preco_promo:p.preco;
-      return`<div class="pc${ic?' in-cart':''}" onclick="add(${p.id})">
-        <div class="pim"><span>${p.e}</span>${ic?`<div class="pbdg">${ic}</div>`:''}
-        </div>
-        <div class="pin"><div class="pnm">${p.nome}</div>
-        <div class="ppr">${B(pF)}${pro&&p.preco_promo<p.preco?`<span class="pol">${B(p.preco)}</span>`:''}</div>
-        </div></div>`;
-    }).join('')}</div>`).join('');
+    <div class="pdv-section">
+      <div class="pdv-cat-lbl">${cat}</div>
+      <div class="pgrid">${list.filter(p=>p.cat===cat).map(p=>{
+        const ic=cart[p.id]?.qty||0,pF=pro?p.preco_promo:p.preco;
+        return`<div class="pc${ic?' in-cart':''}" onclick="add(${p.id})">
+          <div class="pim">
+            ${p.foto?`<img src="${p.foto}" alt="${p.nome}" onerror="this.style.display='none';this.parentElement.querySelector('.pem').style.display='flex'">`:'' }
+            <span class="pem" style="display:${p.foto?'none':'flex'};width:100%;height:100%;align-items:center;justify-content:center;font-size:42px">${p.e}</span>
+            <div class="pim-overlay"><button class="pim-add">+ Adicionar</button></div>
+            ${ic?`<div class="pbdg">${ic}</div>`:''}
+          </div>
+          <div class="pin">
+            <div class="pnm">${p.nome}</div>
+            <div class="ppr">R$ ${pF.toFixed(2).replace('.',',')}${pro&&p.preco_promo<p.preco?`<span class="pol">R$ ${p.preco.toFixed(2).replace('.',',')}</span>`:''}</div>
+          </div>
+        </div>`;
+      }).join('')}</div>
+    </div>`).join('');
 }
 function add(id){const p=PPRODS.find(x=>x.id===id);if(!p)return;if(!cart[id])cart[id]={...p,qty:0};cart[id].qty++;rCart();rGrid(PPRODS);upPBtn();}
 function chgQ(id,d){if(!cart[id])return;cart[id].qty+=d;if(cart[id].qty<=0)delete cart[id];rCart();rGrid(PPRODS);upPBtn();}
@@ -800,8 +876,8 @@ function delC(id){delete cart[id];rCart();rGrid(PPRODS);upPBtn();}
 function calc(){
   const pro=pOn();
   let sub=Object.values(cart).reduce((a,i)=>a+(pro?i.preco_promo:i.preco)*i.qty,0);
-  const dt=document.getElementById('dType')?.value,dv=parseFloat(document.getElementById('dVal')?.value)||0;
-  const dvEl=document.getElementById('dVal');if(dvEl)dvEl.style.display=dt==='none'?'none':'block';
+  const dt=dTypeVal||'none';
+  const dv=parseFloat(document.getElementById('dVal')?.value)||0;
   if(dt==='pct')sub*=(1-Math.min(dv,100)/100);
   if(dt==='fix')sub=Math.max(0,sub-dv);
   const e=document.getElementById('pTot');if(e)e.textContent=B(sub);
@@ -810,27 +886,53 @@ function calc(){
 }
 function rCart(){
   const pro=pOn(),items=Object.values(cart),cnt=items.reduce((a,b)=>a+b.qty,0);
-  const bd=document.getElementById('cBdg');if(bd)bd.textContent=cnt;
+  // badge
+  const bd=document.getElementById('cBdg');
+  if(bd){
+    bd.textContent=cnt?(cnt+' '+(cnt===1?'item':'itens')):'0';
+    bd.style.cssText=cnt
+      ?'background:var(--gm);color:#fff;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700'
+      :'background:var(--bd2);color:var(--t2);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700';
+  }
   const el=document.getElementById('cItEl');if(!el)return;
-  if(!items.length){el.innerHTML='<div class="ce">Carrinho vazio</div>';calc();return;}
+  if(!items.length){
+    el.innerHTML=`<div class="ce">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40" style="color:var(--bd2)"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      Selecione um produto
+    </div>`;
+    calc();return;
+  }
   el.innerHTML=items.map(item=>{
     const price=pro?item.preco_promo:item.preco;
+    const fotoHtml=item.foto
+      ?`<img src="${item.foto}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0" onerror="this.style.display='none'">`
+      :`<div style="width:44px;height:44px;border-radius:8px;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${item.e}</div>`;
     return`<div class="citem">
-      <div style="width:32px;height:32px;border-radius:7px;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">${item.e}</div>
+      ${fotoHtml}
       <div class="cin">
-        <div class="cnm">${item.nome}</div>
-        <div class="cpri">${B(price)}${pro?'<span style="background:var(--gl);color:var(--gm);font-size:9px;padding:1px 5px;border-radius:3px;margin-left:4px">PROMO</span>':''}</div>
-        <div class="qctl">
-          <button class="qb" onclick="chgQ(${item.id},-1)">−</button>
-          <span class="qv">${item.qty}</span>
-          <button class="qb" onclick="chgQ(${item.id},1)">+</button>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+          <div class="cnm">${item.nome}</div>
+          <div style="display:flex;gap:6px;flex-shrink:0;margin-left:6px">
+            <button onclick="toast('Presente em breve!','info')" style="background:none;border:none;cursor:pointer;padding:2px;color:var(--t3)" title="Presente">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="14" height="14"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+            </button>
+            <button onclick="delC(${item.id})" style="background:none;border:none;cursor:pointer;padding:2px;color:var(--t3)" title="Remover">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="cpri">R$ ${price.toFixed(2).replace('.',',')}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+          <div style="display:flex;align-items:center;border:1.5px solid var(--bd);border-radius:8px;overflow:hidden">
+            <button class="qb" onclick="chgQ(${item.id},-1)" style="border:none;border-radius:0;width:30px;height:28px;background:var(--s)">−</button>
+            <span class="qv" style="width:32px;height:28px;display:flex;align-items:center;justify-content:center;border-left:1px solid var(--bd);border-right:1px solid var(--bd);background:var(--s)">${item.qty}</span>
+            <button class="qb" onclick="chgQ(${item.id},1)" style="border:none;border-radius:0;width:30px;height:28px;background:var(--s)">+</button>
+          </div>
+          <span style="font-size:14px;font-weight:700;color:var(--gm)">R$ ${(price*item.qty).toFixed(2).replace('.',',')}</span>
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
-        <span class="ct">${B(price*item.qty)}</span>
-        <button class="ab del" onclick="delC(${item.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
-      </div>
-    </div>`;}).join('');
+    </div>`;
+  }).join('');
   calc();
 }
 function tPromo(){pmM=!pmM;upPBtn();rCart();rGrid(PPRODS);}
@@ -858,7 +960,7 @@ async function confV(){
   document.getElementById('sPay').textContent=lb[spM]||spM;
   cOv('ovFin');oOv('ovSuc');
 }
-function nv(){cart={};pmM=false;spM='din';cOv('ovSuc');rPDV();}
+function nv(){cart={};pmM=false;spM='din';dTypeVal='none';cOv('ovSuc');rPDV();}
 
 // ─── VENDAS ───────────────────────────────────────────────
 async function rVendas(){
@@ -1138,45 +1240,57 @@ function fecharIA(){
 async function confirmarIA(){
   const prompt=document.getElementById('iaPromptTxt')?.value?.trim();
   if(!prompt){toast('Descreva a imagem que deseja gerar','err');return;}
-  
+
   const btn=document.getElementById('btnGerarIA');
   if(btn){btn.disabled=true;btn.innerHTML='<span class="ia-dot"></span><span class="ia-dot"></span><span class="ia-dot"></span> Gerando...';}
-  
+
   const res=document.getElementById('iaResultWrap');
   const img=document.getElementById('iaResultImg');
   if(res)res.style.display='none';
-  
-  try{
-    iaSeed=Math.floor(Math.random()*999999);
-    const encodedPrompt=encodeURIComponent(prompt+', food product photography, professional, high resolution, clean background');
-    const url=`https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&seed=${iaSeed}&nologo=true&model=flux`;
-    
-    iaUltimaUrl=url;
-    
-    // Mostrar preview imediatamente — o browser carrega a imagem diretamente
-    if(img){
-      img.src='';
-      img.style.opacity='0.4';
-      img.src=url;
-      img.onload=()=>{
-        img.style.opacity='1';
-        toast('✨ Imagem gerada!');
-        const btnNov=document.getElementById('btnNovaVariacao');
-        const btnAdd=document.getElementById('btnAddGaleria');
-        if(btnNov)btnNov.style.display='inline-flex';
-        if(btnAdd)btnAdd.style.display='inline-flex';
-        if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
-      };
-      img.onerror=()=>{
-        toast('Erro ao carregar imagem. Tente novamente.','err');
-        if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
-      };
-    }
+
+  iaSeed=Math.floor(Math.random()*999999);
+  // Pollinations — URL direta sem preload, browser carrega sem CORS
+  const promptFinal=encodeURIComponent(prompt+', professional food photography, high quality, detailed');
+  const url=`https://image.pollinations.ai/prompt/${promptFinal}?width=512&height=512&seed=${iaSeed}&nologo=true&model=flux`;
+  iaUltimaUrl=url;
+
+  if(img){
+    img.crossOrigin='';
+    img.style.opacity='0.3';
+    img.style.minHeight='150px';
+    img.style.background='var(--s2)';
     if(res)res.style.display='block';
-    
-  }catch(e){
-    toast('Erro ao gerar imagem. Tente novamente.','err');
-    if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
+
+    // timeout de 45 segundos
+    const timeoutId=setTimeout(()=>{
+      toast('Tempo esgotado. Tente novamente.','err');
+      if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
+    },45000);
+
+    img.onload=()=>{
+      clearTimeout(timeoutId);
+      img.style.opacity='1';
+      img.style.minHeight='';
+      img.style.background='';
+      document.getElementById('btnNovaVariacao').style.display='inline-flex';
+      document.getElementById('btnAddGaleria').style.display='inline-flex';
+      toast('✨ Imagem gerada!');
+      if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
+    };
+    img.onerror=()=>{
+      clearTimeout(timeoutId);
+      // tenta URL alternativa sem parâmetros extras
+      const urlSimples=`https://image.pollinations.ai/prompt/${promptFinal}?seed=${iaSeed}&nologo=true`;
+      if(img.src!==urlSimples){
+        img.src=urlSimples;
+        iaUltimaUrl=urlSimples;
+      }else{
+        if(res)res.style.display='none';
+        toast('Erro ao carregar imagem. Tente com uma descrição diferente.','err');
+        if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
+      }
+    };
+    img.src=url;
   }
 }
 
@@ -1187,19 +1301,14 @@ async function proximaVariacaoIA(){
   if(btn){btn.disabled=true;btn.textContent='🔄 Gerando...';}
   iaSeed=Math.floor(Math.random()*999999);
   const img=document.getElementById('iaResultImg');
-  try{
-    const encodedPrompt=encodeURIComponent(prompt+', food product photography, professional, high resolution');
-    const url=`https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&seed=${iaSeed}&nologo=true&model=flux`;
-    iaUltimaUrl=url;
-    if(img){
-      img.style.opacity='0.4';
-      img.src=url;
-      img.onload=()=>{img.style.opacity='1';toast('✨ Nova variação gerada!');if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}};
-      img.onerror=()=>{toast('Erro ao gerar. Tente novamente.','err');if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}};
-    }
-  }catch(e){
-    toast('Erro ao gerar. Tente novamente.','err');
-    if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}
+  const promptFinal=encodeURIComponent(prompt+', professional food photography, high quality');
+  const url=`https://image.pollinations.ai/prompt/${promptFinal}?seed=${iaSeed}&nologo=true`;
+  iaUltimaUrl=url;
+  if(img){
+    img.style.opacity='0.3';
+    img.onload=()=>{img.style.opacity='1';toast('✨ Nova variação!');if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}};
+    img.onerror=()=>{toast('Erro ao gerar. Tente novamente.','err');if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}};
+    img.src=url;
   }
 }
 
