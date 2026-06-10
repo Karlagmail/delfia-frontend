@@ -1257,38 +1257,20 @@ function fecharIA(){
   if(area)area.style.display='none';
 }
 
-// ── GERAÇÃO DE IMAGEM COM IA (Hugging Face FLUX) ──────────
-const HF_TOKEN = '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';
-const HF_MODELS = [
-  'black-forest-labs/FLUX.1-schnell',
-  'stabilityai/stable-diffusion-xl-base-1.0',
-  'runwayml/stable-diffusion-v1-5',
-];
-
-async function gerarComHuggingFace(prompt, modelIdx=0){
-  const model = HF_MODELS[modelIdx];
-  const resp = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
+// ── GERAÇÃO DE IMAGEM COM IA (via backend Railway) ────────
+async function gerarComHuggingFace(prompt){
+  const resp = await fetch('https://web-production-e0bfa.up.railway.app/api/gerar-imagem', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${HF_TOKEN}`,
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${Api.token()}`
     },
-    body: JSON.stringify({
-      inputs: prompt + ', professional food photography, high quality, detailed, white background',
-      parameters: { num_inference_steps: 4, guidance_scale: 0 }
-    })
+    body: JSON.stringify({ prompt })
   });
-
   if(!resp.ok){
     const err = await resp.json().catch(()=>({}));
-    // Modelo carregando — tenta próximo
-    if(resp.status === 503 && modelIdx < HF_MODELS.length - 1){
-      return gerarComHuggingFace(prompt, modelIdx + 1);
-    }
-    throw new Error(err.error || `Erro ${resp.status}`);
+    throw new Error(err.erro || `Erro ${resp.status}`);
   }
-
-  // Retorna blob da imagem
   const blob = await resp.blob();
   return URL.createObjectURL(blob);
 }
@@ -1303,31 +1285,20 @@ async function confirmarIA(){
   const res = document.getElementById('iaResultWrap');
   const imgEl = document.getElementById('iaResultImg');
   if(res)res.style.display='block';
-  if(imgEl){
-    imgEl.src='';
-    imgEl.style.opacity='0.3';
-    imgEl.style.minHeight='180px';
-    imgEl.style.background='var(--s2)';
-  }
+  if(imgEl){imgEl.src='';imgEl.style.opacity='0.3';imgEl.style.minHeight='180px';imgEl.style.background='var(--s2)';}
 
   try{
     toast('⏳ Gerando com IA... pode levar até 30 segundos','info');
     const url = await gerarComHuggingFace(prompt);
     iaUltimaUrl = url;
-    if(imgEl){
-      imgEl.src = url;
-      imgEl.style.opacity = '1';
-      imgEl.style.minHeight = '';
-      imgEl.style.background = '';
-    }
+    if(imgEl){imgEl.src=url;imgEl.style.opacity='1';imgEl.style.minHeight='';imgEl.style.background='';}
     document.getElementById('btnNovaVariacao').style.display='inline-flex';
     document.getElementById('btnAddGaleria').style.display='inline-flex';
     toast('✨ Imagem gerada com sucesso!');
   }catch(e){
-    console.error('HF erro:', e);
     if(res)res.style.display='none';
     if(imgEl){imgEl.style.minHeight='';imgEl.style.background='';}
-    toast('Erro ao gerar: ' + e.message + '. Tente novamente.','err');
+    toast('Erro ao gerar: '+e.message,'err');
   }finally{
     if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
   }
