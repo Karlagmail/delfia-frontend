@@ -1266,16 +1266,14 @@ async function confirmarIA(){
 
   const res=document.getElementById('iaResultWrap');
   const imgEl=document.getElementById('iaResultImg');
-
-  // Mostra área com placeholder
   if(res)res.style.display='block';
   if(imgEl){imgEl.src='';imgEl.style.opacity='0.3';imgEl.style.minHeight='180px';imgEl.style.background='var(--s2)';}
 
   iaSeed=Math.floor(Math.random()*99999);
 
-  // Pega as primeiras palavras do prompt como busca
-  const palavras=prompt.replace(/[,\.]/g,' ').split(' ').filter(p=>p.length>2).slice(0,4).join(',');
-  const url=`https://source.unsplash.com/512x512/?${encodeURIComponent(palavras)}&random=${iaSeed}`;
+  // Usa o proxy do Railway — sem CORS, sem bloqueio
+  const q=prompt.replace(/[,\.]/g,' ').trim();
+  const url=`https://web-production-e0bfa.up.railway.app/api/imagem?q=${encodeURIComponent(q)}&seed=${iaSeed}`;
   iaUltimaUrl=url;
 
   if(imgEl){
@@ -1290,7 +1288,8 @@ async function confirmarIA(){
     };
     imgEl.onerror=()=>{
       if(res)res.style.display='none';
-      toast('Erro ao buscar imagem. Verifique sua conexão.','err');
+      if(imgEl){imgEl.style.minHeight='';imgEl.style.background='';}
+      toast('Erro ao buscar imagem. Tente novamente.','err');
       if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
     };
     imgEl.src=url;
@@ -1303,8 +1302,8 @@ async function proximaVariacaoIA(){
   const btn=document.getElementById('btnNovaVariacao');
   if(btn){btn.disabled=true;btn.textContent='🔄 Buscando...';}
   iaSeed=Math.floor(Math.random()*99999);
-  const palavras=prompt.replace(/[,\.]/g,' ').split(' ').filter(p=>p.length>2).slice(0,4).join(',');
-  const url=`https://source.unsplash.com/512x512/?${encodeURIComponent(palavras)}&random=${iaSeed}`;
+  const q=prompt.replace(/[,\.]/g,' ').trim();
+  const url=`https://web-production-e0bfa.up.railway.app/api/imagem?q=${encodeURIComponent(q)}&seed=${iaSeed}`;
   iaUltimaUrl=url;
   const imgEl=document.getElementById('iaResultImg');
   if(imgEl){
