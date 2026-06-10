@@ -418,14 +418,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Sora,sans-serif;bac
             <label>Preço Convencional (R$) *</label>
             <div style="position:relative">
               <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--t3);pointer-events:none">R$</span>
-              <input type="number" id="prodPrecoConv" placeholder="0,00" step="0.01" min="0.01" style="padding-left:28px">
+              <input type="text" id="prodPrecoConv" placeholder="0,00" inputmode="numeric" oninput="maskMoeda(this)" style="padding-left:28px">
             </div>
           </div>
           <div class="form-group">
             <label>Preço Promo (R$)</label>
             <div style="position:relative">
               <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--t3);pointer-events:none">R$</span>
-              <input type="number" id="prodPrecoPromo" placeholder="0,00" step="0.01" min="0" style="padding-left:28px">
+              <input type="text" id="prodPrecoPromo" placeholder="0,00" inputmode="numeric" oninput="maskMoeda(this)" style="padding-left:28px">
             </div>
           </div>
         </div>
@@ -924,6 +924,29 @@ async function rProds(){
     document.getElementById('mc').innerHTML=`<div class="empty"><div class="empty-ico">⚠️</div><p>Erro: ${e.message}</p><button class="btn" onclick="rProds()">Tentar novamente</button></div>`;
   }
 }
+// ── MÁSCARA DE MOEDA ──────────────────────────────────────
+function maskMoeda(el){
+  // remove tudo que não é dígito
+  let v=el.value.replace(/\D/g,'');
+  if(!v){el.value='';return;}
+  // limita a 9 dígitos (ex: 9.999.999,99)
+  v=v.slice(-9);
+  // formata como moeda brasileira
+  v=(parseInt(v)/100).toFixed(2);
+  el.value=v.replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+}
+
+function parsePreco(str){
+  if(!str)return 0;
+  // remove espaços e R$
+  str=str.toString().trim().replace(/R\$\s*/,'');
+  // formato brasileiro: 1.200,00 → 1200.00
+  if(str.includes(',')){
+    str=str.replace(/\./g,'').replace(',','.');
+  }
+  return parseFloat(str)||0;
+}
+
 // ── CONSERVAÇÃO (refrigeração / congelamento) ─────────────
 const MSG_REFRIG_DEFAULT = 'Atenção: este produto precisa ser mantido refrigerado a até 4°C para conservar sua qualidade e segurança alimentar. Após receber, leve imediatamente à geladeira. 🧊';
 const MSG_FREEZE_DEFAULT = 'Atenção: este produto precisa ser mantido congelado a -18°C. Após receber, leve imediatamente ao freezer. Para consumir, descongele na geladeira por 12h. 🥶';
@@ -1122,31 +1145,34 @@ async function confirmarIA(){
   
   try{
     iaSeed=Math.floor(Math.random()*999999);
-    const encodedPrompt=encodeURIComponent(prompt+', food product, professional photography, white background option, high resolution');
-    const url=`https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&seed=${iaSeed}&nologo=true&enhance=true&model=flux`;
-    
-    // Preload da imagem
-    await new Promise((resolve,reject)=>{
-      const i=new Image();
-      i.onload=resolve;
-      i.onerror=reject;
-      i.src=url;
-      setTimeout(reject,30000);// timeout 30s
-    });
+    const encodedPrompt=encodeURIComponent(prompt+', food product photography, professional, high resolution, clean background');
+    const url=`https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&seed=${iaSeed}&nologo=true&model=flux`;
     
     iaUltimaUrl=url;
-    if(img)img.src=url;
+    
+    // Mostrar preview imediatamente — o browser carrega a imagem diretamente
+    if(img){
+      img.src='';
+      img.style.opacity='0.4';
+      img.src=url;
+      img.onload=()=>{
+        img.style.opacity='1';
+        toast('✨ Imagem gerada!');
+        const btnNov=document.getElementById('btnNovaVariacao');
+        const btnAdd=document.getElementById('btnAddGaleria');
+        if(btnNov)btnNov.style.display='inline-flex';
+        if(btnAdd)btnAdd.style.display='inline-flex';
+        if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
+      };
+      img.onerror=()=>{
+        toast('Erro ao carregar imagem. Tente novamente.','err');
+        if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
+      };
+    }
     if(res)res.style.display='block';
     
-    const btnNov=document.getElementById('btnNovaVariacao');
-    const btnAdd=document.getElementById('btnAddGaleria');
-    if(btnNov)btnNov.style.display='inline-flex';
-    if(btnAdd)btnAdd.style.display='inline-flex';
-    
-    toast('✨ Imagem gerada!');
   }catch(e){
     toast('Erro ao gerar imagem. Tente novamente.','err');
-  }finally{
     if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
   }
 }
@@ -1159,14 +1185,19 @@ async function proximaVariacaoIA(){
   iaSeed=Math.floor(Math.random()*999999);
   const img=document.getElementById('iaResultImg');
   try{
-    const encodedPrompt=encodeURIComponent(prompt+', food product, professional photography, high resolution');
-    const url=`https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&seed=${iaSeed}&nologo=true&enhance=true&model=flux`;
-    await new Promise((resolve,reject)=>{const i=new Image();i.onload=resolve;i.onerror=reject;i.src=url;setTimeout(reject,30000);});
+    const encodedPrompt=encodeURIComponent(prompt+', food product photography, professional, high resolution');
+    const url=`https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&seed=${iaSeed}&nologo=true&model=flux`;
     iaUltimaUrl=url;
-    if(img)img.src=url;
-    toast('✨ Nova variação gerada!');
-  }catch(e){toast('Erro ao gerar. Tente novamente.','err');}
-  finally{if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}}
+    if(img){
+      img.style.opacity='0.4';
+      img.src=url;
+      img.onload=()=>{img.style.opacity='1';toast('✨ Nova variação gerada!');if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}};
+      img.onerror=()=>{toast('Erro ao gerar. Tente novamente.','err');if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}};
+    }
+  }catch(e){
+    toast('Erro ao gerar. Tente novamente.','err');
+    if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}
+  }
 }
 
 function adicionarIAaGaleria(){
@@ -1316,8 +1347,10 @@ async function editProd(id){
     const p=await Api.produtos.buscar(id);
     document.getElementById('ovProdTit').textContent='Editar Produto';
     sv('prodId',p.id);sv('prodNome',p.nome);
-    sv('prodPrecoConv',p.preco_convencional||p.preco||'');
-    sv('prodPrecoPromo',p.preco_promocional||'');
+    // formatar preços com máscara
+    const fmtMoeda=v=>{if(!v)return'';return parseFloat(v).toFixed(2).replace('.',',');};
+    sv('prodPrecoConv',fmtMoeda(p.preco_convencional||p.preco||''));
+    sv('prodPrecoPromo',fmtMoeda(p.preco_promocional||''));
     sv('prodDesc',p.descricao||'');
     sv('prodIngredientes',p.ingredientes||'');
     sv('prodPorcao',p.porcao||'');
@@ -1429,44 +1462,68 @@ async function preencherNutriIA(){
 async function salvarProd(){
   const btn=document.getElementById('btnSalvarProd');
   if(btn){btn.disabled=true;btn.textContent='Salvando...';}
+
   try{
     const id=gv('prodId');
-    const nome=gv('prodNome').trim();
-    const cat=gv('prodCat');
-    const precoConv=parseFloat(gv('prodPrecoConv'))||0;
-    const precoPromo=parseFloat(gv('prodPrecoPromo'))||null;
-    if(!nome){toast('⚠️ Preencha o nome do produto','err');document.getElementById('prodNome')?.focus();return;}
-    if(!cat){toast('⚠️ Selecione uma categoria','err');return;}
-    if(!precoConv||precoConv<=0){toast('⚠️ Preencha o preço convencional','err');document.getElementById('prodPrecoConv')?.focus();return;}
+    const nome=(document.getElementById('prodNome')?.value||'').trim();
+    const cat=document.getElementById('prodCat')?.value||'';
+    const precoConvRaw=document.getElementById('prodPrecoConv')?.value||'';
+    const precoPromoRaw=document.getElementById('prodPrecoPromo')?.value||'';
+    const precoConv=parsePreco(precoConvRaw);
+    const precoPromo=parsePreco(precoPromoRaw)||null;
+
+    // DEBUG — remove depois
+    console.log('salvar:', {nome, cat, precoConv, precoConvRaw});
+
+    if(!nome){
+      toast('⚠️ Preencha o nome do produto','err');
+      document.getElementById('prodNome')?.focus();
+      if(btn){btn.disabled=false;btn.textContent='💾 Salvar Produto';}
+      return;
+    }
+    if(!cat){
+      toast('⚠️ Selecione uma categoria','err');
+      if(btn){btn.disabled=false;btn.textContent='💾 Salvar Produto';}
+      return;
+    }
+    if(!precoConv||precoConv<=0){
+      toast('⚠️ Preencha o preço convencional','err');
+      document.getElementById('prodPrecoConv')?.focus();
+      if(btn){btn.disabled=false;btn.textContent='💾 Salvar Produto';}
+      return;
+    }
+
     const body={
-      nome,categoria:cat,
+      nome,
+      categoria:cat,
       preco_convencional:precoConv,
       preco_promocional:precoPromo,
-      descricao:gv('prodDesc'),
-      ingredientes:gv('prodIngredientes'),
-      porcao:gv('prodPorcao'),
-      codigo_barras:gv('prodCodBarras'),
-      estoque:parseInt(gv('prodEstoque'))||0,
-      shelf_life:parseInt(gv('prodShelfLife'))||null,
-      beneficios:gv('prodBeneficios'),
-      consumo:gv('prodConsumo'),
+      descricao:document.getElementById('prodDesc')?.value||'',
+      ingredientes:document.getElementById('prodIngredientes')?.value||'',
+      porcao:document.getElementById('prodPorcao')?.value||'',
+      codigo_barras:document.getElementById('prodCodBarras')?.value||'',
+      estoque:parseInt(document.getElementById('prodEstoque')?.value)||0,
+      shelf_life:parseInt(document.getElementById('prodShelfLife')?.value)||null,
+      beneficios:document.getElementById('prodBeneficios')?.value||'',
+      consumo:document.getElementById('prodConsumo')?.value||'',
       ativo:document.getElementById('prodAtivo')?.checked!==false,
       is_kit:document.getElementById('prodIsKit')?.checked||false,
       requer_refrigeracao:document.getElementById('prodRefrig')?.checked||false,
       requer_congelamento:document.getElementById('prodFreeze')?.checked||false,
-      msg_refrigeracao:document.getElementById('prodRefrig')?.checked?gv('msgRefrig'):'',
-      msg_congelamento:document.getElementById('prodFreeze')?.checked?gv('msgFreeze'):'',
+      msg_refrigeracao:document.getElementById('prodRefrig')?.checked?(document.getElementById('msgRefrig')?.value||''):'',
+      msg_congelamento:document.getElementById('prodFreeze')?.checked?(document.getElementById('msgFreeze')?.value||''):'',
       imagem:galeriaFotos.find(f=>f.principal)?.url||galeriaFotos[0]?.url||'',
       galeria:JSON.stringify(galeriaFotos),
     };
+
     if(id)await Api.produtos.atualizar(id,body);
     else await Api.produtos.criar(body);
-    // salvar imagens na biblioteca
-    const nomeP=nome;
-    galeriaFotos.forEach(f=>salvarNaBiblioteca(f.url,nomeP));
+
+    galeriaFotos.forEach(f=>salvarNaBiblioteca(f.url,nome));
     toast(id?'✅ Produto atualizado!':'✅ Produto criado!');
     cOv('ovProd');
     rProds();
+
   }catch(e){
     toast('❌ '+(e.message||'Erro ao salvar'),'err');
   }finally{
