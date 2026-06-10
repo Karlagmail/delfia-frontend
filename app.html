@@ -837,7 +837,397 @@ function rAgenda(){
 
 // ─── PRECIFICAÇÃO ─────────────────────────────────────────
 function rPrec(){
-  document.getElementById('mc').innerHTML='<div class="empty"><div class="empty-ico">🧮</div><p>Módulo de Precificação em desenvolvimento</p><p style="font-size:12px;margin-top:8px">Em breve: insumos, fórmulas de custo e simulação de preços</p></div>';
+  document.getElementById('ta').innerHTML='';
+  document.getElementById('mc').innerHTML=`
+  <div style="display:flex;gap:3px;background:var(--s2);border:1px solid var(--bd);padding:3px;border-radius:var(--r);margin-bottom:14px;width:fit-content">
+    <div class="prec-tab act" onclick="pTab('ins',this)">🌿 Insumos</div>
+    <div class="prec-tab" onclick="pTab('fml',this)">🧪 Fórmulas</div>
+    <div class="prec-tab" onclick="pTab('prc',this)">🏷️ Preços</div>
+    <div class="prec-tab" onclick="pTab('op',this)">⚙️ Operação</div>
+    <div class="prec-tab" onclick="pTab('mt',this)">🎯 Metas</div>
+  </div>
+  <div id="pc"></div>`;
+  pIns();
+}
+
+// ESTILOS INLINE PARA PRECIFICAÇÃO
+(function(){
+  if(document.getElementById('prec-styles'))return;
+  const s=document.createElement('style');
+  s.id='prec-styles';
+  s.textContent=`.prec-tab{padding:6px 14px;font-size:12px;border-radius:6px;cursor:pointer;color:var(--t2);display:flex;align-items:center;gap:5px;transition:all .15s;white-space:nowrap;user-select:none}.prec-tab.act{background:var(--s);color:var(--t1);font-weight:500;border:1px solid var(--bd);box-shadow:var(--sh-sm)}.irow{background:var(--s);border:1px solid var(--bd);border-radius:var(--r);padding:12px 16px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}.frow2{background:var(--s);border:1px solid var(--bd);border-radius:var(--r);padding:12px 16px;margin-bottom:6px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .15s}.frow2:hover{border-color:var(--gm)}.pcard2{background:var(--s);border:1px solid var(--bd);border-radius:var(--rl);padding:14px;margin-bottom:10px}.ctbl{width:100%;border-collapse:collapse;margin-top:8px}.ctbl td{padding:5px 0;font-size:12px;border-bottom:1px solid var(--bd)}.ctbl tr:last-child td{border-bottom:none;font-weight:600;color:var(--t1)}.ctbl td:last-child{text-align:right;color:var(--t2)}`;
+  document.head.appendChild(s);
+})();
+
+function pTab(t,el){
+  document.querySelectorAll('.prec-tab').forEach(x=>x.classList.remove('act'));
+  el.classList.add('act');
+  ({ins:pIns,fml:pFml,prc:pPrc,op:pOp,mt:pMt})[t]();
+}
+
+// ── ABA INSUMOS ──────────────────────────────────────────
+function pIns(){
+  // Tenta carregar da API, fallback para dados reais
+  Api.get('/api/insumos').then(list=>{
+    const cats={};
+    (list||[]).forEach(i=>{
+      const c=i.categoria||'Outros';
+      if(!cats[c])cats[c]=[];
+      cats[c].push(i);
+    });
+    if(!Object.keys(cats).length) throw new Error('vazio');
+    renderInsHTML(cats, true);
+  }).catch(()=>{
+    // Dados reais da Delfia Foods
+    const ins={
+      'Açúcares e Adoçantes':[{id:'ac1',nome:'Açúcar de Coco',preco:24,unidade:'kg'},{id:'ac2',nome:'Açúcar Mascavo',preco:8,unidade:'kg'},{id:'ac3',nome:'Xilitol',preco:45,unidade:'kg'}],
+      'Embalagens':[{id:'em1',nome:'Pote 300ml c/ tampa',preco:1.2,unidade:'unidade'},{id:'em2',nome:'Saco kraft 14x20',preco:0.35,unidade:'unidade'},{id:'em3',nome:'Caixa papelão 150g',preco:0.8,unidade:'unidade'}],
+      'Frutas':[{id:'fr1',nome:'Limão Siciliano Orgânico',preco:18,unidade:'kg'},{id:'fr2',nome:'Maracujá',preco:6,unidade:'kg'},{id:'fr3',nome:'Água de Coco',preco:4,unidade:'kg'}],
+      'Legumes e Verduras':[{id:'lv1',nome:'Abobrinha Italiana Orgânica',preco:10,unidade:'kg'},{id:'lv2',nome:'Cenoura Orgânica',preco:10,unidade:'kg'},{id:'lv3',nome:'Tomate Orgânico',preco:12,unidade:'kg'},{id:'lv4',nome:'Beterraba Orgânica',preco:8,unidade:'kg'}],
+      'Oleaginosas e Castanhas':[{id:'ol1',nome:'Castanha de Caju Crua',preco:85,unidade:'kg'},{id:'ol2',nome:'Castanha-do-Pará',preco:60,unidade:'kg'},{id:'ol3',nome:'Amendoim Cru',preco:15,unidade:'kg'}],
+      'Óleos':[{id:'oc1',nome:'Óleo de Coco Extravirgem',preco:45,unidade:'L'},{id:'oc2',nome:'Azeite Orgânico',preco:55,unidade:'L'}],
+      'Sementes':[{id:'se1',nome:'Gergelim',preco:40,unidade:'kg'},{id:'se2',nome:'Linhaça',preco:50,unidade:'kg'},{id:'se3',nome:'Sarraceno',preco:21,unidade:'kg'},{id:'se4',nome:'Girassol',preco:17,unidade:'kg'}],
+      'Temperos e Condimentos':[{id:'tc1',nome:'Gengibre em Pó',preco:60,unidade:'kg'},{id:'tc2',nome:'Açafrão em Pó',preco:80,unidade:'kg'},{id:'tc3',nome:'Sal de Mossoró',preco:5,unidade:'kg'}],
+      'Outros':[{id:'ou1',nome:'Água Filtrada',preco:0.01,unidade:'L'},{id:'ou2',nome:'Kefir (grãos)',preco:0,unidade:'unidade'}],
+    };
+    renderInsHTML(ins, false);
+  });
+}
+
+function renderInsHTML(cats, fromAPI){
+  document.getElementById('pc').innerHTML=`
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px">
+    <button class="btn" onclick="importarLote()">📥 Importar em Lote</button>
+    <button class="btnp" onclick="novoInsumo()">+ Novo Insumo</button>
+  </div>
+  ${Object.entries(cats).map(([cat,items])=>`
+    <div class="cattit" style="margin-bottom:6px">${cat}</div>
+    ${items.map(i=>`<div class="irow">
+      <div>
+        <div style="font-size:13px;font-weight:500">${i.nome}</div>
+        <div style="font-size:12px;color:var(--t2)">R$ ${parseFloat(i.preco||0).toFixed(2).replace('.',',')} / ${i.unidade||'kg'}</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="ab" onclick="editInsumo(${JSON.stringify(i).replace(/"/g,'&quot;')})">✏️</button>
+        <button class="ab del" onclick="delInsumo('${i.id}','${i.nome}')">🗑️</button>
+      </div>
+    </div>`).join('')}
+  `).join('')}
+  ${fromAPI?'':'<div style="background:var(--gold-soft,#fff8e6);border:1px solid var(--or);border-radius:var(--r);padding:8px 14px;font-size:12px;color:#8a5c00;margin-top:12px">💡 Dados de demonstração — cadastre seus insumos reais pelo botão acima</div>'}`;
+}
+
+function novoInsumo(){
+  const html=`<div style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center" id="modalIns">
+  <div style="background:var(--s);border-radius:var(--rl);padding:22px;width:420px;box-shadow:0 8px 32px rgba(0,0,0,.2)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <h3 style="font-size:15px;font-weight:600">Novo Insumo</h3>
+      <button onclick="document.getElementById('modalIns').remove()" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--t2)">✕</button>
+    </div>
+    <div class="form-group"><label>Nome do Insumo *</label><input type="text" id="insNome" placeholder="ex: Tomate Orgânico"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="form-group"><label>Custo Unitário (R$) *</label><input type="text" id="insPreco" placeholder="R$ 0,00" oninput="maskPreco(this)" inputmode="numeric"></div>
+      <div class="form-group"><label>Unidade *</label>
+        <select id="insUnidade"><option value="kg">kg</option><option value="g">g</option><option value="ml">ml</option><option value="L">L</option><option value="unidade">unidade</option><option value="cx">cx</option></select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Categoria *</label>
+      <div style="display:flex;gap:6px">
+        <select id="insCat" style="flex:1">
+          <option value="">Selecionar...</option>
+          <option>Açúcares e Adoçantes</option><option>Embalagens</option><option>Frutas</option>
+          <option>Legumes e Verduras</option><option>Oleaginosas e Castanhas</option><option>Óleos</option>
+          <option>Outros</option><option>Sementes</option><option>Temperos e Condimentos</option>
+        </select>
+        <button class="btn" onclick="novaCategoria()" style="flex-shrink:0">+ Nova</button>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:0"><label>Fornecedor (opcional)</label><input type="text" id="insForn" placeholder="ex: Orgânico Brasil"></div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn" onclick="document.getElementById('modalIns').remove()" style="flex:1">Cancelar</button>
+      <button class="btnp" onclick="salvarInsumo()" style="flex:2">Salvar Insumo</button>
+    </div>
+  </div></div>`;
+  document.body.insertAdjacentHTML('beforeend',html);
+}
+
+function novaCategoria(){
+  const nome=prompt('Nome da nova categoria:');
+  if(!nome)return;
+  const sel=document.getElementById('insCat');
+  const opt=document.createElement('option');
+  opt.value=nome;opt.textContent=nome;opt.selected=true;
+  sel.appendChild(opt);
+  toast('Categoria "'+nome+'" criada!');
+}
+
+async function salvarInsumo(){
+  const nome=document.getElementById('insNome').value.trim();
+  const precoStr=document.getElementById('insPreco').value;
+  const preco=parsePreco(precoStr);
+  const unidade=document.getElementById('insUnidade').value;
+  const categoria=document.getElementById('insCat').value;
+  const fornecedor=document.getElementById('insForn').value.trim();
+  if(!nome||!categoria){toast('Preencha nome e categoria','err');return;}
+  try{
+    await Api.post('/api/insumos',{nome,preco,unidade,categoria,fornecedor});
+    document.getElementById('modalIns').remove();
+    toast('Insumo cadastrado!');
+    pIns();
+  }catch(e){toast(e.message,'err');}
+}
+
+function editInsumo(i){toast('Editar insumo em breve!','info');}
+function delInsumo(id,nome){
+  if(!confirm('Excluir "'+nome+'"?'))return;
+  if(id.startsWith('ac')||id.startsWith('em')||id.startsWith('fr')){toast('Exclua pela API — dados de demonstração','err');return;}
+  Api.delete('/api/insumos/'+id).then(()=>{toast('Excluído!');pIns();}).catch(e=>toast(e.message,'err'));
+}
+
+function importarLote(){
+  const html=`<div style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center" id="modalLote">
+  <div style="background:var(--s);border-radius:var(--rl);padding:22px;width:480px;box-shadow:0 8px 32px rgba(0,0,0,.2)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3 style="font-size:15px;font-weight:600">Importar Insumos em Lote</h3>
+      <button onclick="document.getElementById('modalLote').remove()" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--t2)">✕</button>
+    </div>
+    <p style="font-size:12px;color:var(--t2);margin-bottom:10px">Cole aqui sua lista em qualquer formato — tabela do Excel, texto corrido, lista do Word. A IA vai identificar automaticamente os nomes, preços e unidades.</p>
+    <textarea style="width:100%;height:140px;padding:10px;font-size:12px;border:1px solid var(--bd);border-radius:var(--r);background:var(--s2);color:var(--t1);resize:none;outline:none;font-family:inherit" id="loteTexto" placeholder="Exemplos aceitos:&#10;&#10;Tomate Orgânico - R$ 12,00/kg&#10;Linhaça R$ 50/kg&#10;Embalagem pote 300ml: R$ 1,20 a unidade&#10;&#10;Ou cole uma tabela do Excel..."></textarea>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="btn" onclick="document.getElementById('modalLote').remove()" style="flex:1">Cancelar</button>
+      <button class="btnp" onclick="analisarLoteIA()" style="flex:2">✨ Analisar com IA</button>
+    </div>
+  </div></div>`;
+  document.body.insertAdjacentHTML('beforeend',html);
+}
+
+function analisarLoteIA(){toast('Análise por IA em breve! Por enquanto cadastre um por um.','info');document.getElementById('modalLote')?.remove();}
+
+// ── ABA FÓRMULAS ─────────────────────────────────────────
+function pFml(){
+  const fmls={
+    'Bebidas':[{n:'Kefir de Limão 300ml',r:8,c:1.17},{n:'Kefir de Maracujá 300ml',r:8,c:1.32},{n:'Suco Verde 300ml',r:10,c:3.80}],
+    'Snacks':[{n:'Snack de Tomate',r:28,c:2.32},{n:'Snack de Beterraba',r:25,c:2.10}],
+    'Doces':[{n:'Brigadeiro Vegano',r:30,c:1.80},{n:'Barra de Chocolate 70%',r:20,c:5.60}],
+    'Queijos':[{n:'Queijo de Castanhas 150g',r:12,c:7.34},{n:'Queijo de Castanhas 80g',r:18,c:4.20}],
+    'Kits':[{n:'Kit 5 Snacks Tomate',r:10,c:11.60}],
+  };
+  document.getElementById('pc').innerHTML=`
+  <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+    <button class="btnp" onclick="novaFormula()">+ Nova Fórmula</button>
+  </div>
+  ${Object.entries(fmls).map(([cat,items])=>`
+    <div class="cattit" style="margin-bottom:6px">${cat}</div>
+    ${items.map(f=>`<div class="frow2">
+      <div style="width:36px;height:36px;border-radius:var(--r);background:var(--s2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">🧪</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500">${f.n}</div>
+        <div style="font-size:12px;color:var(--t2)">Rendimento: ${f.r} un · <span style="color:var(--gm);font-weight:500">R$ ${f.c.toFixed(2).replace('.',',')}/un</span></div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="ab" title="Processo de Produção" onclick="toast('Processo de produção em breve!','info')">📋</button>
+        <button class="ab" title="Duplicar" onclick="toast('Duplicar em breve!','info')">📄</button>
+        <button class="ab" title="Editar" onclick="toast('Editar fórmula em breve!','info')">✏️</button>
+        <button class="ab del" title="Excluir" onclick="toast('Excluir fórmula em breve!','info')">🗑️</button>
+      </div>
+    </div>`).join('')}
+  `).join('')}
+  <div style="background:var(--gl);border:1px solid var(--gb);border-radius:var(--r);padding:8px 14px;font-size:12px;color:var(--gm);margin-top:12px">
+    💡 Dados de referência. O cadastro completo de fórmulas com cálculo automático de custo estará disponível em breve.
+  </div>`;
+}
+
+function novaFormula(){toast('Cadastro de fórmula em breve!','info');}
+
+// ── ABA PREÇOS ───────────────────────────────────────────
+function pPrc(){
+  const prcs=[
+    {n:'Snack de Tomate',formula:'Snack Tomate (28un)',m:2.5,com:13,it:{Insumos:2.32,'Operação (1,5h)':4.57,Embalagem:0.96,Etiqueta:0.14},tot:7.99,p:23.50},
+    {n:'KEFI Limão',formula:'Kefir Limão (8un)',m:3,com:0,it:{Insumos:1.17,Embalagem:0.30,Etiqueta:0.10},tot:1.57,p:16.00},
+    {n:'Queijo de Castanhas 150g',formula:'Queijo Castanhas (12un)',m:2.5,com:13,it:{Insumos:7.34,'Embalagem':1.00,'Etiqueta':0.25},tot:8.59,p:38.00},
+    {n:'Brigadeiro Vegano',formula:'Brigadeiro (30un)',m:2.5,com:0,it:{Insumos:1.80,Embalagem:0.15,Etiqueta:0.08},tot:2.03,p:8.00},
+  ];
+  document.getElementById('pc').innerHTML=`
+  <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+    <button class="btnp" onclick="toast('Nova precificação em breve!','info')">+ Nova Precificação</button>
+  </div>
+  ${prcs.map(p=>`<div class="pcard2">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+      <div>
+        <div style="font-size:14px;font-weight:500">${p.n}</div>
+        <div style="font-size:12px;color:var(--t2)">Fórmula: ${p.formula} · Margem: ${p.m}× · Comissão: ${p.com}%</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:18px;font-weight:700;color:var(--or)">R$ ${p.p.toFixed(2).replace('.',',')}</span>
+        <button class="ab" onclick="toast('Editar em breve!','info')">✏️</button>
+        <button class="ab del" onclick="toast('Excluir em breve!','info')">🗑️</button>
+      </div>
+    </div>
+    <table class="ctbl">
+      <tr><td style="color:var(--t3)">Composição do custo</td><td>R$/un</td></tr>
+      ${Object.entries(p.it).map(([k,v])=>`<tr><td>${k}</td><td>R$ ${v.toFixed(2).replace('.',',')}</td></tr>`).join('')}
+      <tr><td>Custo total/unidade</td><td>R$ ${p.tot.toFixed(2).replace('.',',')}</td></tr>
+    </table>
+    <div style="background:var(--gl);border:1px solid var(--gb);border-radius:var(--r);padding:8px 12px;margin-top:8px;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:12px;color:var(--gm)">✓ Lucro/unidade: R$ ${(p.tot*(p.m-1)).toFixed(2).replace('.',',')} · Margem líquida: ${Math.round((1-1/p.m)*100)}%</span>
+      <button class="btn" style="font-size:11px;padding:4px 8px" onclick="toast('Atualizar PDV em breve!','info')">→ Atualizar PDV</button>
+    </div>
+  </div>`).join('')}`;
+}
+
+// ── ABA OPERAÇÃO ─────────────────────────────────────────
+function pOp(){
+  document.getElementById('pc').innerHTML=`
+  <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+    <button class="btnp" onclick="toast('Nova operação em breve!','info')">+ Nova Operação</button>
+  </div>
+  <div style="background:var(--s);border:1px solid var(--bd);border-radius:var(--rl);padding:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <span style="font-size:16px;font-weight:600">Fábrica</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:13px;font-weight:600;color:var(--gm);background:var(--gl);border:1px solid var(--gb);border-radius:20px;padding:3px 12px">⏱ R$ 85,23/h</span>
+        <span style="font-size:11px;color:var(--t2)">Total/mês: R$ 15.000,00</span>
+        <button class="ab" onclick="editarOperacao()">✏️</button>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:12px">8h/dia · 22 dias/mês · 176h total</div>
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      ${[['Aluguel',4000],['Energia',1000],['Internet',300],['Outros',300],['Contador',400],['Pró-labore (fundadora)',5000],['Funcionário 1 (salário + encargos CLT +60%)',4000]].map(([n,v])=>`
+      <tr style="border-bottom:1px solid var(--bd)">
+        <td style="padding:6px 0">${n}</td>
+        <td style="text-align:right;color:var(--t2);padding:6px 0">R$ ${v.toLocaleString('pt-BR')},00</td>
+      </tr>`).join('')}
+      <tr style="font-weight:700">
+        <td style="padding:8px 0">Total mensal</td>
+        <td style="text-align:right;padding:8px 0">R$ 15.000,00</td>
+      </tr>
+    </table>
+    <div style="background:#fff8e6;border:1px solid var(--or);border-radius:var(--r);padding:10px 14px;margin-top:12px">
+      <div style="font-size:12px;font-weight:600;color:#8a5c00;margin-bottom:6px">💡 Como usar na precificação</div>
+      ${[[0.5,42.61],[1,85.23],[2,170.45],[4,340.91]].map(([h,v])=>`
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--t2);padding:2px 0">
+        <span>Produto que leva ${h}h para produzir</span>
+        <span style="font-weight:500">R$ ${v.toFixed(2).replace('.',',')} de mão de obra</span>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function editarOperacao(){
+  const html=`<div style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center" id="modalOp">
+  <div style="background:var(--s);border-radius:var(--rl);padding:22px;width:460px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.2)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <h3 style="font-size:15px;font-weight:600">Editar Operação — Fábrica</h3>
+      <button onclick="document.getElementById('modalOp').remove()" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--t2)">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+      <div class="form-group"><label>Horas/dia</label><input type="number" id="opH" value="8" oninput="calcOp()"></div>
+      <div class="form-group"><label>Dias/mês</label><input type="number" id="opD" value="22" oninput="calcOp()"></div>
+    </div>
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t2);margin-bottom:8px">Custos Fixos Mensais</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="form-group"><label>Aluguel (R$)</label><input type="number" id="opAlug" value="4000" oninput="calcOp()"></div>
+      <div class="form-group"><label>Energia (R$)</label><input type="number" id="opEner" value="1000" oninput="calcOp()"></div>
+      <div class="form-group"><label>Internet (R$)</label><input type="number" id="opNet" value="300" oninput="calcOp()"></div>
+      <div class="form-group"><label>Contador (R$)</label><input type="number" id="opCont" value="400" oninput="calcOp()"></div>
+      <div class="form-group"><label>Outros (R$)</label><input type="number" id="opOut" value="300" oninput="calcOp()"></div>
+      <div class="form-group"><label>Pró-labore (R$)</label><input type="number" id="opPro" value="5000" oninput="calcOp()"></div>
+    </div>
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t2);margin-bottom:6px">Funcionários CLT</div>
+    <div style="font-size:11px;color:var(--t3);margin-bottom:8px">Encargos CLT +60% calculados automaticamente (13°, férias, INSS, FGTS)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin-bottom:8px">
+      <div class="form-group" style="margin-bottom:0"><label>Nome</label><input type="text" value="Funcionário 1"></div>
+      <div class="form-group" style="margin-bottom:0"><label>Salário (R$)</label><input type="number" id="opSal" value="2500" oninput="calcOp()"></div>
+      <div style="font-size:12px;font-weight:600;color:var(--gm);padding-bottom:4px" id="opCustoReal">R$ 4.000</div>
+    </div>
+    <div style="background:var(--gl);border:1px solid var(--gb);border-radius:var(--r);padding:10px 12px;margin-top:10px" id="opResumo">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>Custo mensal total</span><span id="opTotal">R$ 15.000</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span id="opHrsLabel">Horas/mês (8h × 22 dias)</span><span id="opHrs">176h</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--gd)"><span>⏱ Custo/hora</span><span id="opPH">R$ 85,23</span></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn" onclick="document.getElementById('modalOp').remove()" style="flex:1">Cancelar</button>
+      <button class="btnp" onclick="document.getElementById('modalOp').remove();toast('Operação salva!')" style="flex:2">Salvar</button>
+    </div>
+  </div></div>`;
+  document.body.insertAdjacentHTML('beforeend',html);
+  calcOp();
+}
+
+function calcOp(){
+  const h=parseFloat(document.getElementById('opH')?.value)||8;
+  const d=parseFloat(document.getElementById('opD')?.value)||22;
+  const fixos=(parseFloat(document.getElementById('opAlug')?.value)||0)+(parseFloat(document.getElementById('opEner')?.value)||0)+(parseFloat(document.getElementById('opNet')?.value)||0)+(parseFloat(document.getElementById('opCont')?.value)||0)+(parseFloat(document.getElementById('opOut')?.value)||0)+(parseFloat(document.getElementById('opPro')?.value)||0);
+  const sal=parseFloat(document.getElementById('opSal')?.value)||0;
+  const clte=sal*1.6;
+  const cr=document.getElementById('opCustoReal');if(cr)cr.textContent='R$ '+Math.round(clte).toLocaleString('pt-BR');
+  const total=fixos+clte;
+  const hrs=h*d;
+  const ph=(total/hrs).toFixed(2).replace('.',',');
+  const ot=document.getElementById('opTotal');if(ot)ot.textContent='R$ '+Math.round(total).toLocaleString('pt-BR');
+  const oh=document.getElementById('opHrs');if(oh)oh.textContent=hrs+'h';
+  const ohl=document.getElementById('opHrsLabel');if(ohl)ohl.textContent=`Horas/mês (${h}h × ${d} dias)`;
+  const oph=document.getElementById('opPH');if(oph)oph.textContent='R$ '+ph;
+}
+
+// ── ABA METAS ────────────────────────────────────────────
+function pMt(){
+  const meta=17500,liquido=2535.6,receita=16380;
+  const falta=meta-liquido;
+  const pct=Math.round(liquido/meta*100);
+  document.getElementById('pc').innerHTML=`
+  <div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+    <div>
+      <div style="font-size:12px;color:var(--t2);margin-bottom:4px">Meta de lucro mensal (R$)</div>
+      <input type="number" value="${meta}" id="metaVal" oninput="updMeta()" style="border:1px solid var(--bd);border-radius:var(--r);padding:8px 12px;font-size:15px;font-weight:600;width:140px;outline:none;color:var(--t1)">
+    </div>
+    <button class="btnp" onclick="toast('Ajustar quantidades em breve!','info')">🔄 Ajustar quantidades</button>
+    <div style="display:flex;gap:4px">
+      <span style="padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;background:var(--gd);color:#fff;border:1px solid var(--gd)" onclick="this.style.background='var(--gd)';this.nextElementSibling.style.background='var(--s2)'">Preço Promo</span>
+      <span style="padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid var(--bd);color:var(--t2);background:var(--s2)" onclick="this.style.background='var(--gd)';this.style.color='#fff';this.previousElementSibling.style.background='var(--s2)';this.previousElementSibling.style.color='var(--t2)'">Preço Convencional</span>
+    </div>
+    <div style="font-size:11px;color:var(--t3);display:flex;align-items:center;gap:4px">ℹ️ Custos fixos R$ 8.000/mês já descontados</div>
+  </div>
+  <div style="font-size:12px;color:var(--rd);margin-bottom:12px" id="metaFalta">Falta R$ ${falta.toLocaleString('pt-BR',{minimumFractionDigits:1})} — clique em "Ajustar quantidades"</div>
+  <div class="sgrid">
+    <div class="scard"><div class="scard-accent" style="background:var(--gm)"></div><div class="scard-val">R$ 4.095</div><div class="scard-lbl">Receita/semana</div><div style="font-size:10px;color:var(--t3)">R$ ${receita.toLocaleString('pt-BR')}/mês</div></div>
+    <div class="scard"><div class="scard-accent" style="background:#2c5fbe"></div><div class="scard-val" style="color:var(--gm)">R$ 2.633,9</div><div class="scard-lbl">Lucro bruto/semana</div><div style="font-size:10px;color:var(--t3)">após insumos</div></div>
+    <div class="scard" style="border-color:var(--or)"><div class="scard-accent" style="background:var(--or)"></div><div class="scard-val" style="color:var(--or)">R$ ${liquido.toLocaleString('pt-BR',{minimumFractionDigits:1})}</div><div class="scard-lbl">Lucro líquido/mês</div><div style="font-size:10px;color:var(--t3)">meta: R$ ${meta.toLocaleString('pt-BR')}</div></div>
+    <div class="scard"><div class="scard-accent" style="background:var(--rd)"></div><div class="scard-val" style="color:var(--rd)">- R$ ${falta.toLocaleString('pt-BR',{minimumFractionDigits:1})}</div><div class="scard-lbl">Falta para a meta</div><div style="font-size:10px;background:var(--rs);color:var(--rd);padding:2px 6px;border-radius:4px;margin-top:3px;display:inline-block">Ajuste necessário</div></div>
+  </div>
+  <div style="background:var(--s);border:1px solid var(--bd);border-radius:var(--r);padding:12px 14px;margin-bottom:14px">
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--t2);margin-bottom:6px">
+      <span>Progresso em direção à meta de lucro</span><span id="metaPct">${pct}%</span>
+    </div>
+    <div style="height:8px;background:var(--s2);border-radius:4px;overflow:hidden;border:1px solid var(--bd)">
+      <div style="height:100%;width:${pct}%;background:var(--or);border-radius:4px;transition:width .3s" id="metaBar"></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    ${[
+      {n:'Loja São Paulo',ic:'🏪',items:[['Kefir Limão',60,540],['Snack de Tomate',40,680],['Snack de Beterraba',30,510],['Queijo Castanhas',20,760],['Brigadeiro Vegano',25,200]]},
+      {n:'WhatsApp',ic:'📱',items:[['Kefir Limão',18,162],['Snack de Tomate',12,204],['Snack de Beterraba',9,153],['Queijo Castanhas',8,304],['Kit 5 Snacks',5,425]]}
+    ].map(c=>`
+    <div style="background:var(--s);border:1px solid var(--bd);border-radius:var(--r);padding:12px">
+      <div style="font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:8px">${c.ic} ${c.n}</div>
+      ${c.items.map(([n,q,r])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd);font-size:12px">
+        <span>${n}</span>
+        <div style="display:flex;gap:8px"><span style="font-weight:600">${q} un</span><span style="color:var(--gm)">= R$ ${r}/sem</span></div>
+      </div>`).join('')}
+    </div>`).join('')}
+  </div>`;
+}
+
+function updMeta(){
+  const meta=parseFloat(document.getElementById('metaVal')?.value)||17500;
+  const liq=2535.6;
+  const falta=meta-liq;
+  const pct=Math.min(100,Math.round(liq/meta*100));
+  const f=document.getElementById('metaFalta');
+  if(f)f.textContent=falta>0?'Falta R$ '+falta.toLocaleString('pt-BR',{minimumFractionDigits:1})+' — clique em "Ajustar quantidades"':'🎯 Meta atingida!';
+  if(f)f.style.color=falta>0?'var(--rd)':'var(--gm)';
+  const b=document.getElementById('metaBar');if(b)b.style.width=pct+'%';
+  const p=document.getElementById('metaPct');if(p)p.textContent=pct+'%';
 }
 
 // ─── CONFIGURAÇÕES ────────────────────────────────────────
