@@ -11,6 +11,10 @@ if (!_tok) { window.location.href = 'index.html'; }
 </script>
 <script src="assets/js/api.js"></script>
 <script src="https://js.puter.com/v2/"></script>
+<script>
+// Configura Puter para não pedir login
+window.puter_config = { no_auth: true };
+</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -1251,29 +1255,27 @@ function fecharIA(){
 async function gerarComHuggingFace(prompt, tentativa=1){
   toast('⏳ Gerando imagem com IA...', 'info');
 
-  // Usa Puter.js — gratuito, sem API key, sem bloqueio de rede
-  // Cada usuário usa sua própria cota gratuita
   try{
     if(typeof puter === 'undefined') throw new Error('Puter não carregado');
 
+    // Modo anônimo — sem popup de login
     const imgEl_result = await puter.ai.txt2img(
-      prompt + ', professional food photography, high quality, clean background, detailed',
-      { model: 'black-forest-labs/flux-schnell' }
+      prompt + ', professional food photography, high quality, clean background',
+      { model: 'black-forest-labs/flux-schnell', test_mode: true }
     );
 
-    // Puter retorna um elemento <img> — pegamos o src
-    const src = imgEl_result?.src || imgEl_result?.currentSrc;
-    if(!src) throw new Error('Imagem não retornada');
+    const src = imgEl_result?.src || imgEl_result?.currentSrc || imgEl_result?.getAttribute?.('src');
+    if(!src) throw new Error('Sem src');
 
-    toast('✨ Imagem gerada com IA!');
+    toast('✨ Imagem gerada!');
     return src;
 
   }catch(e){
     console.log('Puter erro:', e.message);
 
-    // Fallback: Lexica (banco de imagens de IA)
+    // Fallback: Lexica
     try{
-      toast('⏳ Buscando imagem alternativa...', 'info');
+      toast('⏳ Buscando imagem de IA...', 'info');
       const q = encodeURIComponent(prompt.replace(/[,\.]/g,' ').trim().substring(0,80));
       const resp = await fetch(`https://lexica.art/api/v1/search?q=${q}`);
       if(resp.ok){
@@ -1282,13 +1284,13 @@ async function gerarComHuggingFace(prompt, tentativa=1){
           const idx = Math.floor(Math.random() * Math.min(data.images.length, 8));
           const url = data.images[idx].src;
           await new Promise((res,rej)=>{const i=new Image();i.onload=res;i.onerror=rej;i.src=url;setTimeout(rej,8000);});
-          toast('✨ Imagem de IA encontrada!');
+          toast('✨ Imagem encontrada!');
           return url;
         }
       }
     }catch(e2){ console.log('Lexica erro:', e2.message); }
 
-    throw new Error('Não foi possível gerar imagem. Tente novamente.');
+    throw new Error('Não foi possível gerar. Tente novamente.');
   }
 }
 
@@ -1346,55 +1348,61 @@ function adicionarIAaGaleria(){
   galeriaFotos.push({url:iaUltimaUrl,principal:isPrincipal});
   renderGaleria();
   const nome=document.getElementById('prodNome')?.value||'Produto';
-  salvarNaBiblioteca(iaUltimaUrl,nome);
+  salvarNaBiblioteca(iaUltimaUrl, nome);
   fecharIA();
   toast('✅ Imagem adicionada à galeria!');
 }
 
-// ── BIBLIOTECA ────────────────────────────────────────────
-function getBiblioteca(){
-  try{return JSON.parse(localStorage.getItem('da_biblioteca')||'[]');}catch{return[];}
-}
-function setBiblioteca(lib){localStorage.setItem('da_biblioteca',JSON.stringify(lib));}
-
-function salvarNaBiblioteca(url,nomeProduto){
-  const lib=getBiblioteca();
-  // evitar duplicata
-  if(lib.find(x=>x.url===url))return;
-  lib.unshift({url,produto:nomeProduto.toUpperCase(),ts:Date.now()});
-  setBiblioteca(lib);
+// ── BIBLIOTECA — salva no banco, compartilhada por empresa ───
+async function getBiblioteca(){
+  try{
+    const data = await Api.get('/api/biblioteca');
+    return (data||[]).map(x=>({id:x.id, url:x.url, produto:x.produto_nome||'SEM PRODUTO'}));
+  }catch{ return []; }
 }
 
-function abrirBiblioteca(){
-  renderBiblioteca();
+async function salvarNaBiblioteca(url, nomeProduto){
+  if(!url || url.startsWith('blob:')) return; // não salva blobs temporários
+  try{
+    await Api.post('/api/biblioteca', { url, produto_nome: (nomeProduto||'Produto').toUpperCase() });
+  }catch(e){ console.log('Biblioteca save erro:', e.message); }
+}
+
+async function removerDaBibliotecaAPI(id){
+  try{ await Api.delete('/api/biblioteca/'+id); }
+  catch(e){ console.log('Biblioteca delete erro:', e.message); }
+}
+
+async function abrirBiblioteca(){
+  renderBibliotecaLoading();
   oOv('ovBib');
+  const lib = await getBiblioteca();
+  renderBiblioteca('', lib);
 }
 
-function renderBiblioteca(filtro=''){
-  const lib=getBiblioteca();
+function renderBibliotecaLoading(){
+  const bibEl=document.getElementById('bibGrid');
+  if(bibEl)bibEl.innerHTML='<div style="text-align:center;padding:30px;color:var(--t3)"><div class="spinner"></div>Carregando biblioteca...</div>';
+}
+
+function renderBiblioteca(filtro='', lib=[]){
   const bibEl=document.getElementById('bibGrid');
   const contador=document.getElementById('bibContador');
-  
   const filtrado=filtro?lib.filter(x=>x.produto.toLowerCase().includes(filtro.toLowerCase())):lib;
-  
-  // agrupar por produto
   const grupos={};
   filtrado.forEach(img=>{
     const k=img.produto||'SEM PRODUTO';
     if(!grupos[k])grupos[k]=[];
     grupos[k].push(img);
   });
-  
   const totalImgs=filtrado.length;
   const totalGrupos=Object.keys(grupos).length;
   if(contador)contador.textContent=totalImgs?`— ${totalImgs} imagens em ${totalGrupos} grupos`:'';
-  
   if(!bibEl)return;
   if(!filtrado.length){
     bibEl.innerHTML='<div style="text-align:center;color:var(--t3);padding:40px 0;font-size:13px">Nenhuma imagem na biblioteca ainda.<br>Gere com IA ou faça upload para começar.</div>';
     return;
   }
-  
   bibEl.innerHTML=Object.entries(grupos).map(([prod,imgs])=>`
     <div style="margin-bottom:16px">
       <div style="font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px">
@@ -1402,28 +1410,28 @@ function renderBiblioteca(filtro=''){
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         ${imgs.map(img=>`
-          <div style="position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden;border:2px solid var(--bd);cursor:pointer;transition:border-color .15s" 
-               onclick="selecionarDaBiblioteca('${img.url}',this)" 
-               class="bib-item"
-               title="Clique para usar">
-            <img src="${img.url}" style="width:100%;height:100%;object-fit:cover">
+          <div style="position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden;border:2px solid var(--bd);cursor:pointer;transition:border-color .15s"
+               onclick="selecionarDaBiblioteca('${img.url}',this)"
+               class="bib-item" title="Clique para usar">
+            <img src="${img.url}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.style.display='none'">
             <div class="bib-check" style="display:none;position:absolute;inset:0;background:rgba(30,107,64,.6);align-items:center;justify-content:center">
               <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" width="24" height="24"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
-            <button onclick="event.stopPropagation();removerDaBiblioteca('${img.url}')" style="position:absolute;top:3px;right:3px;background:rgba(224,62,62,.85);border:none;border-radius:4px;color:#fff;font-size:10px;padding:2px 4px;cursor:pointer;line-height:1">✕</button>
+            <button onclick="event.stopPropagation();removerDaBibliotecaUI(${img.id},'${img.url}',this.closest('.bib-item'))"
+              style="position:absolute;top:3px;right:3px;background:rgba(224,62,62,.85);border:none;border-radius:4px;color:#fff;font-size:10px;padding:2px 4px;cursor:pointer;line-height:1">✕</button>
           </div>`).join('')}
       </div>
     </div>`).join('');
 }
 
-function filtrarBiblioteca(q){renderBiblioteca(q);}
+function filtrarBiblioteca(q){
+  getBiblioteca().then(lib=>renderBiblioteca(q,lib));
+}
 
 function selecionarDaBiblioteca(url,el){
-  // destacar selecionado
-  document.querySelectorAll('.bib-item').forEach(x=>{x.style.borderColor='var(--bd)';x.querySelector('.bib-check').style.display='none';});
+  document.querySelectorAll('.bib-item').forEach(x=>{x.style.borderColor='var(--bd)';const c=x.querySelector('.bib-check');if(c)c.style.display='none';});
   el.style.borderColor='var(--gm)';
-  el.querySelector('.bib-check').style.display='flex';
-  // adicionar à galeria do produto
+  const check=el.querySelector('.bib-check');if(check)check.style.display='flex';
   const isPrincipal=!galeriaFotos.length;
   if(!galeriaFotos.find(f=>f.url===url)){
     galeriaFotos.push({url,principal:isPrincipal});
@@ -1435,21 +1443,30 @@ function selecionarDaBiblioteca(url,el){
   setTimeout(()=>cOv('ovBib'),800);
 }
 
-function removerDaBiblioteca(url){
+async function removerDaBibliotecaUI(id, url, el){
   if(!confirm('Remover esta imagem da biblioteca?'))return;
-  const lib=getBiblioteca().filter(x=>x.url!==url);
-  setBiblioteca(lib);
-  renderBiblioteca(document.getElementById('bibSearch')?.value||'');
+  await removerDaBibliotecaAPI(id);
+  if(el)el.remove();
   toast('Imagem removida da biblioteca');
 }
 
-function addBiblioteca(ev){
+async function addBiblioteca(ev){
   const files=Array.from(ev.target.files);
   const nome=document.getElementById('prodNome')?.value||prompt('Nome do produto para esta imagem:')||'Produto';
+  // Upload de arquivo — converte para base64 e salva
+  // Aviso: base64 é grande, ideal para imagens pequenas
   let count=0;
   files.forEach(file=>{
     const r=new FileReader();
-    r.onload=e=>{salvarNaBiblioteca(e.target.result,nome);count++;if(count===files.length){renderBiblioteca();toast(`${count} imagem(ns) adicionada(s) à biblioteca`);}};
+    r.onload=async e=>{
+      await salvarNaBiblioteca(e.target.result, nome);
+      count++;
+      if(count===files.length){
+        const lib=await getBiblioteca();
+        renderBiblioteca('',lib);
+        toast(`${count} imagem(ns) adicionada(s) à biblioteca`);
+      }
+    };
     r.readAsDataURL(file);
   });
   ev.target.value='';
