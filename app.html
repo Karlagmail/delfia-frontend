@@ -788,16 +788,9 @@ async function salvarProd(){
   const id=gv('prodId');
   const nome=document.getElementById('prodNome')?.value.trim()||'';
   const cat=document.getElementById('prodCat')?.value||'';
-  const precoConvStr=document.getElementById('prodPrecoConv')?.value||'';
-
-  const precoConv=parsePreco(precoConvStr);
-
   const precoConv=parsePreco(document.getElementById('prodPrecoConv')?.value||'');
-
   const precoPromo=parsePreco(document.getElementById('prodPrecoPromo')?.value||'')||null;
-
   const desc=document.getElementById('prodDesc')?.value.trim()||'';
-
   const ativo=document.getElementById('prodAtivo')?.value==='true';
 
   // Validações com mensagens claras
