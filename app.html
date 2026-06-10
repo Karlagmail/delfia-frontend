@@ -786,25 +786,45 @@ function confirmarIA(){
 
 async function salvarProd(){
   const id=gv('prodId');
-  const nome=document.getElementById('prodNome').value.trim();
-  const cat=document.getElementById('prodCat').value;
-  const precoConv=parsePreco(document.getElementById('prodPrecoConv').value);
-  const precoPromo=parsePreco(document.getElementById('prodPrecoPromo').value)||null;
-  const desc=document.getElementById('prodDesc').value.trim();
-  const ativo=document.getElementById('prodAtivo').value==='true';
-  const img=document.getElementById('prodImgData').value||null;
+  const nome=document.getElementById('prodNome')?.value.trim()||'';
+  const cat=document.getElementById('prodCat')?.value||'';
+  const precoConvStr=document.getElementById('prodPrecoConv')?.value||'';
 
-  if(!nome){toast('Preencha o nome do produto','err');document.getElementById('prodNome').focus();return;}
-  if(!cat){toast('Selecione uma categoria','err');document.getElementById('prodCat').focus();return;}
-  if(!precoConv){toast('Preencha o preço convencional','err');document.getElementById('prodPrecoConv').focus();return;}
+  const precoConv=parsePreco(precoConvStr);
 
-  const body={nome,categoria:cat,preco_convencional:precoConv,preco_promocional:precoPromo,descricao:desc,ativo,imagem:img};
+  const precoConv=parsePreco(document.getElementById('prodPrecoConv')?.value||'');
+
+  const precoPromo=parsePreco(document.getElementById('prodPrecoPromo')?.value||'')||null;
+
+  const desc=document.getElementById('prodDesc')?.value.trim()||'';
+
+  const ativo=document.getElementById('prodAtivo')?.value==='true';
+
+  // Validações com mensagens claras
+  if(!nome){toast('⚠️ Preencha o nome do produto','err');document.getElementById('prodNome')?.focus();return;}
+  if(!cat){toast('⚠️ Selecione uma categoria','err');document.getElementById('prodCat')?.focus();return;}
+  if(!precoConv||precoConv<=0){toast('⚠️ Preencha o preço convencional (ex: R$ 23,50)','err');document.getElementById('prodPrecoConv')?.focus();return;}
+
+  // Não enviar imagem base64 para a API (muito grande) — salvar URL apenas
+  const body={
+    nome,
+    categoria:cat,
+    preco_convencional:precoConv,
+    preco_promocional:precoPromo,
+    descricao:desc,
+    ativo
+  };
+
   try{
     if(id)await Api.produtos.atualizar(id,body);
     else await Api.produtos.criar(body);
-    toast(id?'Produto atualizado!':'Produto criado!');
-    cOv('ovProd');rProds();
-  }catch(e){toast(e.message,'err');}
+    toast(id?'✅ Produto atualizado!':'✅ Produto criado!');
+    cOv('ovProd');
+    rProds();
+  }catch(e){
+    console.error('Erro ao salvar produto:',e);
+    toast('❌ '+( e.message||'Erro ao salvar produto'),'err');
+  }
 }
 async function deletarProd(id){
   if(!confirm('Excluir este produto?'))return;
