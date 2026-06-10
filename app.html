@@ -1266,64 +1266,34 @@ async function confirmarIA(){
 
   const res=document.getElementById('iaResultWrap');
   const imgEl=document.getElementById('iaResultImg');
-  if(res)res.style.display='none';
 
-  try{
-    // Usa Claude para traduzir o prompt em palavras-chave em inglês para o Unsplash
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:100,
-        messages:[{role:'user',content:`Translate this food product description to 3-5 English keywords for an image search, comma separated, no explanation: "${prompt}"`}]
-      })
-    });
-    const data=await resp.json();
-    const keywords=(data.content?.[0]?.text||prompt).trim().replace(/\n/g,'').substring(0,80);
-    console.log('keywords:', keywords);
+  // Mostra área com placeholder
+  if(res)res.style.display='block';
+  if(imgEl){imgEl.src='';imgEl.style.opacity='0.3';imgEl.style.minHeight='180px';imgEl.style.background='var(--s2)';}
 
-    // Usa Unsplash Source (gratuito, sem API key) com as palavras-chave
-    iaSeed=Math.floor(Math.random()*9999);
-    const url=`https://source.unsplash.com/512x512/?${encodeURIComponent(keywords)}&sig=${iaSeed}`;
-    iaUltimaUrl=url;
+  iaSeed=Math.floor(Math.random()*99999);
 
-    // Carrega a imagem
-    await new Promise((resolve,reject)=>{
-      const img=new Image();
-      img.onload=resolve;
-      img.onerror=reject;
-      img.src=url;
-      setTimeout(()=>reject(new Error('timeout')),20000);
-    });
+  // Pega as primeiras palavras do prompt como busca
+  const palavras=prompt.replace(/[,\.]/g,' ').split(' ').filter(p=>p.length>2).slice(0,4).join(',');
+  const url=`https://source.unsplash.com/512x512/?${encodeURIComponent(palavras)}&random=${iaSeed}`;
+  iaUltimaUrl=url;
 
-    if(imgEl){imgEl.src=url;imgEl.style.opacity='1';}
-    if(res)res.style.display='block';
-    document.getElementById('btnNovaVariacao').style.display='inline-flex';
-    document.getElementById('btnAddGaleria').style.display='inline-flex';
-    toast('✨ Imagem encontrada!');
-
-  }catch(e){
-    console.error('IA erro:',e);
-    // fallback direto Unsplash sem IA
-    try{
-      iaSeed=Math.floor(Math.random()*9999);
-      const enc=encodeURIComponent(prompt.split(' ').slice(0,3).join(' '));
-      const urlFallback=`https://source.unsplash.com/512x512/?food,${enc}&sig=${iaSeed}`;
-      iaUltimaUrl=urlFallback;
-      await new Promise((resolve,reject)=>{
-        const img=new Image();img.onload=resolve;img.onerror=reject;img.src=urlFallback;setTimeout(()=>reject(),15000);
-      });
-      if(imgEl){imgEl.src=urlFallback;imgEl.style.opacity='1';}
-      if(res)res.style.display='block';
+  if(imgEl){
+    imgEl.onload=()=>{
+      imgEl.style.opacity='1';
+      imgEl.style.minHeight='';
+      imgEl.style.background='';
       document.getElementById('btnNovaVariacao').style.display='inline-flex';
       document.getElementById('btnAddGaleria').style.display='inline-flex';
       toast('✨ Imagem encontrada!');
-    }catch{
-      toast('Não foi possível buscar imagem. Verifique sua conexão.','err');
-    }
-  }finally{
-    if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
+      if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
+    };
+    imgEl.onerror=()=>{
+      if(res)res.style.display='none';
+      toast('Erro ao buscar imagem. Verifique sua conexão.','err');
+      if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
+    };
+    imgEl.src=url;
   }
 }
 
@@ -1332,21 +1302,16 @@ async function proximaVariacaoIA(){
   if(!prompt)return;
   const btn=document.getElementById('btnNovaVariacao');
   if(btn){btn.disabled=true;btn.textContent='🔄 Buscando...';}
-  try{
-    iaSeed=Math.floor(Math.random()*99999);
-    const enc=encodeURIComponent(prompt.split(' ').slice(0,4).join(' '));
-    const url=`https://source.unsplash.com/512x512/?food,${enc}&sig=${iaSeed}`;
-    iaUltimaUrl=url;
-    await new Promise((resolve,reject)=>{
-      const img=new Image();img.onload=resolve;img.onerror=reject;img.src=url;setTimeout(()=>reject(),15000);
-    });
-    const imgEl=document.getElementById('iaResultImg');
-    if(imgEl){imgEl.src=url;}
-    toast('✨ Nova imagem!');
-  }catch{
-    toast('Erro ao buscar. Tente novamente.','err');
-  }finally{
-    if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}
+  iaSeed=Math.floor(Math.random()*99999);
+  const palavras=prompt.replace(/[,\.]/g,' ').split(' ').filter(p=>p.length>2).slice(0,4).join(',');
+  const url=`https://source.unsplash.com/512x512/?${encodeURIComponent(palavras)}&random=${iaSeed}`;
+  iaUltimaUrl=url;
+  const imgEl=document.getElementById('iaResultImg');
+  if(imgEl){
+    imgEl.style.opacity='0.3';
+    imgEl.onload=()=>{imgEl.style.opacity='1';toast('✨ Nova imagem!');if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}};
+    imgEl.onerror=()=>{toast('Erro. Tente novamente.','err');if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}};
+    imgEl.src=url;
   }
 }
 
