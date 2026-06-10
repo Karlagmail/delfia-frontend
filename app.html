@@ -166,6 +166,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Sora,sans-serif;bac
 .loading{text-align:center;padding:60px 20px;color:var(--t3);font-size:14px}
 .spinner{width:32px;height:32px;border:3px solid var(--bd);border-top-color:var(--gm);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* TOGGLE SWITCH */
+.toggle-sw{position:relative;display:inline-flex;width:40px;height:22px;flex-shrink:0}
+.toggle-sw input{opacity:0;width:0;height:0;position:absolute}
+.toggle-sl{position:absolute;inset:0;background:var(--bd2);border-radius:11px;cursor:pointer;transition:.2s}
+.toggle-sl:before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle-sw input:checked+.toggle-sl{background:var(--gm)}
+.toggle-sw input:checked+.toggle-sl:before{transform:translateX(18px)}
+
+/* CATEGORY CHIPS */
+.cat-chip{padding:5px 12px;border-radius:20px;border:1.5px solid var(--bd);background:var(--s);font-size:12px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px;color:var(--t2);font-family:inherit;white-space:nowrap}
+.cat-chip:hover{border-color:var(--gm);color:var(--gm)}
+.cat-chip.sel{background:var(--gd);color:#fff;border-color:var(--gd)}
+.cat-chip-new{border-style:dashed;color:var(--t3)}
+.cat-chip-new:hover{border-color:var(--gm);color:var(--gm);background:var(--s)}
+
+/* FOTO MINIATURA */
+.foto-thumb{position:relative;width:52px;height:52px;border-radius:8px;overflow:hidden;border:1.5px solid var(--bd);cursor:pointer;flex-shrink:0}
+.foto-thumb img{width:100%;height:100%;object-fit:cover}
+.foto-thumb .foto-actions{position:absolute;inset:0;background:rgba(0,0,0,.55);display:none;flex-direction:column;gap:2px;align-items:center;justify-content:center}
+.foto-thumb:hover .foto-actions{display:flex}
+.foto-thumb .foto-actions button{background:rgba(255,255,255,.9);border:none;border-radius:4px;font-size:9px;padding:3px 5px;cursor:pointer;font-weight:600;width:44px;font-family:inherit}
+.foto-thumb.principal{border-color:var(--gm);border-width:2px}
+
+/* IA LOADING DOTS */
+@keyframes iaLoad{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.ia-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#fff;animation:iaLoad 1.2s ease-in-out infinite}
+.ia-dot:nth-child(2){animation-delay:.2s}
+.ia-dot:nth-child(3){animation-delay:.4s}
 </style>
 </head>
 <body>
@@ -286,91 +315,254 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Sora,sans-serif;bac
   </div>
 </div>
 
-<!-- MODAL PRODUTO -->
+<!-- MODAL PRODUTO — NOVO LAYOUT COMPLETO -->
 <div class="ov" id="ovProd">
-  <div class="ovc" style="width:480px">
+  <div class="ovc" style="width:560px;max-height:92vh">
     <div class="ov-hd">
       <h3 id="ovProdTit">Novo Produto</h3>
       <button class="ab" onclick="cOv('ovProd')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
-    <div class="ov-bd">
-      <input type="hidden" id="prodId">
-      <input type="hidden" id="prodImgData">
+    <div class="ov-bd" style="padding:0">
 
-      <!-- IMAGEM -->
-      <div class="form-group">
-        <label>Imagem do Produto</label>
-        <div style="display:flex;gap:10px;align-items:center">
-          <div id="prodImgPrev" style="width:72px;height:72px;border-radius:10px;background:var(--s2);border:1.5px dashed var(--bd2);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;overflow:hidden">📦</div>
-          <div style="flex:1;display:flex;flex-direction:column;gap:6px">
-            <label class="btn" style="cursor:pointer;justify-content:center">
-              📤 Upload (JPG/PNG)
-              <input type="file" id="prodImgUp" accept="image/*" style="display:none" onchange="onProdImg(event)">
-            </label>
-            <button type="button" class="btn" onclick="abrirBiblioteca()" style="justify-content:center">🖼️ Biblioteca</button>
-            <button type="button" class="btn" onclick="gerarImgIA()" style="justify-content:center;color:#8a5c00;border-color:var(--or)">✨ Gerar com IA</button>
+      <!-- SEÇÃO: GALERIA DE FOTOS (topo) -->
+      <div id="secGaleria" style="background:var(--s2);border-bottom:1px solid var(--bd);padding:14px 20px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <span style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px">Galeria de Fotos</span>
+          <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t2);cursor:pointer;user-select:none">
+            <input type="checkbox" id="carrosselAuto" checked onchange="toggleCarrossel()" style="accent-color:var(--gm)"> Auto
+          </label>
+        </div>
+        <div id="carrosselStatus" style="font-size:11px;color:var(--gm);margin-bottom:8px">✓ Carrossel automático ativado — imagens mudam a cada 4 segundos</div>
+
+        <!-- Foto principal + adicionais -->
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <!-- Principal -->
+          <div>
+            <div style="font-size:10px;color:var(--t3);margin-bottom:5px;font-weight:600">Foto Principal</div>
+            <div id="fotoMainPrev" style="width:72px;height:72px;border-radius:8px;background:var(--s);border:2px solid var(--gm);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;flex-shrink:0" onclick="clicarFotoPrincipal()">📦</div>
+          </div>
+          <!-- Adicionais -->
+          <div style="flex:1">
+            <div style="font-size:10px;color:var(--t3);margin-bottom:5px;font-weight:600">Fotos Adicionais (<span id="qtdFotos">0</span>)</div>
+            <div id="fotosAdicionaisWrap" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+              <!-- miniaturas serão inseridas aqui -->
+              <button onclick="document.getElementById('addFotoInput').click()" style="width:52px;height:52px;border:2px dashed var(--bd2);border-radius:8px;background:var(--s);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--t3);flex-shrink:0" title="Adicionar foto">+</button>
+              <input type="file" id="addFotoInput" accept="image/*" style="display:none" onchange="adicionarFotoGaleria(event)">
+            </div>
           </div>
         </div>
-        <div id="iaPromptArea" style="display:none;margin-top:8px">
-          <div style="display:flex;gap:6px">
-            <input type="text" id="iaPromptTxt" placeholder="ex: snack crocante de tomate fundo verde" style="flex:1;padding:8px;border:1px solid var(--bd);border-radius:var(--r);font-size:12px;font-family:inherit;outline:none">
-            <button type="button" class="btnp" onclick="confirmarIA()" style="padding:8px 12px;font-size:12px">Gerar</button>
-            <button type="button" class="btn" onclick="document.getElementById('iaPromptArea').style.display='none'" style="padding:8px">✕</button>
+
+        <!-- Botões de ação de imagem -->
+        <div style="display:flex;gap:6px;margin-top:10px">
+          <button type="button" class="btn" onclick="gerarImgIA()" style="flex:1;justify-content:center;font-size:12px;color:#7c3aed;border-color:#c4b5fd;background:#f5f3ff">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Gerar com IA
+          </button>
+          <button type="button" class="btn" onclick="abrirBiblioteca()" style="flex:1;justify-content:center;font-size:12px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Biblioteca
+          </button>
+          <label class="btn" style="flex:1;justify-content:center;font-size:12px;cursor:pointer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload
+            <input type="file" accept="image/*" style="display:none" onchange="uploadFotoPrincipal(event)">
+          </label>
+          <button type="button" class="btn" id="btnAjustarImg" onclick="toast('Editor de imagem em breve!','info')" style="flex:1;justify-content:center;font-size:12px;display:none">
+            ✏️ Ajustar imagem atual
+          </button>
+        </div>
+
+        <!-- Área de geração IA -->
+        <div id="iaArea" style="display:none;margin-top:10px;background:var(--s);border:1px solid #c4b5fd;border-radius:var(--r);padding:12px">
+          <div style="font-size:12px;font-weight:600;color:#7c3aed;margin-bottom:8px">✨ Gerar imagem com IA</div>
+          <div style="font-size:11px;color:var(--t3);margin-bottom:8px">Descreva como deve ser a foto do produto. Quanto mais detalhes, melhor o resultado.</div>
+          <textarea id="iaPromptTxt" placeholder="Ex: snack crocante de tomate seco em bowl rústico, fundo verde natural, fotografia gastronômica, luz natural..." rows="2" style="width:100%;padding:8px;border:1px solid var(--bd);border-radius:var(--r);font-size:12px;font-family:inherit;outline:none;resize:none;background:var(--s2)"></textarea>
+          <div style="display:flex;gap:6px;margin-top:8px;align-items:center">
+            <button type="button" onclick="confirmarIA()" id="btnGerarIA" style="background:#7c3aed;color:#fff;border:none;border-radius:var(--r);padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:inherit">
+              <span id="iaSpinnerWrap"></span>✨ Gerar
+            </button>
+            <button type="button" onclick="proximaVariacaoIA()" id="btnNovaVariacao" style="display:none;background:var(--s2);color:var(--t1);border:1px solid var(--bd);border-radius:var(--r);padding:8px 12px;font-size:12px;cursor:pointer;font-family:inherit">🔄 Nova variação</button>
+            <button type="button" onclick="adicionarIAaGaleria()" id="btnAddGaleria" style="display:none;background:var(--gl);color:var(--gm);border:1px solid var(--gb);border-radius:var(--r);padding:8px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">+ Adicionar à galeria</button>
+            <button type="button" onclick="fecharIA()" style="background:none;border:none;color:var(--t3);cursor:pointer;padding:8px;font-size:13px">✕</button>
           </div>
-          <p style="font-size:10px;color:var(--t3);margin-top:4px">⚠️ Geração por IA em breve</p>
+          <!-- Preview da imagem gerada -->
+          <div id="iaResultWrap" style="display:none;margin-top:10px">
+            <img id="iaResultImg" style="width:100%;max-height:200px;object-fit:cover;border-radius:var(--r);border:1px solid var(--bd)" src="" alt="Imagem gerada">
+          </div>
         </div>
       </div>
 
-      <!-- NOME -->
-      <div class="form-group">
-        <label>Nome do Produto *</label>
-        <input type="text" id="prodNome" placeholder="ex: Snack de Tomate 50g" autocomplete="off">
-      </div>
+      <!-- FORMULÁRIO SCROLLÁVEL -->
+      <div style="padding:16px 20px;overflow-y:auto;max-height:calc(92vh - 340px)">
+        <input type="hidden" id="prodId">
+        <input type="hidden" id="prodImgData">
+        <input type="hidden" id="prodGaleriaData"><!-- JSON com array de fotos -->
 
-      <!-- CATEGORIA -->
-      <div class="form-group">
-        <label>Categoria *</label>
-        <select id="prodCat">
-          <option value="">— Selecionar —</option>
-          <option value="Acompanhamentos">Acompanhamentos</option>
-          <option value="Bebidas">Bebidas</option>
-          <option value="Doces">Doces</option>
-          <option value="Kits">Kits</option>
-          <option value="Pães">Pães</option>
-          <option value="Queijos">Queijos</option>
-          <option value="Snacks">Snacks</option>
-          <option value="Sopas">Sopas</option>
-          <option value="Sorvetes">Sorvetes</option>
-        </select>
-      </div>
-
-      <!-- PREÇOS -->
-      <div class="form-row">
+        <!-- NOME -->
         <div class="form-group">
-          <label>Preço Convencional (R$) *</label>
-          <input type="number" id="prodPrecoConv" placeholder="0.00" step="0.01" min="0.01">
+          <label>Nome do Produto *</label>
+          <input type="text" id="prodNome" placeholder="ex: Snack de Tomate 50g" autocomplete="off">
         </div>
+
+        <!-- CATEGORIA — chips clicáveis -->
         <div class="form-group">
-          <label>Preço Promocional (R$)</label>
-          <input type="number" id="prodPrecoPromo" placeholder="0.00" step="0.01" min="0">
+          <label>Categoria *</label>
+          <div id="catChips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px"></div>
+          <div id="catSelecionada" style="font-size:11px;color:var(--gm);font-weight:500;min-height:16px"></div>
+          <input type="hidden" id="prodCat">
         </div>
-      </div>
 
-      <!-- DESCRIÇÃO -->
-      <div class="form-group">
-        <label>Descrição</label>
-        <textarea id="prodDesc" placeholder="Descrição do produto..." rows="2"></textarea>
-      </div>
+        <!-- PREÇOS -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Preço Convencional (R$) *</label>
+            <div style="position:relative">
+              <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--t3);pointer-events:none">R$</span>
+              <input type="number" id="prodPrecoConv" placeholder="0,00" step="0.01" min="0.01" style="padding-left:28px">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Preço Promo (R$)</label>
+            <div style="position:relative">
+              <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--t3);pointer-events:none">R$</span>
+              <input type="number" id="prodPrecoPromo" placeholder="0,00" step="0.01" min="0" style="padding-left:28px">
+            </div>
+          </div>
+        </div>
 
-      <!-- ATIVO -->
-      <div class="form-group" style="margin-bottom:0">
-        <label>Status</label>
-        <select id="prodAtivo">
-          <option value="true">✅ Ativo — aparece no PDV</option>
-          <option value="false">❌ Inativo — oculto no PDV</option>
-        </select>
-      </div>
-    </div>
+        <!-- CÓDIGO DE BARRAS + ESTOQUE -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Código de Barras</label>
+            <input type="text" id="prodCodBarras" placeholder="Ex: 7891234567890">
+          </div>
+          <div class="form-group">
+            <label>Estoque</label>
+            <input type="number" id="prodEstoque" placeholder="0" min="0" value="0">
+          </div>
+        </div>
+
+        <!-- SHELF LIFE -->
+        <div class="form-group">
+          <label>Validade / Shelf Life (dias)</label>
+          <input type="number" id="prodShelfLife" placeholder="Ex: 45 para snacks, 30 para kefir" min="0">
+          <div style="font-size:10px;color:var(--t3);margin-top:3px">Usado para calcular automaticamente a validade nos rótulos a partir da data de fabricação</div>
+        </div>
+
+        <!-- TOGGLES -->
+        <div style="display:flex;flex-direction:column;gap:0;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:14px">
+          <!-- Produto ativo -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--s);border-bottom:1px solid var(--bd)">
+            <span style="font-size:13px;font-weight:500">Produto ativo</span>
+            <label class="toggle-sw"><input type="checkbox" id="prodAtivo" checked><span class="toggle-sl"></span></label>
+          </div>
+          <!-- É um Kit -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--s);border-bottom:1px solid var(--bd)">
+            <div>
+              <div style="font-size:13px;font-weight:500">É um Kit</div>
+              <div style="font-size:11px;color:var(--t3)">Composto por outros produtos</div>
+            </div>
+            <label class="toggle-sw"><input type="checkbox" id="prodIsKit" onchange="toggleKit()"><span class="toggle-sl"></span></label>
+          </div>
+          <!-- Requer Refrigeração -->
+          <div style="border-bottom:1px solid var(--bd)">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--s)">
+              <div>
+                <div style="font-size:13px;font-weight:500">🧊 Requer Refrigeração</div>
+                <div style="font-size:11px;color:var(--t3)">Manter até 4°C (kefir, queijo...)</div>
+              </div>
+              <label class="toggle-sw"><input type="checkbox" id="prodRefrig" onchange="toggleConservacao('refrig')"><span class="toggle-sl"></span></label>
+            </div>
+            <!-- Mensagem de refrigeração (aparece ao ativar) -->
+            <div id="msgRefrigArea" style="display:none;padding:0 14px 12px">
+              <div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Mensagem para o cliente (WhatsApp)</div>
+              <textarea id="msgRefrig" rows="2" style="width:100%;padding:8px 10px;font-size:12px;border:1px solid var(--gb);border-radius:var(--r);background:#f0faf4;color:var(--t1);outline:none;resize:none;font-family:inherit;line-height:1.4"></textarea>
+              <div style="font-size:10px;color:var(--t3);margin-top:3px">✉️ Esta mensagem será incluída automaticamente no WhatsApp de entrega</div>
+            </div>
+          </div>
+          <!-- Requer Congelamento -->
+          <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--s)">
+              <div>
+                <div style="font-size:13px;font-weight:500">🥶 Requer Congelamento</div>
+                <div style="font-size:11px;color:var(--t3)">Manter no freezer (sorvete...)</div>
+              </div>
+              <label class="toggle-sw"><input type="checkbox" id="prodFreeze" onchange="toggleConservacao('freeze')"><span class="toggle-sl"></span></label>
+            </div>
+            <!-- Mensagem de congelamento (aparece ao ativar) -->
+            <div id="msgFreezeArea" style="display:none;padding:0 14px 12px">
+              <div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Mensagem para o cliente (WhatsApp)</div>
+              <textarea id="msgFreeze" rows="2" style="width:100%;padding:8px 10px;font-size:12px;border:1px solid #bae0fa;border-radius:var(--r);background:#f0f7ff;color:var(--t1);outline:none;resize:none;font-family:inherit;line-height:1.4"></textarea>
+              <div style="font-size:10px;color:var(--t3);margin-top:3px">✉️ Esta mensagem será incluída automaticamente no WhatsApp de entrega</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMPONENTES DO KIT (aparece só quando isKit=true) -->
+        <div id="kitSection" style="display:none;background:var(--gl);border:1px solid var(--gb);border-radius:var(--r);padding:12px;margin-bottom:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <span style="font-size:13px;font-weight:600;color:var(--gd)">🎁 Componentes do Kit</span>
+            <button type="button" onclick="addKitItem()" style="background:none;border:none;color:var(--gm);font-size:12px;font-weight:600;cursor:pointer">+ Adicionar</button>
+          </div>
+          <div id="kitItens"></div>
+          <div id="kitTotal" style="font-size:11px;color:var(--t2);margin-top:8px;padding-top:8px;border-top:1px solid var(--gb)">Total estimado do kit: <strong>Conv: R$ 0,00 · Promo: R$ 0,00</strong></div>
+        </div>
+
+        <!-- FÓRMULA BASE -->
+        <div class="form-group">
+          <label>Fórmula Base (opcional)</label>
+          <select id="prodFormula" style="width:100%">
+            <option value="">— Selecionar fórmula base —</option>
+          </select>
+          <div style="font-size:10px;color:var(--t3);margin-top:3px">Vincule a fórmula de produção para importar ingredientes e dados nutricionais automaticamente</div>
+        </div>
+
+        <!-- DESCRITIVO -->
+        <div class="form-group">
+          <label>Descritivo do Produto</label>
+          <textarea id="prodDesc" placeholder="ex: Banana-prata picada, porção 200g, cortada redondas." rows="3"></textarea>
+          <div style="font-size:10px;color:var(--t3);margin-top:3px">Descreva o produto de forma detalhada para alimentar a IA nas campanhas</div>
+        </div>
+
+        <!-- INGREDIENTES -->
+        <div class="form-group">
+          <label>Ingredientes</label>
+          <textarea id="prodIngredientes" placeholder="ex: Banana-prata picada, 200g" rows="2"></textarea>
+        </div>
+
+        <!-- NUTRIÇÃO (expansível) -->
+        <div style="border:1px solid var(--gb);border-radius:var(--r);overflow:hidden;margin-bottom:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--gl);cursor:pointer" onclick="toggleNutri()">
+            <span style="font-size:13px;font-weight:600;color:var(--gd);display:flex;align-items:center;gap:6px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              Nutrição &amp; Consumo
+            </span>
+            <button type="button" class="btnp" onclick="event.stopPropagation();preencherNutriIA()" style="font-size:11px;padding:4px 10px;display:flex;align-items:center;gap:4px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              Preencher com IA
+            </button>
+          </div>
+          <div id="nutriSection" style="display:none;padding:14px">
+            <div class="form-group">
+              <label>Benefícios para Saúde</label>
+              <textarea id="prodBeneficios" placeholder="Ex: Rico em potássio, fonte de energia natural..." rows="3"></textarea>
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label>Melhor Forma de Consumir</label>
+              <textarea id="prodConsumo" placeholder="Ex: Ideal como lanche da manhã..." rows="2"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABELA NUTRICIONAL -->
+        <div class="form-group" style="margin-bottom:6px">
+          <label>Tabela Nutricional</label>
+          <input type="text" id="prodPorcao" placeholder="Porção (ex: 30g)">
+          <div style="font-size:10px;color:var(--t3);margin-top:3px">Opcional - Preencha se tiver os dados nutricionais</div>
+        </div>
+
+      </div><!-- fim scroll area -->
+    </div><!-- fim ov-bd -->
     <div class="ov-ft">
       <button type="button" class="btn" onclick="cOv('ovProd')">Cancelar</button>
       <button type="button" class="btnp" id="btnSalvarProd" onclick="salvarProd()">💾 Salvar Produto</button>
@@ -378,19 +570,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Sora,sans-serif;bac
   </div>
 </div>
 
-<!-- MODAL BIBLIOTECA -->
+<!-- MODAL BIBLIOTECA — reorganizado por produto -->
 <div class="ov" id="ovBib">
-  <div class="ovc" style="width:560px">
-    <div class="ov-hd"><h3>Biblioteca de Imagens</h3><button class="ab" onclick="cOv('ovBib')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
-    <div class="ov-bd">
+  <div class="ovc" style="width:620px;max-height:90vh">
+    <div class="ov-hd">
+      <div>
+        <h3 style="display:flex;align-items:center;gap:8px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Biblioteca de Imagens
+          <span id="bibContador" style="font-size:12px;font-weight:400;color:var(--t3)"></span>
+        </h3>
+      </div>
+      <button class="ab" onclick="cOv('ovBib')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div style="padding:10px 16px;border-bottom:1px solid var(--bd)">
+      <div style="position:relative">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--t3)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="bibSearch" placeholder="Buscar por produto..." oninput="filtrarBiblioteca(this.value)" style="width:100%;padding:8px 10px 8px 30px;border:1.5px solid var(--bd);border-radius:var(--r);font-size:13px;background:var(--s2);outline:none;font-family:inherit">
+      </div>
+    </div>
+    <div class="ov-bd" style="padding:14px 16px">
       <div style="display:flex;gap:8px;margin-bottom:12px">
-        <label class="btn" style="cursor:pointer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <label class="btn" style="cursor:pointer;font-size:12px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           Adicionar à biblioteca
           <input type="file" accept="image/*" multiple style="display:none" onchange="addBiblioteca(event)">
         </label>
       </div>
-      <div id="bibGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;min-height:120px"></div>
+      <div id="bibGrid"></div>
     </div>
     <div class="ov-ft"><button class="btn" onclick="cOv('ovBib')">Fechar</button></div>
   </div>
@@ -717,73 +924,565 @@ async function rProds(){
     document.getElementById('mc').innerHTML=`<div class="empty"><div class="empty-ico">⚠️</div><p>Erro: ${e.message}</p><button class="btn" onclick="rProds()">Tentar novamente</button></div>`;
   }
 }
+// ── CONSERVAÇÃO (refrigeração / congelamento) ─────────────
+const MSG_REFRIG_DEFAULT = 'Atenção: este produto precisa ser mantido refrigerado a até 4°C para conservar sua qualidade e segurança alimentar. Após receber, leve imediatamente à geladeira. 🧊';
+const MSG_FREEZE_DEFAULT = 'Atenção: este produto precisa ser mantido congelado a -18°C. Após receber, leve imediatamente ao freezer. Para consumir, descongele na geladeira por 12h. 🥶';
+
+function toggleConservacao(tipo){
+  if(tipo==='refrig'){
+    const on=document.getElementById('prodRefrig')?.checked;
+    const area=document.getElementById('msgRefrigArea');
+    if(area)area.style.display=on?'block':'none';
+    if(on){
+      const txt=document.getElementById('msgRefrig');
+      if(txt&&!txt.value)txt.value=MSG_REFRIG_DEFAULT;
+    }
+  }else{
+    const on=document.getElementById('prodFreeze')?.checked;
+    const area=document.getElementById('msgFreezeArea');
+    if(area)area.style.display=on?'block':'none';
+    if(on){
+      const txt=document.getElementById('msgFreeze');
+      if(txt&&!txt.value)txt.value=MSG_FREEZE_DEFAULT;
+    }
+  }
+}
+
+// ── CATEGORIAS CHIPS ──────────────────────────────────────
+const CATS_DEFAULT=['Acompanhamentos','Bebidas','Doces','Kits','Pães','Queijos','Snacks','Sopas','Sorvetes'];
+let catsCustom=JSON.parse(localStorage.getItem('da_cats_custom')||'[]');
+
+function renderCatChips(sel=''){
+  const all=[...CATS_DEFAULT,...catsCustom];
+  const w=document.getElementById('catChips');if(!w)return;
+  w.innerHTML=all.map(c=>`<button type="button" class="cat-chip${c===sel?' sel':''}" onclick="selCat('${c}',this)">${c}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="10" height="10" style="margin-left:2px;display:${catsCustom.includes(c)?'inline':'none'}" onclick="event.stopPropagation();removerCat('${c}')"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`).join('')+
+  `<button type="button" class="cat-chip cat-chip-new" onclick="novaCatChip()">+ Nova categoria</button>`;
+  document.getElementById('catSelecionada').textContent=sel?'Selecionada: '+sel:'';
+  sv('prodCat',sel);
+}
+function selCat(c,el){
+  document.querySelectorAll('.cat-chip').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  sv('prodCat',c);
+  document.getElementById('catSelecionada').textContent='Selecionada: '+c;
+}
+function novaCatChip(){
+  const n=prompt('Nome da nova categoria:');
+  if(!n||!n.trim())return;
+  const cat=n.trim();
+  if([...CATS_DEFAULT,...catsCustom].includes(cat)){toast('Categoria já existe','err');return;}
+  catsCustom.push(cat);
+  localStorage.setItem('da_cats_custom',JSON.stringify(catsCustom));
+  renderCatChips(cat);
+  toast('Categoria "'+cat+'" criada!');
+}
+function removerCat(c){
+  if(!confirm('Remover categoria "'+c+'"?'))return;
+  catsCustom=catsCustom.filter(x=>x!==c);
+  localStorage.setItem('da_cats_custom',JSON.stringify(catsCustom));
+  renderCatChips();
+}
+
+// ── GALERIA DE FOTOS ──────────────────────────────────────
+let galeriaFotos=[]; // [{url, principal}]
+let carrosselInterval=null;
+let iaUltimaUrl='';
+let iaSeed=Math.floor(Math.random()*99999);
+
+function initGaleria(imgs=[]){
+  galeriaFotos=imgs.length?imgs:[]; 
+  renderGaleria();
+}
+
+function renderGaleria(){
+  const main=galeriaFotos.find(f=>f.principal)||galeriaFotos[0];
+  const mainEl=document.getElementById('fotoMainPrev');
+  if(mainEl){
+    if(main){mainEl.innerHTML=`<img src="${main.url}" style="width:100%;height:100%;object-fit:cover">`;mainEl.style.fontSize='0';}
+    else{mainEl.innerHTML='📦';mainEl.style.fontSize='28px';}
+  }
+  const wrap=document.getElementById('fotosAdicionaisWrap');
+  if(!wrap)return;
+  // limpar thumbs existentes (manter o botão +)
+  wrap.querySelectorAll('.foto-thumb').forEach(el=>el.remove());
+  const btn=wrap.querySelector('button');
+  galeriaFotos.forEach((f,i)=>{
+    const d=document.createElement('div');
+    d.className='foto-thumb'+(f.principal?' principal':'');
+    d.innerHTML=`<img src="${f.url}" alt="">
+      <div class="foto-actions">
+        <button onclick="setPrincipal(${i})">Principal</button>
+        <button onclick="removerFoto(${i})" style="background:rgba(224,62,62,.9);color:#fff">Remover</button>
+      </div>`;
+    wrap.insertBefore(d,btn);
+  });
+  const qtd=document.getElementById('qtdFotos');if(qtd)qtd.textContent=galeriaFotos.length;
+  sv('prodImgData',main?.url||'');
+  sv('prodGaleriaData',JSON.stringify(galeriaFotos));
+  // mostrar botão ajustar se tem imagem principal
+  const ba=document.getElementById('btnAjustarImg');if(ba)ba.style.display=main?'flex':'none';
+  // carrossel
+  if(carrosselInterval)clearInterval(carrosselInterval);
+  if(document.getElementById('carrosselAuto')?.checked&&galeriaFotos.length>1){
+    let idx=0;
+    carrosselInterval=setInterval(()=>{
+      idx=(idx+1)%galeriaFotos.length;
+      if(mainEl)mainEl.innerHTML=`<img src="${galeriaFotos[idx].url}" style="width:100%;height:100%;object-fit:cover">`;
+    },4000);
+  }
+}
+
+function toggleCarrossel(){
+  const on=document.getElementById('carrosselAuto')?.checked;
+  const st=document.getElementById('carrosselStatus');
+  if(st)st.textContent=on?'✓ Carrossel automático ativado — imagens mudam a cada 4 segundos':'Carrossel automático desativado';
+  if(st)st.style.color=on?'var(--gm)':'var(--t3)';
+  renderGaleria();
+}
+
+function setPrincipal(i){
+  galeriaFotos.forEach((f,j)=>f.principal=(j===i));
+  renderGaleria();
+}
+
+function removerFoto(i){
+  galeriaFotos.splice(i,1);
+  if(galeriaFotos.length&&!galeriaFotos.find(f=>f.principal))galeriaFotos[0].principal=true;
+  renderGaleria();
+}
+
+function clicarFotoPrincipal(){
+  // abre seleção para trocar a foto principal
+  document.getElementById('addFotoInput').click();
+}
+
+function uploadFotoPrincipal(ev){
+  const file=ev.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    const url=e.target.result;
+    // remove principal anterior e define nova
+    galeriaFotos.forEach(f=>f.principal=false);
+    galeriaFotos.unshift({url,principal:true});
+    renderGaleria();
+    salvarNaBiblioteca(url,document.getElementById('prodNome')?.value||'Produto');
+    toast('Foto definida como principal!');
+  };
+  r.readAsDataURL(file);
+  ev.target.value='';
+}
+
+function adicionarFotoGaleria(ev){
+  const file=ev.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    const url=e.target.result;
+    const isPrincipal=!galeriaFotos.length;
+    galeriaFotos.push({url,principal:isPrincipal});
+    renderGaleria();
+    salvarNaBiblioteca(url,document.getElementById('prodNome')?.value||'Produto');
+    toast('Foto adicionada à galeria!');
+  };
+  r.readAsDataURL(file);
+  ev.target.value='';
+}
+
+// ── GERAÇÃO DE IMAGEM COM IA (Pollinations) ───────────────
+function gerarImgIA(){
+  const area=document.getElementById('iaArea');
+  if(!area)return;
+  area.style.display=area.style.display==='none'?'block':'none';
+  if(area.style.display==='block'){
+    // sugerir prompt baseado no nome do produto
+    const nome=document.getElementById('prodNome')?.value?.trim();
+    const desc=document.getElementById('prodDesc')?.value?.trim();
+    const prompt=document.getElementById('iaPromptTxt');
+    if(prompt&&!prompt.value&&nome){
+      prompt.value=`${nome}${desc?', '+desc:''}, fotografia gastronômica profissional, luz natural suave, fundo limpo neutro, alta qualidade, food photography`;
+    }
+    prompt?.focus();
+  }
+}
+
+function fecharIA(){
+  const area=document.getElementById('iaArea');
+  if(area)area.style.display='none';
+}
+
+async function confirmarIA(){
+  const prompt=document.getElementById('iaPromptTxt')?.value?.trim();
+  if(!prompt){toast('Descreva a imagem que deseja gerar','err');return;}
+  
+  const btn=document.getElementById('btnGerarIA');
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="ia-dot"></span><span class="ia-dot"></span><span class="ia-dot"></span> Gerando...';}
+  
+  const res=document.getElementById('iaResultWrap');
+  const img=document.getElementById('iaResultImg');
+  if(res)res.style.display='none';
+  
+  try{
+    iaSeed=Math.floor(Math.random()*999999);
+    const encodedPrompt=encodeURIComponent(prompt+', food product, professional photography, white background option, high resolution');
+    const url=`https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&seed=${iaSeed}&nologo=true&enhance=true&model=flux`;
+    
+    // Preload da imagem
+    await new Promise((resolve,reject)=>{
+      const i=new Image();
+      i.onload=resolve;
+      i.onerror=reject;
+      i.src=url;
+      setTimeout(reject,30000);// timeout 30s
+    });
+    
+    iaUltimaUrl=url;
+    if(img)img.src=url;
+    if(res)res.style.display='block';
+    
+    const btnNov=document.getElementById('btnNovaVariacao');
+    const btnAdd=document.getElementById('btnAddGaleria');
+    if(btnNov)btnNov.style.display='inline-flex';
+    if(btnAdd)btnAdd.style.display='inline-flex';
+    
+    toast('✨ Imagem gerada!');
+  }catch(e){
+    toast('Erro ao gerar imagem. Tente novamente.','err');
+  }finally{
+    if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
+  }
+}
+
+async function proximaVariacaoIA(){
+  const prompt=document.getElementById('iaPromptTxt')?.value?.trim();
+  if(!prompt)return;
+  const btn=document.getElementById('btnNovaVariacao');
+  if(btn){btn.disabled=true;btn.textContent='🔄 Gerando...';}
+  iaSeed=Math.floor(Math.random()*999999);
+  const img=document.getElementById('iaResultImg');
+  try{
+    const encodedPrompt=encodeURIComponent(prompt+', food product, professional photography, high resolution');
+    const url=`https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&seed=${iaSeed}&nologo=true&enhance=true&model=flux`;
+    await new Promise((resolve,reject)=>{const i=new Image();i.onload=resolve;i.onerror=reject;i.src=url;setTimeout(reject,30000);});
+    iaUltimaUrl=url;
+    if(img)img.src=url;
+    toast('✨ Nova variação gerada!');
+  }catch(e){toast('Erro ao gerar. Tente novamente.','err');}
+  finally{if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}}
+}
+
+function adicionarIAaGaleria(){
+  if(!iaUltimaUrl){toast('Gere uma imagem primeiro','err');return;}
+  const isPrincipal=!galeriaFotos.length;
+  galeriaFotos.push({url:iaUltimaUrl,principal:isPrincipal});
+  renderGaleria();
+  const nome=document.getElementById('prodNome')?.value||'Produto';
+  salvarNaBiblioteca(iaUltimaUrl,nome);
+  fecharIA();
+  toast('✅ Imagem adicionada à galeria!');
+}
+
+// ── BIBLIOTECA ────────────────────────────────────────────
+function getBiblioteca(){
+  try{return JSON.parse(localStorage.getItem('da_biblioteca')||'[]');}catch{return[];}
+}
+function setBiblioteca(lib){localStorage.setItem('da_biblioteca',JSON.stringify(lib));}
+
+function salvarNaBiblioteca(url,nomeProduto){
+  const lib=getBiblioteca();
+  // evitar duplicata
+  if(lib.find(x=>x.url===url))return;
+  lib.unshift({url,produto:nomeProduto.toUpperCase(),ts:Date.now()});
+  setBiblioteca(lib);
+}
+
+function abrirBiblioteca(){
+  renderBiblioteca();
+  oOv('ovBib');
+}
+
+function renderBiblioteca(filtro=''){
+  const lib=getBiblioteca();
+  const bibEl=document.getElementById('bibGrid');
+  const contador=document.getElementById('bibContador');
+  
+  const filtrado=filtro?lib.filter(x=>x.produto.toLowerCase().includes(filtro.toLowerCase())):lib;
+  
+  // agrupar por produto
+  const grupos={};
+  filtrado.forEach(img=>{
+    const k=img.produto||'SEM PRODUTO';
+    if(!grupos[k])grupos[k]=[];
+    grupos[k].push(img);
+  });
+  
+  const totalImgs=filtrado.length;
+  const totalGrupos=Object.keys(grupos).length;
+  if(contador)contador.textContent=totalImgs?`— ${totalImgs} imagens em ${totalGrupos} grupos`:'';
+  
+  if(!bibEl)return;
+  if(!filtrado.length){
+    bibEl.innerHTML='<div style="text-align:center;color:var(--t3);padding:40px 0;font-size:13px">Nenhuma imagem na biblioteca ainda.<br>Gere com IA ou faça upload para começar.</div>';
+    return;
+  }
+  
+  bibEl.innerHTML=Object.entries(grupos).map(([prod,imgs])=>`
+    <div style="margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px">
+        ${prod} <span style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:1px 7px;font-weight:600;color:var(--t2)">${imgs.length}</span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        ${imgs.map(img=>`
+          <div style="position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden;border:2px solid var(--bd);cursor:pointer;transition:border-color .15s" 
+               onclick="selecionarDaBiblioteca('${img.url}',this)" 
+               class="bib-item"
+               title="Clique para usar">
+            <img src="${img.url}" style="width:100%;height:100%;object-fit:cover">
+            <div class="bib-check" style="display:none;position:absolute;inset:0;background:rgba(30,107,64,.6);align-items:center;justify-content:center">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" width="24" height="24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <button onclick="event.stopPropagation();removerDaBiblioteca('${img.url}')" style="position:absolute;top:3px;right:3px;background:rgba(224,62,62,.85);border:none;border-radius:4px;color:#fff;font-size:10px;padding:2px 4px;cursor:pointer;line-height:1">✕</button>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function filtrarBiblioteca(q){renderBiblioteca(q);}
+
+function selecionarDaBiblioteca(url,el){
+  // destacar selecionado
+  document.querySelectorAll('.bib-item').forEach(x=>{x.style.borderColor='var(--bd)';x.querySelector('.bib-check').style.display='none';});
+  el.style.borderColor='var(--gm)';
+  el.querySelector('.bib-check').style.display='flex';
+  // adicionar à galeria do produto
+  const isPrincipal=!galeriaFotos.length;
+  if(!galeriaFotos.find(f=>f.url===url)){
+    galeriaFotos.push({url,principal:isPrincipal});
+    renderGaleria();
+    toast('✅ Imagem adicionada à galeria!');
+  }else{
+    toast('Imagem já está na galeria','info');
+  }
+  setTimeout(()=>cOv('ovBib'),800);
+}
+
+function removerDaBiblioteca(url){
+  if(!confirm('Remover esta imagem da biblioteca?'))return;
+  const lib=getBiblioteca().filter(x=>x.url!==url);
+  setBiblioteca(lib);
+  renderBiblioteca(document.getElementById('bibSearch')?.value||'');
+  toast('Imagem removida da biblioteca');
+}
+
+function addBiblioteca(ev){
+  const files=Array.from(ev.target.files);
+  const nome=document.getElementById('prodNome')?.value||prompt('Nome do produto para esta imagem:')||'Produto';
+  let count=0;
+  files.forEach(file=>{
+    const r=new FileReader();
+    r.onload=e=>{salvarNaBiblioteca(e.target.result,nome);count++;if(count===files.length){renderBiblioteca();toast(`${count} imagem(ns) adicionada(s) à biblioteca`);}};
+    r.readAsDataURL(file);
+  });
+  ev.target.value='';
+}
+
+// ── ABRIR/EDITAR PRODUTO ──────────────────────────────────
 function abrirNovoProd(){
-  document.getElementById('ovProdTit').textContent = 'Novo Produto';
-  document.getElementById('prodId').value = '';
-  document.getElementById('prodNome').value = '';
-  document.getElementById('prodCat').value = '';
-  document.getElementById('prodPrecoConv').value = '';
-  document.getElementById('prodPrecoPromo').value = '';
-  document.getElementById('prodDesc').value = '';
-  document.getElementById('prodAtivo').value = 'true';
-  document.getElementById('prodImgData').value = '';
-  document.getElementById('prodImgPrev').innerHTML = '📦';
-  document.getElementById('iaPromptArea').style.display = 'none';
+  document.getElementById('ovProdTit').textContent='Novo Produto';
+  sv('prodId','');sv('prodNome','');sv('prodCat','');
+  sv('prodPrecoConv','');sv('prodPrecoPromo','');
+  sv('prodDesc','');sv('prodIngredientes','');sv('prodPorcao','');
+  sv('prodCodBarras','');sv('prodEstoque','0');sv('prodShelfLife','');
+  sv('prodBeneficios','');sv('prodConsumo','');sv('prodFormula','');
+  document.getElementById('prodAtivo').checked=true;
+  document.getElementById('prodIsKit').checked=false;
+  document.getElementById('prodRefrig').checked=false;
+  document.getElementById('prodFreeze').checked=false;
+  document.getElementById('msgRefrigArea').style.display='none';
+  document.getElementById('msgFreezeArea').style.display='none';
+  sv('msgRefrig','');sv('msgFreeze','');
+  document.getElementById('kitSection').style.display='none';
+  document.getElementById('kitItens').innerHTML='';
+  document.getElementById('nutriSection').style.display='none';
+  document.getElementById('iaArea').style.display='none';
+  galeriaFotos=[];
+  iaSeed=Math.floor(Math.random()*99999);
+  iaUltimaUrl='';
+  renderCatChips();
+  initGaleria();
   oOv('ovProd');
 }
+
 async function editProd(id){
   try{
     const p=await Api.produtos.buscar(id);
     document.getElementById('ovProdTit').textContent='Editar Produto';
-    sv('prodId',p.id);sv('prodNome',p.nome);sv('prodCat',p.categoria||'');
-    // Formatar preços com máscara
-    const fmtP=v=>{if(!v)return'';const c=Math.round(parseFloat(v)*100).toString().padStart(3,'0');return'R$ '+parseInt(c.slice(0,-2)).toLocaleString('pt-BR')+','+c.slice(-2);};
-    sv('prodPrecoConv',fmtP(p.preco_convencional||p.preco||''));
-    sv('prodPrecoPromo',fmtP(p.preco_promocional||''));
-    sv('prodDesc',p.descricao||'');sv('prodAtivo',p.ativo!==false?'true':'false');
-    sv('prodImgData',p.imagem||'');
-    const prev=document.getElementById('prodImgPrev');
-    if(prev)prev.innerHTML=p.imagem?`<img src="${p.imagem}" style="width:100%;height:100%;object-fit:cover">`:`<span>${catEmoji(p.categoria||'')}</span>`;
-    document.getElementById('iaPromptArea').style.display='none';
+    sv('prodId',p.id);sv('prodNome',p.nome);
+    sv('prodPrecoConv',p.preco_convencional||p.preco||'');
+    sv('prodPrecoPromo',p.preco_promocional||'');
+    sv('prodDesc',p.descricao||'');
+    sv('prodIngredientes',p.ingredientes||'');
+    sv('prodPorcao',p.porcao||'');
+    sv('prodCodBarras',p.codigo_barras||'');
+    sv('prodEstoque',p.estoque||0);
+    sv('prodShelfLife',p.shelf_life||'');
+    sv('prodBeneficios',p.beneficios||'');
+    sv('prodConsumo',p.consumo||'');
+    sv('prodFormula',p.formula_id||'');
+    document.getElementById('prodAtivo').checked=p.ativo!==false;
+    document.getElementById('prodIsKit').checked=!!p.is_kit;
+    document.getElementById('prodRefrig').checked=!!p.requer_refrigeracao;
+    document.getElementById('prodFreeze').checked=!!p.requer_congelamento;
+    // mensagens de conservação
+    const msgR=p.msg_refrigeracao||MSG_REFRIG_DEFAULT;
+    const msgF=p.msg_congelamento||MSG_FREEZE_DEFAULT;
+    sv('msgRefrig',msgR);
+    sv('msgFreeze',msgF);
+    document.getElementById('msgRefrigArea').style.display=p.requer_refrigeracao?'block':'none';
+    document.getElementById('msgFreezeArea').style.display=p.requer_congelamento?'block':'none';
+    document.getElementById('kitSection').style.display=p.is_kit?'block':'none';
+    document.getElementById('nutriSection').style.display='none';
+    document.getElementById('iaArea').style.display='none';
+    // galeria
+    let imgs=[];
+    if(p.imagem)imgs=[{url:p.imagem,principal:true}];
+    if(p.galeria)try{imgs=JSON.parse(p.galeria);}catch{}
+    galeriaFotos=imgs;
+    iaUltimaUrl='';
+    renderCatChips(p.categoria||'');
+    initGaleria(galeriaFotos);
     oOv('ovProd');
   }catch(e){toast(e.message,'err');}
 }
 
-async function salvarProd(){
-  const btn = document.getElementById('btnSalvarProd');
-  if(btn) { btn.disabled=true; btn.textContent='Salvando...'; }
+// ── KIT ───────────────────────────────────────────────────
+function toggleKit(){
+  const on=document.getElementById('prodIsKit')?.checked;
+  document.getElementById('kitSection').style.display=on?'block':'none';
+  if(on&&!document.getElementById('kitItens').children.length)addKitItem();
+}
 
-  try {
-    const id = document.getElementById('prodId').value;
-    const nome = document.getElementById('prodNome').value.trim();
-    const cat = document.getElementById('prodCat').value;
-    const precoConv = parseFloat(document.getElementById('prodPrecoConv').value) || 0;
-    const precoPromo = parseFloat(document.getElementById('prodPrecoPromo').value) || null;
-    const desc = document.getElementById('prodDesc').value.trim();
-    const ativo = document.getElementById('prodAtivo').value === 'true';
+let kitProds=[];
+async function addKitItem(){
+  if(!kitProds.length){
+    try{kitProds=(await Api.produtos.listar(true)||[]).filter(p=>!p.is_kit);}
+    catch{kitProds=[];}
+  }
+  const id='kit_'+Date.now();
+  const opts=kitProds.map(p=>`<option value="${p.id}" data-conv="${p.preco_convencional||p.preco||0}" data-promo="${p.preco_promocional||p.preco_convencional||p.preco||0}">${p.nome}</option>`).join('');
+  const row=document.createElement('div');
+  row.id=id;row.style.cssText='margin-bottom:8px';
+  row.innerHTML=`<div style="display:flex;gap:6px;align-items:center">
+    <select style="flex:1;padding:7px;font-size:12px;border:1px solid var(--bd);border-radius:var(--r);background:var(--s);color:var(--t1);outline:none;font-family:inherit" onchange="updKitTotal()"><option value="">Selecionar produto...</option>${opts}</select>
+    <input type="number" value="1" min="1" style="width:50px;padding:7px;font-size:12px;border:1px solid var(--bd);border-radius:var(--r);text-align:center;outline:none;font-family:inherit" oninput="updKitTotal()">
+    <button onclick="document.getElementById('${id}').remove();updKitTotal()" style="background:none;border:none;color:var(--rd);font-size:16px;cursor:pointer;padding:4px;line-height:1">×</button>
+  </div>
+  <div class="kit-item-info" style="font-size:11px;color:var(--t2);padding:2px 0 0 0"></div>`;
+  document.getElementById('kitItens').appendChild(row);
+}
 
-    if (!nome) { toast('⚠️ Preencha o nome do produto', 'err'); document.getElementById('prodNome').focus(); return; }
-    if (!cat) { toast('⚠️ Selecione uma categoria', 'err'); document.getElementById('prodCat').focus(); return; }
-    if (!precoConv || precoConv <= 0) { toast('⚠️ Preencha o preço convencional', 'err'); document.getElementById('prodPrecoConv').focus(); return; }
+function updKitTotal(){
+  let conv=0,promo=0;
+  document.querySelectorAll('#kitItens > div').forEach(row=>{
+    const sel=row.querySelector('select');
+    const qty=parseInt(row.querySelector('input')?.value)||1;
+    const opt=sel?.selectedOptions[0];
+    const c=parseFloat(opt?.dataset.conv||0);
+    const pr=parseFloat(opt?.dataset.promo||0);
+    conv+=c*qty;promo+=pr*qty;
+    const info=row.querySelector('.kit-item-info');
+    if(info&&opt?.value)info.textContent=`Conv: R$ ${(c*qty).toFixed(2).replace('.',',')} · Promo: R$ ${(pr*qty).toFixed(2).replace('.',',')}`;
+  });
+  const t=document.getElementById('kitTotal');
+  if(t)t.innerHTML=`Total estimado do kit: <strong>Conv: R$ ${conv.toFixed(2).replace('.',',')} · Promo: R$ ${promo.toFixed(2).replace('.',',')}</strong>`;
+}
 
-    const body = { nome, categoria: cat, preco_convencional: precoConv, preco_promocional: precoPromo, descricao: desc, ativo };
+// ── NUTRIÇÃO IA ───────────────────────────────────────────
+function toggleNutri(){
+  const s=document.getElementById('nutriSection');
+  if(s)s.style.display=s.style.display==='none'?'block':'none';
+}
 
-    if (id) await Api.produtos.atualizar(id, body);
-    else await Api.produtos.criar(body);
-
-    toast(id ? '✅ Produto atualizado!' : '✅ Produto criado!');
-    cOv('ovProd');
-    rProds();
-  } catch(e) {
-    toast('❌ ' + (e.message || 'Erro ao salvar'), 'err');
-  } finally {
-    if(btn) { btn.disabled=false; btn.textContent='💾 Salvar Produto'; }
+async function preencherNutriIA(){
+  const nome=document.getElementById('prodNome')?.value?.trim();
+  const desc=document.getElementById('prodDesc')?.value?.trim();
+  if(!nome){toast('Preencha o nome do produto primeiro','err');return;}
+  document.getElementById('nutriSection').style.display='block';
+  const bBtn=document.getElementById('prodBeneficios');
+  const cBtn=document.getElementById('prodConsumo');
+  if(bBtn)bBtn.value='⏳ Gerando com IA...';
+  if(cBtn)cBtn.value='⏳ Aguarde...';
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:`Para o produto "${nome}"${desc?', descrito como: '+desc:''}, escreva em português brasileiro:\n1. Benefícios para saúde (3-4 tópicos numerados, 2 linhas cada)\n2. Melhor forma de consumir (2-3 frases práticas)\n\nResponda apenas com JSON: {"beneficios":"...","consumo":"..."}`}]})});
+    const data=await resp.json();
+    const txt=data.content?.[0]?.text||'';
+    const clean=txt.replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(clean);
+    if(bBtn)bBtn.value=parsed.beneficios||'';
+    if(cBtn)cBtn.value=parsed.consumo||'';
+    toast('✅ Nutrição preenchida com IA!');
+  }catch(e){
+    if(bBtn)bBtn.value='';if(cBtn)cBtn.value='';
+    toast('Erro ao gerar com IA','err');
   }
 }
+
+// ── SALVAR PRODUTO ────────────────────────────────────────
+async function salvarProd(){
+  const btn=document.getElementById('btnSalvarProd');
+  if(btn){btn.disabled=true;btn.textContent='Salvando...';}
+  try{
+    const id=gv('prodId');
+    const nome=gv('prodNome').trim();
+    const cat=gv('prodCat');
+    const precoConv=parseFloat(gv('prodPrecoConv'))||0;
+    const precoPromo=parseFloat(gv('prodPrecoPromo'))||null;
+    if(!nome){toast('⚠️ Preencha o nome do produto','err');document.getElementById('prodNome')?.focus();return;}
+    if(!cat){toast('⚠️ Selecione uma categoria','err');return;}
+    if(!precoConv||precoConv<=0){toast('⚠️ Preencha o preço convencional','err');document.getElementById('prodPrecoConv')?.focus();return;}
+    const body={
+      nome,categoria:cat,
+      preco_convencional:precoConv,
+      preco_promocional:precoPromo,
+      descricao:gv('prodDesc'),
+      ingredientes:gv('prodIngredientes'),
+      porcao:gv('prodPorcao'),
+      codigo_barras:gv('prodCodBarras'),
+      estoque:parseInt(gv('prodEstoque'))||0,
+      shelf_life:parseInt(gv('prodShelfLife'))||null,
+      beneficios:gv('prodBeneficios'),
+      consumo:gv('prodConsumo'),
+      ativo:document.getElementById('prodAtivo')?.checked!==false,
+      is_kit:document.getElementById('prodIsKit')?.checked||false,
+      requer_refrigeracao:document.getElementById('prodRefrig')?.checked||false,
+      requer_congelamento:document.getElementById('prodFreeze')?.checked||false,
+      msg_refrigeracao:document.getElementById('prodRefrig')?.checked?gv('msgRefrig'):'',
+      msg_congelamento:document.getElementById('prodFreeze')?.checked?gv('msgFreeze'):'',
+      imagem:galeriaFotos.find(f=>f.principal)?.url||galeriaFotos[0]?.url||'',
+      galeria:JSON.stringify(galeriaFotos),
+    };
+    if(id)await Api.produtos.atualizar(id,body);
+    else await Api.produtos.criar(body);
+    // salvar imagens na biblioteca
+    const nomeP=nome;
+    galeriaFotos.forEach(f=>salvarNaBiblioteca(f.url,nomeP));
+    toast(id?'✅ Produto atualizado!':'✅ Produto criado!');
+    cOv('ovProd');
+    rProds();
+  }catch(e){
+    toast('❌ '+(e.message||'Erro ao salvar'),'err');
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='💾 Salvar Produto';}
+  }
+}
+
 async function deletarProd(id){
   if(!confirm('Excluir este produto?'))return;
   try{await Api.produtos.excluir(id);toast('Produto excluído!');rProds();}catch(e){toast(e.message,'err');}
 }
+
+// compatibilidade com chamadas antigas
+function onProdImg(ev){adicionarFotoGaleria(ev);}
+function gerarImgIA_old(){gerarImgIA();}
+function confirmarIA_old(){confirmarIA();}
 
 // ─── CLIENTES ─────────────────────────────────────────────
 async function rClientes(){
