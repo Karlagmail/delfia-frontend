@@ -42,9 +42,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Sora,sans-serif;bac
 .tb-l h2{font-size:16px;font-weight:600;color:var(--t1)}
 .tb-l p{font-size:12px;color:var(--t3);margin-top:1px}
 .tb-r{display:flex;align-items:center;gap:8px}
-.mc{flex:1;overflow-y:auto;padding:18px 20px}
+.mc{flex:1;overflow-y:auto;padding:18px 20px;min-height:0}
 .mc::-webkit-scrollbar{width:5px}
 .mc::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:10px}
+.mc.pdv-mode{overflow:hidden;padding:0}
 
 /* BUTTONS */
 .btn{padding:7px 14px;font-size:13px;border-radius:var(--r);cursor:pointer;border:1px solid var(--bd2);background:var(--s);color:var(--t1);display:inline-flex;align-items:center;gap:6px;transition:all .15s;font-family:inherit}
@@ -84,51 +85,56 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Sora,sans-serif;bac
 .ab svg{width:14px;height:14px}
 
 /* PDV */
-.pdvw{display:grid;grid-template-columns:1fr 300px;gap:0;height:calc(100vh - 57px);margin:-18px -20px}
-.pdvp{overflow-y:auto;padding:0;background:#f7f6f3}
+.pdvw{display:grid;grid-template-columns:1fr 320px;gap:0;height:100%;margin:-18px -20px}
+.pdvp{overflow-y:auto;overflow-x:hidden;background:#f7f6f3}
 .pdvp::-webkit-scrollbar{width:5px}
 .pdvp::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:10px}
-.pdvc{background:var(--s);border-left:1px solid var(--bd);display:flex;flex-direction:column}
-.pdv-search{padding:12px 16px;background:#fff;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;position:sticky;top:0;z-index:10}
+.pdvc{background:var(--s);border-left:1px solid var(--bd);display:flex;flex-direction:column;min-height:0}
+.pdv-search{padding:12px 20px;background:#fff;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;position:sticky;top:0;z-index:10}
 .pdv-search input{flex:1;border:none;background:transparent;font-size:14px;outline:none;color:var(--t1);font-family:inherit}
 .pdv-search input::placeholder{color:var(--t3)}
 
-/* GRID DE PRODUTOS — 4 colunas, cards com foto grande */
-.pdv-section{padding:16px 16px 0}
-.pdv-cat-lbl{font-size:11px;font-weight:700;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
-.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+/* GRID DE PRODUTOS */
+.pdv-section{padding:20px 20px 0}
+.pdv-cat-lbl{font-size:11px;font-weight:700;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:24px}
 .pc{background:#fff;border:1.5px solid var(--bd);border-radius:12px;cursor:pointer;transition:all .18s;overflow:hidden;position:relative}
 .pc:hover{border-color:var(--gm);box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
-.pc.in-cart{border-color:var(--gm);box-shadow:0 0 0 2px rgba(30,107,64,.15)}
+.pc.in-cart{border-color:var(--gm);box-shadow:0 0 0 3px rgba(30,107,64,.12)}
 .pim{position:relative;aspect-ratio:1;background:#f0efec;display:flex;align-items:center;justify-content:center;font-size:42px;overflow:hidden}
 .pim img{width:100%;height:100%;object-fit:cover}
-/* overlay + botão adicionar no hover */
-.pim-overlay{position:absolute;inset:0;background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .18s;border-radius:0}
+.pim-overlay{position:absolute;inset:0;background:rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .18s}
 .pc:hover .pim-overlay{opacity:1}
-.pim-add{background:var(--gm);color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-.pbdg{position:absolute;top:8px;right:8px;background:var(--gm);color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,.2);z-index:2}
-.pin{padding:10px 12px 12px}
-.pnm{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:4px;line-height:1.3}
-.ppr{font-size:14px;font-weight:700;color:var(--gm)}
-.pol{font-size:11px;color:var(--t3);text-decoration:line-through;margin-left:5px;font-weight:400}
+.pim-add{background:var(--gm);color:#fff;border:none;border-radius:20px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.pbdg{position:absolute;top:10px;right:10px;background:var(--gm);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.2);z-index:2}
+.pin{padding:12px 14px 14px}
+.pnm{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:5px;line-height:1.3}
+.ppr{font-size:15px;font-weight:700;color:var(--gm)}
+.pol{font-size:11px;color:var(--t3);text-decoration:line-through;margin-left:6px;font-weight:400}
 
-/* CARRINHO NOVO */
-.ch{padding:14px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.cbdg{background:var(--gm);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
-.ptgl{padding:8px 14px;margin:8px 12px 0;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;border:1.5px solid;transition:all .18s;flex-shrink:0;font-family:inherit}
+/* CARRINHO */
+.ch{padding:16px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ptgl{padding:10px 16px;margin:10px 14px 4px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;border:1.5px solid;transition:all .18s;flex-shrink:0;font-family:inherit;width:calc(100% - 28px)}
 .ptgl.cv{border-color:var(--bd2);color:var(--t2);background:var(--s2)}
 .ptgl.pm{border-color:var(--gm);color:var(--gm);background:var(--gl)}
 
 /* Carrinho vazio */
 .ce{text-align:center;color:var(--t3);font-size:13px;padding:40px 20px;display:flex;flex-direction:column;align-items:center;gap:10px}
-.ci{flex:1;overflow-y:auto;padding:8px 14px}
+.ci{flex:1;overflow-y:auto;padding:6px 16px;min-height:0}
 .ci::-webkit-scrollbar{width:4px}
 .ci::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:10px}
+.ce{text-align:center;color:var(--t3);font-size:13px;padding:40px 20px;display:flex;flex-direction:column;align-items:center;gap:10px}
 .citem{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-bottom:1px solid var(--bd)}
 .citem:last-child{border-bottom:none}
 .cin{flex:1;min-width:0}
-.cnm{font-size:13px;font-weight:600;color:var(--t1);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+.cnm{font-size:13px;font-weight:600;color:var(--t1);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
 .cpri{font-size:12px;color:var(--t3);margin-top:1px}
+.cf{padding:14px 16px;border-top:1px solid var(--bd);flex-shrink:0;background:var(--s)}
+.trow{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 2px}
+.tv{font-size:20px;font-weight:700;color:var(--t1)}
+.bfin{width:100%;padding:14px;background:var(--gm);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:600;cursor:pointer;transition:background .15s;font-family:inherit;letter-spacing:.3px}
+.bfin:hover:not(:disabled){background:var(--gd)}
+.bfin:disabled{opacity:.45;cursor:not-allowed}
 .qctl{display:flex;align-items:center;gap:4px}
 .qb{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--bd);background:var(--s2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;color:var(--t1);transition:all .15s}
 .qb:hover{background:var(--gd);color:#fff;border-color:var(--gd)}
@@ -672,7 +678,9 @@ function goTo(p,el){
   document.getElementById('pt').textContent=pg.t;
   document.getElementById('ps').textContent=pg.s;
   document.getElementById('ta').innerHTML='';
-  document.getElementById('mc').style.padding='18px 20px';
+  const mc=document.getElementById('mc');
+  mc.classList.remove('pdv-mode');
+  mc.style.padding='18px 20px';
   pg.r();
 }
 
@@ -761,6 +769,7 @@ async function rPDV(){
   document.getElementById('ta').innerHTML='';
   const mc=document.getElementById('mc');
   mc.style.padding='0';
+  mc.classList.add('pdv-mode');
   mc.innerHTML=`
   <div class="pdvw">
     <div class="pdvp">
@@ -1237,6 +1246,18 @@ function fecharIA(){
   if(area)area.style.display='none';
 }
 
+// ── GERAÇÃO DE IMAGEM COM IA ──────────────────────────────
+// Tenta múltiplos serviços em sequência até um funcionar
+async function tentarCarregarImagem(url, timeoutMs=30000){
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    const timer=setTimeout(()=>{img.src='';reject(new Error('timeout'));},timeoutMs);
+    img.onload=()=>{clearTimeout(timer);resolve(url);};
+    img.onerror=()=>{clearTimeout(timer);reject(new Error('erro'));};
+    img.src=url;
+  });
+}
+
 async function confirmarIA(){
   const prompt=document.getElementById('iaPromptTxt')?.value?.trim();
   if(!prompt){toast('Descreva a imagem que deseja gerar','err');return;}
@@ -1245,53 +1266,74 @@ async function confirmarIA(){
   if(btn){btn.disabled=true;btn.innerHTML='<span class="ia-dot"></span><span class="ia-dot"></span><span class="ia-dot"></span> Gerando...';}
 
   const res=document.getElementById('iaResultWrap');
-  const img=document.getElementById('iaResultImg');
+  const imgEl=document.getElementById('iaResultImg');
   if(res)res.style.display='none';
 
   iaSeed=Math.floor(Math.random()*999999);
-  // Pollinations — URL direta sem preload, browser carrega sem CORS
-  const promptFinal=encodeURIComponent(prompt+', professional food photography, high quality, detailed');
-  const url=`https://image.pollinations.ai/prompt/${promptFinal}?width=512&height=512&seed=${iaSeed}&nologo=true&model=flux`;
-  iaUltimaUrl=url;
+  const enc=encodeURIComponent(prompt);
 
-  if(img){
-    img.crossOrigin='';
-    img.style.opacity='0.3';
-    img.style.minHeight='150px';
-    img.style.background='var(--s2)';
-    if(res)res.style.display='block';
+  // Lista de serviços para tentar em ordem
+  const servicos=[
+    // Pollinations model turbo (mais rápido)
+    `https://image.pollinations.ai/prompt/${enc}?seed=${iaSeed}&nologo=true&model=turbo`,
+    // Pollinations model flux
+    `https://image.pollinations.ai/prompt/${enc}?seed=${iaSeed}&nologo=true`,
+    // Pollinations sem parâmetros extras
+    `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt+' food photography')}?seed=${iaSeed}`,
+  ];
 
-    // timeout de 45 segundos
-    const timeoutId=setTimeout(()=>{
-      toast('Tempo esgotado. Tente novamente.','err');
-      if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
-    },45000);
+  let urlFinal=null;
 
-    img.onload=()=>{
-      clearTimeout(timeoutId);
-      img.style.opacity='1';
-      img.style.minHeight='';
-      img.style.background='';
-      document.getElementById('btnNovaVariacao').style.display='inline-flex';
-      document.getElementById('btnAddGaleria').style.display='inline-flex';
-      toast('✨ Imagem gerada!');
-      if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
-    };
-    img.onerror=()=>{
-      clearTimeout(timeoutId);
-      // tenta URL alternativa sem parâmetros extras
-      const urlSimples=`https://image.pollinations.ai/prompt/${promptFinal}?seed=${iaSeed}&nologo=true`;
-      if(img.src!==urlSimples){
-        img.src=urlSimples;
-        iaUltimaUrl=urlSimples;
-      }else{
-        if(res)res.style.display='none';
-        toast('Erro ao carregar imagem. Tente com uma descrição diferente.','err');
-        if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
-      }
-    };
-    img.src=url;
+  // Mostrar área de resultado com loading
+  if(res){res.style.display='block';}
+  if(imgEl){
+    imgEl.src='';
+    imgEl.style.opacity='0';
+    imgEl.style.minHeight='160px';
+    imgEl.style.background='linear-gradient(90deg,var(--s2) 25%,var(--bd) 50%,var(--s2) 75%)';
+    imgEl.style.backgroundSize='200% 100%';
+    imgEl.style.animation='shimmer 1.5s infinite';
   }
+
+  // Adicionar animação shimmer se não existir
+  if(!document.getElementById('shimmerStyle')){
+    const s=document.createElement('style');
+    s.id='shimmerStyle';
+    s.textContent='@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}';
+    document.head.appendChild(s);
+  }
+
+  for(let i=0;i<servicos.length;i++){
+    try{
+      toast(`Gerando imagem... (tentativa ${i+1}/${servicos.length})`,'info');
+      urlFinal=await tentarCarregarImagem(servicos[i], 25000);
+      break; // sucesso!
+    }catch(e){
+      console.log(`Serviço ${i+1} falhou:`,e.message);
+      if(i===servicos.length-1){
+        // todos falharam
+        if(res)res.style.display='none';
+        if(imgEl){imgEl.style.minHeight='';imgEl.style.animation='none';}
+        toast('Não foi possível gerar a imagem agora. O serviço pode estar sobrecarregado — tente novamente em alguns segundos.','err');
+        if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
+        return;
+      }
+    }
+  }
+
+  // Sucesso!
+  iaUltimaUrl=urlFinal;
+  if(imgEl){
+    imgEl.style.animation='none';
+    imgEl.style.background='';
+    imgEl.style.minHeight='';
+    imgEl.src=urlFinal;
+    imgEl.style.opacity='1';
+  }
+  document.getElementById('btnNovaVariacao').style.display='inline-flex';
+  document.getElementById('btnAddGaleria').style.display='inline-flex';
+  toast('✨ Imagem gerada!');
+  if(btn){btn.disabled=false;btn.innerHTML='✨ Gerar';}
 }
 
 async function proximaVariacaoIA(){
@@ -1300,16 +1342,24 @@ async function proximaVariacaoIA(){
   const btn=document.getElementById('btnNovaVariacao');
   if(btn){btn.disabled=true;btn.textContent='🔄 Gerando...';}
   iaSeed=Math.floor(Math.random()*999999);
-  const img=document.getElementById('iaResultImg');
-  const promptFinal=encodeURIComponent(prompt+', professional food photography, high quality');
-  const url=`https://image.pollinations.ai/prompt/${promptFinal}?seed=${iaSeed}&nologo=true`;
-  iaUltimaUrl=url;
-  if(img){
-    img.style.opacity='0.3';
-    img.onload=()=>{img.style.opacity='1';toast('✨ Nova variação!');if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}};
-    img.onerror=()=>{toast('Erro ao gerar. Tente novamente.','err');if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}};
-    img.src=url;
+  const enc=encodeURIComponent(prompt);
+  const urls=[
+    `https://image.pollinations.ai/prompt/${enc}?seed=${iaSeed}&nologo=true&model=turbo`,
+    `https://image.pollinations.ai/prompt/${enc}?seed=${iaSeed}&nologo=true`,
+  ];
+  const imgEl=document.getElementById('iaResultImg');
+  for(const url of urls){
+    try{
+      await tentarCarregarImagem(url,25000);
+      iaUltimaUrl=url;
+      if(imgEl){imgEl.style.opacity='0.3';imgEl.src=url;imgEl.style.opacity='1';}
+      toast('✨ Nova variação!');
+      if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}
+      return;
+    }catch(e){continue;}
   }
+  toast('Erro ao gerar. Tente novamente.','err');
+  if(btn){btn.disabled=false;btn.textContent='🔄 Nova variação';}
 }
 
 function adicionarIAaGaleria(){
